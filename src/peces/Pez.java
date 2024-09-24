@@ -1,5 +1,7 @@
 package peces;
 
+import propiedades.*;
+
 /** 
  * Clase padre de todos los peces.
  */
@@ -32,7 +34,7 @@ public abstract class Pez {
     /** La edad óptima para vender al pez. */
     private int optimo;
     /** Las propiedades del pez */
-    private 
+    private PecesProps[] propiedades;
     
     /**
      * El constructor básico de un pez genérico
@@ -113,6 +115,10 @@ public abstract class Pez {
 
     public int getOptimo() {
         return optimo;
+    }
+
+    public PecesProps[] getPropiedades() {
+        return propiedades;
     }
 
     public void setEdad(int edad) {
