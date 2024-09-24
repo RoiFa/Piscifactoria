@@ -1,5 +1,9 @@
 package peces;
 
+import java.util.Random;
+
+import propiedades.*;
+
 /** 
  * Clase padre de todos los peces.
  */
@@ -31,11 +35,16 @@ public abstract class Pez {
     private int madurez;
     /** La edad óptima para vender al pez. */
     private int optimo;
+    /** La clase de piscifactoría en la que puede criar este pez (Mar, Rio o ambos) */
+    private CriaTipo piscifactoria;
+    /** El tipo de pez (Base, Normal, Inversion o Riesgo) */
+    private PecesTipo tipo;
     /** Las propiedades del pez */
-    private 
+    private PecesProps[] propiedades;
+
     
     /**
-     * El constructor básico de un pez genérico
+     * El constructor básico de un pez genérico de sexo fijo.
      * 
      * @param nombre    El nombre común del pez
      * @param nombreCientifico  El nombre científico del pez
@@ -47,7 +56,7 @@ public abstract class Pez {
      * @param madurez   El número de días que tarda en ser fértil por primera vez
      * @param optimo    La edad óptima para vender al pez
      */
-    public Pez(String nombre, String nombreCientifico, boolean sexo, int coste, int monedas, int huevos, int ciclo, int madurez, int optimo) {
+    public Pez(String nombre, String nombreCientifico, boolean sexo, int coste, int monedas, int huevos, int ciclo, int madurez, int optimo, CriaTipo piscifactoria, PecesTipo tipo, PecesProps[] propiedades) {
         this.nombre = nombre;
         this.nombreCientifico = nombreCientifico;
         this.edad = 0;
@@ -60,7 +69,48 @@ public abstract class Pez {
         this.ciclo = ciclo;
         this.madurez = madurez;
         this.optimo = optimo;
+        this.piscifactoria = piscifactoria;
+        this.tipo = tipo;
+        this.propiedades = propiedades;
         
+    }
+
+    /**
+     * El constructor básico de un pez genérico de sexo aleatorio.
+     * 
+     * @param nombre    El nombre común del pez
+     * @param nombreCientifico  El nombre científico del pez
+     * @param coste El coste del pez
+     * @param monedas   Las monedas que vale el pez
+     * @param huevos    La cantidad de huevos que pone el pez
+     * @param ciclo El número de días hasta qe vuelva a ser fértil
+     * @param madurez   El número de días que tarda en ser fértil por primera vez
+     * @param optimo    La edad óptima para vender al pez
+     */
+    public Pez(String nombre, String nombreCientifico, int coste, int monedas, int huevos, int ciclo, int madurez, int optimo, CriaTipo piscifactoria, PecesTipo tipo, PecesProps[] propiedades) {
+        Random r = new Random(); //TODO reemplazar esta puta mierda cuando se cree el helper de rng
+        int num = r.nextInt(2);
+
+        this.nombre = nombre;
+        this.nombreCientifico = nombreCientifico;
+        this.edad = 0;
+        this.fertil = false;
+        this.vivo = true;
+        this.alimentado = false;
+        this.coste = coste;
+        this.monedas = monedas;
+        this.ciclo = ciclo;
+        this.madurez = madurez;
+        this.optimo = optimo;
+        this.piscifactoria = piscifactoria;
+        this.tipo = tipo;
+        this.propiedades = propiedades;
+        
+        if (num == 0) {
+            this.sexo = false;
+        } else {
+            this.sexo = true;
+        }
     }
 
     public String getNombre() {
@@ -77,6 +127,10 @@ public abstract class Pez {
 
     public String getSexo() {
         return sexo ? "Macho" : "Hembra";
+    }
+
+    public boolean isMale() {
+        return sexo;
     }
 
     public boolean isFertil() {
@@ -113,6 +167,18 @@ public abstract class Pez {
 
     public int getOptimo() {
         return optimo;
+    }
+
+    public CriaTipo getPiscifactoria() {
+        return piscifactoria;
+    }
+
+    public PecesTipo getTipo() {
+        return tipo;
+    }
+
+    public PecesProps[] getPropiedades() {
+        return propiedades;
     }
 
     public void setEdad(int edad) {
@@ -158,12 +224,14 @@ public abstract class Pez {
      */
     public abstract void grow();
 
+    /**
+     * Mérodo que se encarga de reestableces todos los valores modificados a su estado original.
+     */
     public void reset() {
         this.edad = 0;
         this.fertil = false;
         this.vivo = true;
         this.alimentado = false;
     }
-
 
 }
