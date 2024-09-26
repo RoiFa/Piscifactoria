@@ -213,7 +213,17 @@ public abstract class Pez {
     /**
      * Método que se encarga de toda la lógica de hacer crecer al pez.
      */
-    public abstract void grow();
+    public void grow() {
+        if (vivo) {
+            setEdad(edad++);
+            if (!this.alimentado && RNG.RandomBoolean()) {
+                setVivo(false);
+            }
+            if (this.edad >= this.madurez) {
+                //TODO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            }
+        }
+    }
 
     /**
      * Mérodo que se encarga de reestableces todos los valores modificados a su estado original.
