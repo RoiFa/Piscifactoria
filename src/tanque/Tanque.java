@@ -1,6 +1,4 @@
 package Tanques;
-import Helpers.Reader;
-import peces.Pez;
 
 public abstract class Tanque {
     
