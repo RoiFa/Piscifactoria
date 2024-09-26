@@ -1,6 +1,9 @@
 package tanque;
+import helpers.Reader;
 import peces.*;
 import peces.mar.*;
+import peces.rio.*;
+import peces.doble.*;
 
 public abstract class Tanque {
     
@@ -84,19 +87,11 @@ public abstract class Tanque {
         System.out.println(
         "1.-Carpa\n" +
         "2.-Koi\n" +
-        "3.-Carpa plateada\n" +
-        "4.-Salmón chinook\n" +
-        "5.-Tilapia del Nilo\n" +
-        "6.-Pejerrey \n" +
-        "7.-Siluro europeo\n" +
-        "8.-Perca europea\n" +
-        "9.-Lucio del norte\n" +
-        "10.-Carpín de tres espinas\n" +
-        "12.-Trucha arcoíris\n" +
-        "13.-Salmón atlántico\n" +
-        "14.-Dorada\n" +
-        "15.-Lubina europea\n" +
-        "16.-Bagre de canal\n" +
+        "3.-Salmón chinook\n" +
+        "4.-Tilapia del Nilo\n" +
+        "5.-Pejerrey \n" +
+        "6.-Dorada\n" +
+        "7.-Bagre de canal\n" +
         "0.-Cancelar");
     }
     
@@ -104,20 +99,11 @@ public abstract class Tanque {
         System.out.println(
         "1.-Rodaballo\n" +
         "2.-Besugo\n" +
-        "3.-Róbalo\n" +
-        "4.-Lenguado europeo\n" +
-        "5.-Corvina\n" +
-        "6.-Sargo\n" +
-        "7.-Lubina rayada\n" +
-        "8.-Arenque del Atlántico\n" +
-        "9.-Caballa\n" +
-        "10.-Abadejo\n" +
-        "11.-Cobia\n" +
-        "12.-Trucha arcoíris\n" +
-        "13.-Salmón atlántico\n" +
-        "14.-Dorada\n" +
-        "15.-Lubina europea\n" +
-        "16.-Bagre de canal\n" +
+        "3.-Arenque del Atlántico\n" +
+        "4.-Abadejo\n" +
+        "5.-Cobia\n" +
+        "6.-Dorada\n" +
+        "7.-Bagre de canal\n" +
         "0.-Cancelar");
     }
 
@@ -133,111 +119,178 @@ public abstract class Tanque {
 
     public Pez creadorEspeciesRio(int opcion){
         switch (opcion) {
+            default:
+                return null;
             case 0:
-                
+                System.out.println("Cancelando...");
                 break;
             case 1:
-                
-                break;
+                    if(ocupacion()==1){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+
             case 2:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Koi(false);
+                    }else {
+                        return new Koi(true);
+                    }
+                }else{
+                    return new Koi();
+                }
+
             case 3:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new SalmonChinook(false);
+                    }else {
+                        return new SalmonChinook(true);
+                    }
+                }else{
+                    return new SalmonChinook();
+                }
+
             case 4:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new TilapiaDelNilo(false);
+                    }else {
+                        return new TilapiaDelNilo(true);
+                    }
+                }else{
+                    return new TilapiaDelNilo();
+                }
+    
             case 5:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Pejerrey(false);
+                    }else {
+                        return new Pejerrey(true);
+                    }
+                }else{
+                    return new Pejerrey();
+                }
+
             case 6:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Dorada(false);
+                    }else {
+                        return new Dorada(true);
+                    }
+                }else{
+                    return new Dorada();
+                }
+
             case 7:
-                
-                break;
-            case 8:
-                
-                break;
-            case 9:
-                
-                break;
-            case 10:
-                
-                break;
-            case 11:
-                
-                break;
-            case 12:
-                
-                break;
-            case 13:
-                
-                break;
-            case 14:
-                
-                break;
-            case 15:
-                
-                break;
-            case 16:
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new BagreDeCanal(false);
+                    }else {
+                        return new BagreDeCanal(true);
+                    }
+                }else{
+                    return new BagreDeCanal();
+                }
         }
+                return null;
     }
 
     public Pez creadorEspeciesMar(int opcion){
         switch (opcion) {
+            default:
+                return null;
             case 0:
-                
+            System.out.println("Cancelando...");
                 break;
-            case 1:
-                
-                break;
+                case 1:
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Rodaballo(false);
+                    }else {
+                        return new Rodaballo(true);
+                    }
+                }else{
+                    return new Rodaballo();
+                }
+
             case 2:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Besugo(false);
+                    }else {
+                        return new Besugo(true);
+                    }
+                }else{
+                    return new Besugo();
+                }
+
             case 3:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new ArenqueDelAtlantico(false);
+                    }else {
+                        return new ArenqueDelAtlantico(true);
+                    }
+                }else{
+                    return new ArenqueDelAtlantico();
+                }
+
             case 4:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Abadejo(false);
+                    }else {
+                        return new Abadejo(true);
+                    }
+                }else{
+                    return new Abadejo();
+                }
+
             case 5:
-                
-                break;
-            case 6:
-                
-                break;
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Cobia(false);
+                    }else {
+                        return new Cobia(true);
+                    }
+                }else{
+                    return new Cobia();
+                }
+
+                case 6:
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new Dorada(false);
+                    }else {
+                        return new Dorada(true);
+                    }
+                }else{
+                    return new Dorada();
+                }
+
             case 7:
-                
-                break;
-            case 8:
-                
-                break;
-            case 9:
-                
-                break;
-            case 10:
-                
-                break;
-            case 11:
-                
-                break;
-            case 12:
-                
-                break;
-            case 13:
-                
-                break;
-            case 14:
-                
-                break;
-            case 15:
-                
-                break;
-            case 16:
+                if(ocupacion()==1){
+                    if(peces[0].isMale()){
+                        return new BagreDeCanal(false);
+                    }else {
+                        return new BagreDeCanal(true);
+                    }
+                }else{
+                    return new BagreDeCanal();
+                }
         }
+        return null;
     }
+            
 
     public int ocupacion(){
         int count=0;
