@@ -1,4 +1,4 @@
-package Tanques;
+package tanque;
 
 public abstract class Tanque {
     
