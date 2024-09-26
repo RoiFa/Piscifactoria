@@ -53,8 +53,8 @@ public abstract class Tanque {
             System.out.println("Quiere añadir un "+peces[0].getNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
             int opcion = Reader.readTheNumber();
             if(opcion==1){
-                Pez[] especiesMar = (new Rodaballo(),new Besugo(),new Robalo(), new LenguadoEuropeo(),new Corvina(),new Sargo(),new LubinaRayada(),new ArenqueDelAtlantico(),new Caballa(),new Abadejo(),new Cobia(),new TruchaArcoiris(),new SalmonAtlantico(), new Dorada(),new LubinaEuropea(),new BagreDeCanal());new Carpa(),new Koi(),new CarpaPlateada(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new SiluroEuropeo(), new PercaEuropea(),new LucioDelNorte(),new CarpinDeTresEspinas(),new TruchaArcoiris(),new SalmonAtlantico(), new Dorada(),new LubinaEuropea(),new BagreDeCanal());
-                Pez[] especiesRio = (new Carpa(),new Koi(),new CarpaPlateada(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new SiluroEuropeo(), new PercaEuropea(),new LucioDelNorte(),new CarpinDeTresEspinas(),new TruchaArcoiris(),new SalmonAtlantico(), new Dorada(),new LubinaEuropea(),new BagreDeCanal());
+                Pez[] especiesMar = {new Rodaballo(),new Besugo(),new Robalo(), new LenguadoEuropeo(),new Corvina(),new Sargo(),new LubinaRayada(),new ArenqueDelAtlantico(),new Caballa(),new Abadejo(),new Cobia(),new TruchaArcoiris(),new SalmonAtlantico(), new Dorada(),new LubinaEuropea(),new BagreDeCanal()};
+                Pez[] especiesRio = {new Carpa(),new Koi(),new CarpaPlateada(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new SiluroEuropeo(), new PercaEuropea(),new LucioDelNorte(),new CarpinDeTresEspinas(),new TruchaArcoiris(),new SalmonAtlantico(), new Dorada(),new LubinaEuropea(),new BagreDeCanal()};
                 if(tipo=="Mar"){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==peces[0].getNombre()){
