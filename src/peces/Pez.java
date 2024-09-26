@@ -1,7 +1,6 @@
 package peces;
 
-import java.util.Random;
-
+import helpers.*;
 import propiedades.*;
 
 /** 
@@ -88,12 +87,10 @@ public abstract class Pez {
      * @param optimo    La edad óptima para vender al pez
      */
     public Pez(String nombre, String nombreCientifico, int coste, int monedas, int huevos, int ciclo, int madurez, int optimo, CriaTipo piscifactoria, PecesTipo tipo, PecesProps[] propiedades) {
-        Random r = new Random(); //TODO reemplazar esta puta mierda cuando se cree el helper de rng
-        int num = r.nextInt(2);
-
         this.nombre = nombre;
         this.nombreCientifico = nombreCientifico;
         this.edad = 0;
+        this.sexo = RNG.RandomBoolean();
         this.fertil = false;
         this.vivo = true;
         this.alimentado = false;
@@ -105,12 +102,6 @@ public abstract class Pez {
         this.piscifactoria = piscifactoria;
         this.tipo = tipo;
         this.propiedades = propiedades;
-        
-        if (num == 0) {
-            this.sexo = false;
-        } else {
-            this.sexo = true;
-        }
     }
 
     public String getNombre() {
