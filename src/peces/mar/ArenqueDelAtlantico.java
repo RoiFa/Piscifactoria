@@ -1,5 +1,6 @@
 package peces.mar;
 
+import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
@@ -10,20 +11,7 @@ public class ArenqueDelAtlantico extends Pez{
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public ArenqueDelAtlantico(boolean sexo) {
-        super(
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(),
-            sexo,
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMonedas(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getHuevos(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCiclo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getOptimo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPiscifactoria(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getTipo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPropiedades()
-            );
+        super(AlmacenPropiedades.ARENQUE_ATLANTICO, sexo);
     }
 
     /**
@@ -31,17 +19,6 @@ public class ArenqueDelAtlantico extends Pez{
      */
     public ArenqueDelAtlantico() {
         super(
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMonedas(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getHuevos(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCiclo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getOptimo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPiscifactoria(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getTipo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPropiedades()
-            );
+            AlmacenPropiedades.ARENQUE_ATLANTICO, RNG.RandomBoolean());
     }
 }

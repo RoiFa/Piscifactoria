@@ -43,7 +43,7 @@ public abstract class Pez {
 
     
     /**
-     * El constructor básico de un pez genérico de sexo fijo.
+     * El constructor básico de un pez genérico.
      * 
      * @param nombre    El nombre común del pez
      * @param nombreCientifico  El nombre científico del pez
@@ -55,53 +55,22 @@ public abstract class Pez {
      * @param madurez   El número de días que tarda en ser fértil por primera vez
      * @param optimo    La edad óptima para vender al pez
      */
-    public Pez(String nombre, String nombreCientifico, boolean sexo, int coste, int monedas, int huevos, int ciclo, int madurez, int optimo, CriaTipo piscifactoria, PecesTipo tipo, PecesProps[] propiedades) {
-        this.nombre = nombre;
-        this.nombreCientifico = nombreCientifico;
+    protected Pez(PecesDatos fish, boolean sexo) {
+        this.nombre = fish.getNombre();
+        this.nombreCientifico = fish.getCientifico();
         this.edad = 0;
         this.sexo = sexo;
         this.fertil = false;
         this.vivo = true;
         this.alimentado = false;
-        this.coste = coste;
-        this.monedas = monedas;
-        this.ciclo = ciclo;
-        this.madurez = madurez;
-        this.optimo = optimo;
-        this.piscifactoria = piscifactoria;
-        this.tipo = tipo;
-        this.propiedades = propiedades;
-        
-    }
-
-    /**
-     * El constructor básico de un pez genérico de sexo aleatorio.
-     * 
-     * @param nombre    El nombre común del pez
-     * @param nombreCientifico  El nombre científico del pez
-     * @param coste El coste del pez
-     * @param monedas   Las monedas que vale el pez
-     * @param huevos    La cantidad de huevos que pone el pez
-     * @param ciclo El número de días hasta qe vuelva a ser fértil
-     * @param madurez   El número de días que tarda en ser fértil por primera vez
-     * @param optimo    La edad óptima para vender al pez
-     */
-    public Pez(String nombre, String nombreCientifico, int coste, int monedas, int huevos, int ciclo, int madurez, int optimo, CriaTipo piscifactoria, PecesTipo tipo, PecesProps[] propiedades) {
-        this.nombre = nombre;
-        this.nombreCientifico = nombreCientifico;
-        this.edad = 0;
-        this.sexo = RNG.RandomBoolean();
-        this.fertil = false;
-        this.vivo = true;
-        this.alimentado = false;
-        this.coste = coste;
-        this.monedas = monedas;
-        this.ciclo = ciclo;
-        this.madurez = madurez;
-        this.optimo = optimo;
-        this.piscifactoria = piscifactoria;
-        this.tipo = tipo;
-        this.propiedades = propiedades;
+        this.coste = fish.getCoste();
+        this.monedas = fish.getMonedas();
+        this.ciclo = fish.getCiclo();
+        this.madurez = fish.getMadurez();
+        this.optimo = fish.getOptimo();
+        this.piscifactoria = fish.getPiscifactoria();
+        this.tipo = fish.getTipo();
+        this.propiedades = fish.getPropiedades();
     }
 
     public String getNombre() {
