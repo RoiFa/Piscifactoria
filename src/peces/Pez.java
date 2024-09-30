@@ -38,8 +38,6 @@ public abstract class Pez {
     private CriaTipo piscifactoria;
     /** El tipo de pez (Base, Normal, Inversion o Riesgo) */
     private PecesTipo tipo;
-    /** Las propiedades del pez */
-    private PecesProps[] propiedades;
 
     
     /**
@@ -70,7 +68,6 @@ public abstract class Pez {
         this.optimo = fish.getOptimo();
         this.piscifactoria = fish.getPiscifactoria();
         this.tipo = fish.getTipo();
-        this.propiedades = fish.getPropiedades();
     }
 
     public String getNombre() {
@@ -137,10 +134,6 @@ public abstract class Pez {
         return tipo;
     }
 
-    public PecesProps[] getPropiedades() {
-        return propiedades;
-    }
-
     public void setEdad(int edad) {
         this.edad = edad;
     }
@@ -182,7 +175,7 @@ public abstract class Pez {
     /**
      * Método que se encarga de toda la lógica de hacer crecer al pez.
      */
-    public void grow() {
+    public void grow() { //TODO igual hay que cambiarlo
         if (vivo) {
             setEdad(edad++);
             if (!this.alimentado && RNG.RandomBoolean()) {
@@ -202,20 +195,5 @@ public abstract class Pez {
         this.fertil = false;
         this.vivo = true;
         this.alimentado = false;
-    }
-
-    /**
-     * Método auxiliar que ayuda a buscar si un pez tiene una propiedad dada o no.
-     * 
-     * @param prop
-     * @return
-     */
-    public boolean searchProperty(PecesProps prop) {
-        for (int i = 0; i < propiedades.length; i++) {
-            if (propiedades[i].equals(prop)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
