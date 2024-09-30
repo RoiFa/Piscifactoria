@@ -44,11 +44,4 @@ public class SalmonChinook extends Pez{
             AlmacenPropiedades.SALMON_CHINOOK.getPropiedades()
             );
     }
-
-    @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
 }

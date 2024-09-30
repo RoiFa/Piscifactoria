@@ -44,11 +44,4 @@ public class BagreDeCanal extends Pez{
             AlmacenPropiedades.BAGRE_CANAL.getPropiedades()
             );
     }
-
-    @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
 }

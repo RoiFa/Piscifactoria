@@ -44,11 +44,4 @@ public class Carpa extends Pez{
             AlmacenPropiedades.CARPA.getPropiedades()
             );
     }
-
-    @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
 }

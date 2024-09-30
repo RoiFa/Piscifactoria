@@ -219,14 +219,14 @@ public abstract class Pez {
             if (!this.alimentado && RNG.RandomBoolean()) {
                 setVivo(false);
             }
-            if (this.edad >= this.madurez) {
-                //TODO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            if (this.edad == this.madurez) {
+                this.fertil = true;
             }
         }
     }
 
     /**
-     * Mérodo que se encarga de reestableces todos los valores modificados a su estado original.
+     * Mértodo que se encarga de reestableces todos los valores modificados a su estado original.
      */
     public void reset() {
         this.edad = 0;
@@ -235,4 +235,18 @@ public abstract class Pez {
         this.alimentado = false;
     }
 
+    /**
+     * Método auxiliar que ayuda a buscar si un pez tiene una propiedad dada o no.
+     * 
+     * @param prop
+     * @return
+     */
+    public boolean searchProperty(PecesProps prop) {
+        for (int i = 0; i < propiedades.length; i++) {
+            if (propiedades[i].equals(prop)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -44,11 +44,4 @@ public class Koi extends Pez{
             AlmacenPropiedades.KOI.getPropiedades()
             );
     }
-
-    @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
 }

@@ -44,11 +44,4 @@ public class Besugo extends Pez{
             AlmacenPropiedades.BESUGO.getPropiedades()
             );
     }
-
-    @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
 }

@@ -44,11 +44,4 @@ public class ArenqueDelAtlantico extends Pez{
             AlmacenPropiedades.ARENQUE_ATLANTICO.getPropiedades()
             );
     }
-
-    @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
 }
