@@ -23,7 +23,7 @@ public class SalmonChinook extends Pez{
     }
 
     @Override
-    protected void comer() {
-        
+    protected int[] comer(int a, int v) {
+        if (a <= 0)
     }
 }
