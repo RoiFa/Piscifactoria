@@ -23,7 +23,12 @@ public class Pejerrey extends Pez{
     }
 
     @Override
-    protected void comer() {
-        // TODO Comer
+    protected int[] comer(int a, int v) {
+        if (a == 0) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        setAlimentado(true);
+        return new int[]{1,0};
     }
 }

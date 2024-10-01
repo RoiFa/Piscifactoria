@@ -32,6 +32,7 @@ public class TilapiaDelNilo extends Pez{
             setAlimentado(false);
             return new int[]{0,0};
         }
+        setAlimentado(true);
         return new int[]{0,1};
     }
     
