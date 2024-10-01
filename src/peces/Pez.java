@@ -172,7 +172,7 @@ public abstract class Pez {
         );
     }
 
-    /**
+  /**
      * Método que se encarga de toda la lógica de hacer crecer al pez.
      * 
      * @param comidaAnimal  La comida animal que hay en el almacén
@@ -202,9 +202,6 @@ public abstract class Pez {
      * @return La cantidad de comida que come de cada tipo.
      */
     protected abstract int[] comer(int a, int v);
-
-    /**
-     * Mértodo que se encarga de reestableces todos los valores modificados a su estado original.
      */
     public void reset() {
         this.edad = 0;
