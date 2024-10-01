@@ -43,6 +43,17 @@ public abstract class Tanque {
         System.out.println("Tanque "+numTanque+" de la piscifactoría x al y% de capacidad.[peces/espacios]");
     }
 
+    public void nextDay(int carne, int vegetal){
+        int carneCant = carne;
+        int vegetCant = vegetal;
+        int[] cants;
+        for(int i=0;i<peces.length;i++){
+            cants = peces[i].grow(carneCant,vegetCant);
+            carneCant -= cants[0];
+            vegetCant -= cants[1];
+        }
+    }
+
     public void addFish(){
         if(ocupacion()==maxSize){
             System.out.println("No hay espacio suficiente en este tanque");
