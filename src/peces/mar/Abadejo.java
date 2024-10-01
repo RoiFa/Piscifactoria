@@ -1,5 +1,6 @@
 package peces.mar;
 
+import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
@@ -46,9 +47,17 @@ public class Abadejo extends Pez{
     }
 
     @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
+    protected int[] comer(int a, int v) {
+        if (RNG.RandomInt(100)<=75) {
+            setAlimentado(true);
+            return new int[]{0,0};
+        }
+        if (a <= 0) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        setAlimentado(true);
+        return new int[]{1,0};
     }
     
 }

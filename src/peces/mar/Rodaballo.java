@@ -1,5 +1,6 @@
 package peces.mar;
 
+import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
@@ -46,9 +47,12 @@ public class Rodaballo extends Pez{
     }
 
     @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
+    protected int[] comer(int a, int v) {
+        if (a <= 2) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        return new int[]{2,0};
     }
     
 }

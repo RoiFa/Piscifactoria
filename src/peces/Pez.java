@@ -210,11 +210,36 @@ public abstract class Pez {
         );
     }
 
-    /**
+  /**
      * Método que se encarga de toda la lógica de hacer crecer al pez.
+     * 
+     * @param comidaAnimal  La comida animal que hay en el almacén
+     * @param comidaVegetal La comida vegetal que hay en el almacén
+     * @return La cantidad de comida que come de cada tipo
      */
-    public abstract void grow();
+    public int[] grow(int comidaAnimal, int comidaVegetal) { 
+        if (vivo) {
+            int[] comido = comer(comidaAnimal, comidaVegetal);
+            setEdad(edad++);
+            if (this.edad == this.madurez) {
+                this.fertil = true;
+            }
+            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(0, 100) >= 5)) {
+                setVivo(false);
+            }
+            return comido;
+        }
+        return new int[]{0,0};
+    }
 
+    /**
+     * Método abstracto que indica cuánta comida y de qué tipo consume cada pez.
+     * 
+     * @param a  La comida animal que hay en el almacén
+     * @param v La comida vegetal que hay en el almacén
+     * @return La cantidad de comida que come de cada tipo.
+     */
+    protected abstract int[] comer(int a, int v);
     /**
      * Mérodo que se encarga de reestableces todos los valores modificados a su estado original.
      */
