@@ -23,7 +23,12 @@ public class BagreDeCanal extends Pez{
     }
 
     @Override
-    protected void comer() {
-        // TODO Comer
+    protected int[] comer(int a, int v) {
+        if (a < 2) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        setAlimentado(true);
+        return new int[]{2,0};
     }
 }
