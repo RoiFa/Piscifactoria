@@ -8,6 +8,7 @@ public class Abadejo extends Pez{
 
     /**
      * Constructor de un abadejo con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Abadejo(boolean sexo) {
@@ -19,5 +20,10 @@ public class Abadejo extends Pez{
      */
     public Abadejo() {
         super(AlmacenPropiedades.ABADEJO, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

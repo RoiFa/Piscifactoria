@@ -8,6 +8,7 @@ public class SalmonChinook extends Pez{
 
     /**
      * Constructor de un salmón chinook con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public SalmonChinook(boolean sexo) {
@@ -19,5 +20,10 @@ public class SalmonChinook extends Pez{
      */
     public SalmonChinook() {
         super(AlmacenPropiedades.SALMON_CHINOOK, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        
     }
 }

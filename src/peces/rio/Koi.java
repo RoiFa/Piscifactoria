@@ -8,6 +8,7 @@ public class Koi extends Pez{
 
     /**
      * Constructor de un koi con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Koi(boolean sexo) {
@@ -19,5 +20,10 @@ public class Koi extends Pez{
      */
     public Koi() {
         super(AlmacenPropiedades.KOI, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

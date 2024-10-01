@@ -8,6 +8,7 @@ public class Besugo extends Pez{
 
     /**
      * Constructor de un besugo con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Besugo(boolean sexo) {
@@ -19,5 +20,10 @@ public class Besugo extends Pez{
      */
     public Besugo() {
         super(AlmacenPropiedades.BESUGO, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

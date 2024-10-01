@@ -8,6 +8,7 @@ public class Carpa extends Pez{
 
     /**
      * Constructor de una carpa con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Carpa(boolean sexo) {
@@ -19,5 +20,10 @@ public class Carpa extends Pez{
      */
     public Carpa() {
         super(AlmacenPropiedades.CARPA, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

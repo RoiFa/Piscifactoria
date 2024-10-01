@@ -8,6 +8,7 @@ public class Dorada extends Pez{
 
     /**
      * Constructor de una dorada con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Dorada(boolean sexo) {
@@ -19,5 +20,10 @@ public class Dorada extends Pez{
      */
     public Dorada() {
         super(AlmacenPropiedades.DORADA, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

@@ -8,6 +8,7 @@ public class Cobia extends Pez{
 
     /**
      * Constructor de una cobia con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Cobia(boolean sexo) {
@@ -19,5 +20,10 @@ public class Cobia extends Pez{
      */
     public Cobia() {
         super(AlmacenPropiedades.COBIA, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

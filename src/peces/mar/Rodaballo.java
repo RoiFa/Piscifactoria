@@ -8,6 +8,7 @@ public class Rodaballo extends Pez{
 
     /**
      * Constructor de un rodaballo con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Rodaballo(boolean sexo) {
@@ -19,5 +20,10 @@ public class Rodaballo extends Pez{
      */
     public Rodaballo() {
         super(AlmacenPropiedades.RODABALLO, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }

@@ -8,6 +8,7 @@ public class TilapiaDelNilo extends Pez{
 
     /**
      * Constructor de una tilapia del nilo con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public TilapiaDelNilo(boolean sexo) {
@@ -19,6 +20,19 @@ public class TilapiaDelNilo extends Pez{
      */
     public TilapiaDelNilo() {
         super(AlmacenPropiedades.TILAPIA_NILO, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected int[] comer(int a, int v) {
+        if (RNG.RandomBoolean()) {
+            setAlimentado(true);
+            return new int[]{0,0};
+        }
+        if (v == 0) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        return new int[]{0,1};
     }
     
 }

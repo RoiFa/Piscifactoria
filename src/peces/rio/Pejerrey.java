@@ -8,6 +8,7 @@ public class Pejerrey extends Pez{
 
     /**
      * Constructor de un pejerrey con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public Pejerrey(boolean sexo) {
@@ -19,5 +20,10 @@ public class Pejerrey extends Pez{
      */
     public Pejerrey() {
         super(AlmacenPropiedades.PEJERREY, RNG.RandomBoolean());
+    }
+
+    @Override
+    protected void comer() {
+        // TODO Comer
     }
 }
