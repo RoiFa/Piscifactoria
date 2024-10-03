@@ -23,10 +23,6 @@ public class Pejerrey extends Pez{
     }
 
     @Override
-<<<<<<< HEAD
-    protected void comer() {
-        // TODO Comer
-=======
     protected int[] comer(int a, int v) {
         if (a == 0) {
             setAlimentado(false);
@@ -34,6 +30,5 @@ public class Pejerrey extends Pez{
         }
         setAlimentado(true);
         return new int[]{1,0};
->>>>>>> 26e1b7a (Peces)
     }
 }

@@ -23,10 +23,6 @@ public class Carpa extends Pez{
     }
 
     @Override
-<<<<<<< HEAD
-    protected void comer() {
-        // TODO Comer
-=======
     protected int[] comer(int a, int v) {
         if (a+v < 2) {
             setAlimentado(false);
@@ -42,6 +38,5 @@ public class Carpa extends Pez{
         } else {
             return new int[]{2,0};
         }
->>>>>>> 26e1b7a (Peces)
     }
 }

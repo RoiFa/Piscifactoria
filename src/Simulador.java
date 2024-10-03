@@ -15,17 +15,33 @@ public class Simulador {
     private Almacen almacen;
 
     /**
+     * Constructor básico para la clase Simulador
+     */
+    private Simulador(){
+        dias = 0;
+        piscis = new ArrayList<>();
+        nombre = "";
+        monedas = new Monedas();
+        almacen = null;
+    }
+
+    /**
      * Inicializa el sistema desde cero
      */
     private void init(){
 
-        dias = 0;
-        System.out.println("Dame el nombre de la entidad:");
-        System.out.println();
-        piscis = new ArrayList<>();
-        monedas = new Monedas();
+        while (nombre.equals("")) {
+            System.out.println("Dame el nombre de la entidad:");
+            nombre = Reader.readTheLine();
+        }
+        System.out.println("Dame el nombre de la primera piscifactoría (río)");
+        String nomPisc = Reader.readTheLine();
+        while (nomPisc.equals("")) {
+            System.out.println("Vuelve a introducir un nombre");
+            nomPisc = Reader.readTheLine();
+        }
+        piscis.add(new Piscifactoria("Río",nomPisc));
         monedas.setCantidad(100);
-        almacen = null;
 
     }
 
@@ -54,7 +70,7 @@ public class Simulador {
      */
     private void menuPisc(){
         
-        int i = 0;
+        int i = 1;
         System.out.println("Seleccione una opción:");
         System.out.println("-------------------------- Piscifactorías --------------------------");
         System.out.println("[Peces vivos / Peces totales / Espacio total]");
@@ -64,6 +80,30 @@ public class Simulador {
         }
     }
 
+    /**
+     * Permite seleccionar una piscifactoría
+     * @return un entero con la opción seleccionada
+     */
+    private int selectPisc(){
+        int opcion = 0;
+        while (opcion == 0) {
+            menuPisc();
+            opcion = Reader.readTheNumber();
+        }
+        return opcion-1;
+    }
+
+    /**
+     * Permite seleccionar un tanque
+     * @return un entero con la opción seleccionada
+     */
+    private int selectTank(){
+        
+    }
+
+    /**
+     * Permite hacer mejoras o comprar nuevas estructuras
+     */
     private void upgrade(){
         
         System.out.println("1. Comprar edificios");
@@ -90,26 +130,43 @@ public class Simulador {
 
 
 
+    /**
+     * Se encarga de la opción comprar del método upgrade
+     */
     private void comprar(){
         System.out.println("1. Piscifactoría");
-        System.out.println("2. Almacén central: 2000 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
+        System.out.println("2. Almacén central: 2000 monedas. Disponible: "+monedas.getCantidad()+" monedas");
         System.out.println("3. Volver");
 
         int opcion = escogeTres();
 
         switch (opcion) {
             case 1:
+                System.out.println("1. Río: ");
+                System.out.println("2. Mar: ");
+                System.out.println("3. Volver");
+                int buyPisc = escogeTres();
+                if(buyPisc == 3){
+                    comprar();
+                }else{
+                    if(buyPisc == 1){
+                        
+                    }else{
 
-                System.out.println("1. Río (");
-                System.out.println("2. Mar (");
+                    }
+                }
                 break;
             case 2:
-                if(monedas.getCantidad()>=2000){
-                    monedas.gastar(2000);
-                    almacen = new Almacen();
-                    System.out.println("Monedas restantes: "+monedas.getCantidad());
+                if(almacen==null){
+                    if(monedas.getCantidad()>=2000){
+                        monedas.gastar(2000);
+                        almacen = new Almacen();
+                        System.out.println("Monedas restantes: "+monedas.getCantidad());
+                    }else{
+                        System.out.println("Monedas insuficientes");
+                    }
                 }else{
-                    System.out.println("Monedas insuficientes");
+                    System.out.println("Ya se dispone del almacén");
                 }
                 break;
             case 3:
@@ -118,10 +175,17 @@ public class Simulador {
         } 
     }
 
+    /**
+     * Se encarga de la opción mejorar del método upgrade
+     */
     private void mejorar(){
 
     }
 
+    /**
+     * Permite escoger una opción entera entre 1 y 3
+     * @return el número seleccionado
+     */
     private int escogeTres(){
         int opcion = Reader.readTheNumber();
         while (opcion==0) {
@@ -140,16 +204,76 @@ public class Simulador {
      */
     public static void main(String[] args) {
         
-        init();
+        Simulador sim = new Simulador();
+
+        sim.init();
 
         int op = 0;
 
         try{
+            
             while (op!=14) {
+                System.out.println("Día actual: "+sim.dias);
                 menu();
+                op = Reader.readTheNumber();
+
+                switch (op) {
+                    case 1:
+                        sim.showGeneralStatus();
+                        break;
+                    case 2:
+                        sim.showSpecificStatus();
+                        break;
+                    case 3:
+                        sim.showTankStatus();
+                        break;
+                    case 4:
+                        sim.showStats();
+                        break;
+                    case 5:
+                        sim.showIctio();
+                        break;
+                    case 6:
+                        sim.nextDay();
+                        break;
+                    case 7:
+                        sim.addFood();
+                        break;
+                    case 8:
+                        sim.addFish();
+                        break;
+                    case 9:
+                        sim.sell();
+                        break;
+                    case 10:
+                        sim.cleanTank();
+                        break;
+                    case 11:
+                        sim.emptyTank();
+                        break;
+                    case 12:
+                        sim.upgrade();
+                        break;
+                    case 13:
+                        sim.forwardDays();
+                        break;
+                    case 14:
+                        System.out.println("Salida con éxito");
+                        break;
+                    case 98:
+                        break;
+                    case 99:
+                        sim.monedas.anadir(1000);
+                        break;
+                    default:
+                        break;
+                }
             }
+
         }catch(Exception e){
             System.out.println("Ha ocurrido un error");
+        } finally{
+            Reader.closer();
         }
     }
 }
