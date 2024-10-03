@@ -29,7 +29,7 @@ public class Dorada extends Pez{
             return new int[]{0,0};
         }
         setAlimentado(true);
-        if (a < v) {
+        if (a <= v) {
             return new int[]{0,1};
         } else {
             return new int[]{1,0};
