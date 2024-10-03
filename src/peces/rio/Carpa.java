@@ -33,7 +33,7 @@ public class Carpa extends Pez{
             return new int[]{1,1};
         }
         setAlimentado(true);
-        if (a < v) {
+        if (a <= v) {
             return new int[]{0,2};
         } else {
             return new int[]{2,0};
