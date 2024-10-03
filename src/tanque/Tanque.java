@@ -5,23 +5,39 @@ import peces.mar.*;
 import peces.rio.*;
 import peces.doble.*;
 
+/**
+ * Clase que representa los tanques de agua
+ */
 public abstract class Tanque {
     
+    /** Identifica si el tanque es de agau salada o dulce */
     protected String tipo;
+    /** Identifica el nombre de la piscifactoria a la que pertenece*/
     protected String nombrePiscifactoria;
+    /** Indica el número del tanque */
     protected int numTanque;
-    protected String pez="";
+    /** Lista de peces que avitan este tanque */
     protected Pez[] peces;
+    /** Capacidad maxima del tanque */
     protected int maxSize=20;
     
-    public Tanque(int numTanque,String pez,String nombrePiscifactoria,String tipo){
-        this.pez=pez;
+    /**
+     * Constructor de la clase tanque
+     * @param numTanque Numero del tanque
+     * @param pez Nombre del pez alojado en este tanque
+     * @param nombrePiscifactoria Nombre de la piscifactoria a la que pertenece
+     * @param tipo TIpo de tanque, mar o rio
+     */
+    public Tanque(int numTanque,String nombrePiscifactoria,String tipo){
         this.peces=new Pez[20];
         this.numTanque=numTanque;
         this.nombrePiscifactoria=nombrePiscifactoria;
         this.tipo=tipo;
     }
 
+    /**
+     * Muestra el estado actual del tanque
+     */
     public void showStatus(){
         System.out.println("================Tanque"+numTanque+"================"+"\n"+
         "Ocupación: "+ocupacion()+"/"+maxSize+"("+(ocupacion()/maxSize)+"%)");
@@ -33,14 +49,22 @@ public abstract class Tanque {
         }
     }
 
+    /**
+     * Muestra el estado de todos los peces de este tanque
+     */
     public void showFishStatus(){
         for(int i=0;i<peces.length;i++){
-            peces[i].showStatus();
+            if(peces[i]!=null){
+                peces[i].showStatus();
+            }
         }
     }
 
+    /**
+     * Muestra la capacidad del tanque y su ocupación actual
+    */
     public void showCapacity(){
-        System.out.println("Tanque "+numTanque+" de la piscifactoría x al y% de capacidad.[peces/espacios]");
+        System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+(ocupacion()/maxSize)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
     }
 
     public void nextDay(int carne, int vegetal){
@@ -48,9 +72,11 @@ public abstract class Tanque {
         int vegetCant = vegetal;
         int[] cants;
         for(int i=0;i<peces.length;i++){
+            if(peces[i]!=null){
             cants = peces[i].grow(carneCant,vegetCant);
             carneCant -= cants[0];
             vegetCant -= cants[1];
+            }
         }
     }
 
@@ -316,7 +342,7 @@ public abstract class Tanque {
     public int vivos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i].isVivo()){
+            if(peces[i]!=null&&peces[i].isVivo()){
                 count++;
             }
         }
@@ -325,7 +351,7 @@ public abstract class Tanque {
     public int alimentados(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i].isAlimentado()){
+            if(peces[i]!=null&&peces[i].isAlimentado()){
                 count++;
             }
         }
@@ -334,7 +360,7 @@ public abstract class Tanque {
     public int adultos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i].isAdulto()){
+            if(peces[i]!=null&&peces[i].isAdulto()){
                 count++;
             }
         }
@@ -343,7 +369,7 @@ public abstract class Tanque {
     public int hembras(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i].getSexo()=="Hembra"){
+            if(peces[i]!=null&&peces[i].getSexo()=="Hembra"){
                 count++;
             }
         }
@@ -352,7 +378,7 @@ public abstract class Tanque {
     public int machos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i].getSexo()=="Macho"){
+            if(peces[i]!=null&&peces[i].getSexo()=="Macho"){
                 count++;
             }
         }
@@ -361,7 +387,7 @@ public abstract class Tanque {
     public int fertiles(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i].isFertil()){
+            if(peces[i]!=null&&peces[i].isFertil()){
                 count++;
             }
         }
