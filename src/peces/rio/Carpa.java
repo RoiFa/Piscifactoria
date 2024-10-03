@@ -23,7 +23,25 @@ public class Carpa extends Pez{
     }
 
     @Override
+<<<<<<< HEAD
     protected void comer() {
         // TODO Comer
+=======
+    protected int[] comer(int a, int v) {
+        if (a+v < 2) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        if (a >= 1 && v >= 1 && RNG.RandomBoolean()) {
+            setAlimentado(true);
+            return new int[]{1,1};
+        }
+        setAlimentado(true);
+        if (a < v) {
+            return new int[]{0,2};
+        } else {
+            return new int[]{2,0};
+        }
+>>>>>>> 26e1b7a (Peces)
     }
 }

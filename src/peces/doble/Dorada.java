@@ -23,7 +23,21 @@ public class Dorada extends Pez{
     }
 
     @Override
+<<<<<<< HEAD
     protected void comer() {
         // TODO Comer
+=======
+    protected int[] comer(int a, int v) {
+        if (a == 0 && v == 0) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        setAlimentado(true);
+        if (a < v) {
+            return new int[]{0,1};
+        } else {
+            return new int[]{1,0};
+        }
+>>>>>>> 26e1b7a (Peces)
     }
 }
