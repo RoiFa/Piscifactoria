@@ -19,12 +19,7 @@ public class ArenqueDelAtlantico extends Pez{
      * Constructor de un arenque del atlántico con género aleatorio.
      */
     public ArenqueDelAtlantico() {
-<<<<<<< HEAD
-        super(
-            AlmacenPropiedades.ARENQUE_ATLANTICO, RNG.RandomBoolean());
-=======
         super(AlmacenPropiedades.ARENQUE_ATLANTICO, RNG.RandomBoolean());
->>>>>>> 26e1b7a (Peces)
     }
 
     @Override

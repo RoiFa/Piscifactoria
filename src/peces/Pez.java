@@ -202,11 +202,7 @@ public abstract class Pez {
      * @return La cantidad de comida que come de cada tipo.
      */
     protected abstract int[] comer(int a, int v);
-<<<<<<< HEAD
-     */
-=======
     
->>>>>>> 26e1b7a (Peces)
     public void reset() {
         this.edad = 0;
         this.fertil = false;
