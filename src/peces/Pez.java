@@ -25,7 +25,7 @@ public abstract class Pez {
     /** El coste del pez al comprarlo */
     private int coste;
     /** El dinero que recibes al vender al pez */
-    private int monedas;
+    protected int monedas;
     /** La cantidad de huevos que pone el pez */
     private int huevos;
     /** El número de días hasta que vuelva a ser fértil */
@@ -149,6 +149,11 @@ public abstract class Pez {
     public void setAlimentado(boolean alimentado) {
         this.alimentado = alimentado;
     }
+
+    public void setMonedas(int monedas) {
+        this.monedas = monedas;
+    }
+
 
     /**
      * Método que devuelve un boolean dependiendo de si el pez es adulto o no
