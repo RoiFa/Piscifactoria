@@ -18,7 +18,6 @@ public class Tanque {
     protected Pez[] peces;
     /** Capacidad maxima del tanque */
     protected int maxSize=20;
-    public int pezMax;
 
     public String getTipo() {
         return tipo;
