@@ -1,5 +1,6 @@
 package peces.mar;
 
+import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
@@ -7,48 +8,30 @@ public class ArenqueDelAtlantico extends Pez{
 
     /**
      * Constructor de un arenque del atlántico con género definido.
+     * 
      * @param sexo  El sexo del pez (True = Macho, False = Hembra)
      */
     public ArenqueDelAtlantico(boolean sexo) {
-        super(
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(),
-            sexo,
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMonedas(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getHuevos(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCiclo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getOptimo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPiscifactoria(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getTipo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPropiedades()
-            );
+        super(AlmacenPropiedades.ARENQUE_ATLANTICO, sexo);
     }
 
     /**
      * Constructor de un arenque del atlántico con género aleatorio.
      */
     public ArenqueDelAtlantico() {
-        super(
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMonedas(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getHuevos(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getCiclo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getMadurez(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getOptimo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPiscifactoria(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getTipo(),
-            AlmacenPropiedades.ARENQUE_ATLANTICO.getPropiedades()
-            );
+        super(AlmacenPropiedades.ARENQUE_ATLANTICO, RNG.RandomBoolean());
     }
 
     @Override
-    public void grow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'grow'");
-    }
-    
+    protected int[] comer(int a, int v) {
+        if (RNG.RandomBoolean()) {
+            setAlimentado(true);
+            return new int[]{0,0};
+        }
+        if (v <= 0) {
+            setAlimentado(false);
+            return new int[]{0,0};
+        }
+        return new int[]{0,1};
+        }
 }
