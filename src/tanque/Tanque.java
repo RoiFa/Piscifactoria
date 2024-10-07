@@ -8,18 +8,29 @@ import peces.doble.*;
 /**
  * Clase que representa los tanques de agua
  */
-public abstract class Tanque {
+public class Tanque {
     
-    /** Identifica si el tanque es de agau salada o dulce */
+    /** Identifica si el tanque es de agua salada o dulce */
     protected String tipo;
-    /** Identifica el nombre de la piscifactoria a la que pertenece*/
-    protected String nombrePiscifactoria;
     /** Indica el número del tanque */
     protected int numTanque;
     /** Lista de peces que avitan este tanque */
     protected Pez[] peces;
     /** Capacidad maxima del tanque */
     protected int maxSize=20;
+    public int pezMax;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public int getNumTanque() {
+        return numTanque;
+    }
+
+    public int getMaxSize() {
+        return maxSize;
+    }
     
     /**
      * Constructor de la clase tanque
@@ -28,10 +39,9 @@ public abstract class Tanque {
      * @param nombrePiscifactoria Nombre de la piscifactoria a la que pertenece
      * @param tipo TIpo de tanque, mar o rio
      */
-    public Tanque(int numTanque,String nombrePiscifactoria,String tipo){
+    public Tanque(int numTanque,String tipo){
         this.peces=new Pez[20];
         this.numTanque=numTanque;
-        this.nombrePiscifactoria=nombrePiscifactoria;
         this.tipo=tipo;
     }
 
@@ -63,7 +73,7 @@ public abstract class Tanque {
     /**
      * Muestra la capacidad del tanque y su ocupación actual
     */
-    public void showCapacity(){
+    public void showCapacity(String nombrePiscifactoria){
         System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+(ocupacion()/maxSize)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
     }
 
