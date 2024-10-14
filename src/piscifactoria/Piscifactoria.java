@@ -22,8 +22,9 @@ public class Piscifactoria {
      * 
      * @param tipo  El tipo de piscifactoría (Río o mar)
      */
-    public Piscifactoria(String tipo) {
+    public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
+        this.nombre = nombre;
         this.tanques.add(new Tanque(0, tipo));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
