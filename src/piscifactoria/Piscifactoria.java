@@ -35,13 +35,41 @@ public class Piscifactoria {
     /**
      * Método que muestra el estado actual de la piscifactoría.
      */
-    public void showStatus() { //TODO encontrar una forma de conseguir la informacion de los peces
+    public void showStatus() {
+        int maxTotal=0;
+        int ocupTotal=0;
+        int vivosTotal=0;
+        int alimTotal=0;
+        int adultTotal=0;
+        int machosTotal=0;
+        int hembrasTotal=0;
+        int fertilesTotal=0;
+        for(int i=0;i<tanques.size();i++){
+            maxTotal += tanques.get(i).getMaxSize();
+            ocupTotal += tanques.get(i).ocupacion();
+            vivosTotal += tanques.get(i).vivos();
+            alimTotal += tanques.get(i).alimentados();
+            adultTotal += tanques.get(i).adultos();
+            machosTotal += tanques.get(i).machos();
+            hembrasTotal += tanques.get(i).hembras();
+            fertilesTotal += tanques.get(i).fertiles();
+        }
         System.out.println(
             "========== " + this.nombre + " ==========\n" +
             "Tanques: " + this.tanques.size() + "\n" +
-            "Ocupación: " + "\n" +
-            "Almacén de comida animal: " + ((this.comidaAnimal/this.comidaMax)*100) + "%\n" +
-            "Almacén de comida vegetal: " + ((this.comidaVegetal/this.comidaMax)*100) + "%"
+            "Ocupación: " +ocupTotal+"/"+maxTotal+"("+((ocupTotal/maxTotal)*100)+"%)");
+            if(ocupTotal!=0){
+        System.out.println(
+            "Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+((vivosTotal/ocupTotal)*100)+"%)\n"+
+            "Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+((alimTotal/vivosTotal)*100)+"%)\n"+
+            "Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+((adultTotal/vivosTotal)*100)+"%)\n"+
+            "Hembras / Machos: "+hembrasTotal+"/"+machosTotal+"\n"+
+            "Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+((fertilesTotal/vivosTotal)*100)+"%)\n"
+        );
+            }
+        System.out.println(
+            "Almacén de comida animal: "+ this.comidaAnimal + "("+((this.comidaAnimal/this.comidaMax)*100) + "%)\n" +
+            "Almacén de comida vegetal: "+ this.comidaVegetal + "("+((this.comidaVegetal/this.comidaMax)*100) + "%)"
         );
     }
 
