@@ -109,9 +109,9 @@ public class Simulador {
 
     /**
      * Permite seleccionar un tanque
-     * @return un entero con la opción seleccionada
+     * @return el tanque seleccionado
      */
-    private int selectTank(){
+    private Tanque selectTank(){
         //TODO Hacer método
     }
 
@@ -173,6 +173,23 @@ public class Simulador {
         for(Piscifactoria p : piscis){
             p.nextDay();
         }
+    }
+
+    /**
+     * Elimina los peces muertos de un tanque seleccionado
+     */
+    private void cleanTank(){
+        int piscifactoria = selectPisc();
+        piscis.get(piscifactoria).cleanTank();
+    }
+
+    /**
+     * Elimina todos los peces de un tanque de una piscifactoría
+     * independientemente de su estado
+     */
+    private void emptyTank(){
+        int piscifactoria = selectPisc();
+        piscis.get(piscifactoria).emptyTank();
     }
 
     /**
@@ -389,9 +406,8 @@ public class Simulador {
         int op = 0;
 
         try{
-            
+            sim.showGeneralStatus();
             while (op!=14) {
-                sim.showGeneralStatus();
                 menu();
                 op = Reader.readTheNumber();
 
@@ -413,6 +429,7 @@ public class Simulador {
                         break;
                     case 6:
                         sim.nextDay();
+                        sim.showGeneralStatus();
                         break;
                     case 7:
                         sim.addFood();

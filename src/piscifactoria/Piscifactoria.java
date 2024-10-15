@@ -1,4 +1,5 @@
 package piscifactoria;
+import java.io.Reader;
 import java.util.ArrayList;
 
 import tanque.Tanque;
@@ -6,7 +7,7 @@ import tanque.Tanque;
 public class Piscifactoria {
     /** El nombre de la piscifactoría. */
     private String nombre;
-    /** El tipo de piscifactoría (Río o mar) */
+    /** El tipo de piscifactoría (rio o mar) */
     private String tipo;
     /** La lista de tanques en la piscifactoría */
     private ArrayList<Tanque> tanques;
@@ -20,7 +21,8 @@ public class Piscifactoria {
     /**
      * El constructor de una piscifactoría.
      * 
-     * @param tipo  El tipo de piscifactoría (Río o mar)
+     * @param tipo  El tipo de piscifactoría (rio o mar)
+     * @param nombre El nombre de la piscifactoría
      */
     public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
@@ -113,5 +115,31 @@ public class Piscifactoria {
 
     public void upgradeFood() {
         //TODO terminar
+    }
+
+
+
+    public int selectTank(){
+        int i = 1;
+        for(Tanque tanque : tanques){
+            System.out.println(i+". Tanque "+tanque.getNumTanque()+": "); //TODO acabar
+        }
+    }
+
+    /**
+     * Elimina los peces muertos de los tanques de la piscifactoría
+     */
+    public void cleanTank(){
+        for(Tanque tanque : tanques){
+            tanque.cleanTank();
+        }
+    }
+
+    /**
+     * Elimina todos los peces de un tanque de la piscifactoría
+     * independientemente de su estado
+     */
+    public void emptyTank(Tanque tanque){
+        tanques.get(tanques.indexOf(tanque)).emptyTank();
     }
 }
