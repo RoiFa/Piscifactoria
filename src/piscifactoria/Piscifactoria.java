@@ -1,5 +1,4 @@
 package piscifactoria;
-import java.io.Reader;
 import java.util.ArrayList;
 
 import tanque.Tanque;
@@ -27,7 +26,7 @@ public class Piscifactoria {
     public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
         this.nombre = nombre;
-        this.tanques.add(new Tanque(0, tipo));
+        this.tanques.add(new Tanque(this.tanques.size()+1, tipo));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
         } else {
@@ -118,7 +117,10 @@ public class Piscifactoria {
     }
 
 
-
+    /**
+     * Permite seleccionar un tanque y lo devuelve
+     * @return el tanque seleccionado
+     */
     public int selectTank(){
         int i = 1;
         for(Tanque tanque : tanques){

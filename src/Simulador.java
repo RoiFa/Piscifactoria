@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 import estadisticas.Estadisticas;
 import helpers.Reader;
+import monedas.Monedas;
 import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 
