@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 
+import almacen.Almacen;
 import estadisticas.Estadisticas;
 import helpers.Reader;
 import monedas.Monedas;
 import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
+import tanque.Tanque;
 
 public class Simulador {
     
@@ -55,7 +57,8 @@ public class Simulador {
             nomPisc = Reader.readTheLine();
         }
         piscis.add(new Piscifactoria("rio",nomPisc));
-        piscis.get(0).addFood(25);
+        piscis.get(0).addFood(25,true);
+        piscis.get(0).addFood(25, false);
         monedas.setCantidad(100);
 
     }
@@ -90,9 +93,10 @@ public class Simulador {
         System.out.println("-------------------------- Piscifactorías --------------------------");
         System.out.println("[Peces vivos / Peces totales / Espacio total]");
         for(Piscifactoria p : piscis){
-            System.out.println(i+".- "+p.getNombre()+" ["+p.getAlive()+"/"+p.getNum()+"/"+p.getTotal()+"]");
+            System.out.println(i+".- "+p.getNombre()+" ["+p.getTotalAlive()+"/"+p.getNum()+"/"+p.getTotal()+"]");
             i++;
         }
+        System.out.println("0. Cancelar");
     }
 
     /**
@@ -112,8 +116,8 @@ public class Simulador {
      * Permite seleccionar un tanque
      * @return el tanque seleccionado
      */
-    private Tanque selectTank(){
-        //TODO Hacer método
+    private Tanque selectTank(Piscifactoria pisc){
+        return pisc.selectTank();
     }
 
     /**
@@ -147,7 +151,8 @@ public class Simulador {
      */
     private void showTankStatus(){
         int pisc = selectPisc();
-        piscis.get(pisc).showFishStatus();
+        Tanque tank = selectTank(piscis.get(pisc));
+        tank.showFishStatus();
     }
 
     /**
@@ -159,10 +164,14 @@ public class Simulador {
     }
 
     /**
-     * Muestra la información de un pez a seleccionar entre los disponibles
+     * Muestra la información de un pez a seleccionar entre los implementados
      */
     private void showIctio(){
-        //TODO Hacer método
+        int pez = 0;
+        System.out.println("---------- Seleccione un pez ----------");
+        System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
+        "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo");
+        
     }
 
     /**
@@ -174,6 +183,33 @@ public class Simulador {
         for(Piscifactoria p : piscis){
             p.nextDay();
         }
+    }
+
+    /**
+     * Añade comida a una piscifactoría seleccionada
+     * o al almacén central si se dispone de el
+     */
+    private void addFood(){
+        if(almacen==null){
+            int piscifactoria = selectPisc();
+            //TODO terminar
+        }
+    }
+
+    /**
+     * Añade un pez a una piscifactoría si hay sitio
+     */
+    private void addFish(){
+        //TODO hacer
+    }
+
+    /**
+     * Vende todos los peces adultos vivos de una piscifactoría
+     * a la mitad de dinero de lo normal
+     */
+    private void sell(){
+        int piscifactoria = selectPisc();
+        piscis.get(piscifactoria).sellFish();
     }
 
     /**
@@ -190,7 +226,7 @@ public class Simulador {
      */
     private void emptyTank(){
         int piscifactoria = selectPisc();
-        piscis.get(piscifactoria).emptyTank();
+        piscis.get(piscifactoria).emptyTank(piscis.get(piscifactoria).selectTank());
     }
 
     /**

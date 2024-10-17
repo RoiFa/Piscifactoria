@@ -1,6 +1,7 @@
 package piscifactoria;
 import java.util.ArrayList;
 
+import helpers.Reader;
 import tanque.Tanque;
 
 public class Piscifactoria {
@@ -32,6 +33,14 @@ public class Piscifactoria {
         } else {
             this.comidaMax = 100;
         }
+    }
+
+    public String getNombre(){
+        return nombre;
+    }
+
+    public String getTipo(){
+        return tipo;
     }
 
     /**
@@ -116,15 +125,79 @@ public class Piscifactoria {
         //TODO terminar
     }
 
+    /**
+     * Devuelve la cantidad total (todos los tanques) 
+     * de peces vivos de la piscifactoría
+     * @return el número de peces vivos
+     */
+    public int getTotalAlive(){
+        int alive = 0;
+        for(Tanque tanque : tanques){
+            alive += tanque.vivos();
+        }
+        return alive;
+    }
+
+    /**
+     * Devuelve la cantidad total (todos los tanques)
+     * de peces de la piscifactoría
+     * @return el número de peces
+     */
+    public int getNum(){
+        int num = 0;
+        for(Tanque tanque : tanques){
+            num += tanque.ocupacion();
+        }
+        return num;
+    }
+
+    /**
+     * Devuelve el espacio total para peces de la piscifactoría
+     * @return el número de espacios para peces
+     */
+    public int getTotal(){
+        int total = 0;
+        for(Tanque tanque : tanques){
+            total += tanque.getMaxSize();
+        }
+        return total;
+    }
+
+    /**
+     * Muestra el texto del menú con los posibles tanques a seleccionar
+     */
+    private void menuTank(){
+        int i = 1;
+        for(Tanque tanque : tanques){
+            System.out.println(i+". Tanque "+tanque.getNumTanque()+": "+tanque.getTipoPez());
+            i++;
+        }
+    }
 
     /**
      * Permite seleccionar un tanque y lo devuelve
      * @return el tanque seleccionado
      */
-    public int selectTank(){
-        int i = 1;
-        for(Tanque tanque : tanques){
-            System.out.println(i+". Tanque "+tanque.getNumTanque()+": "); //TODO acabar
+    public Tanque selectTank(){
+        menuTank();
+        int opcion = Reader.readTheNumber();
+        while (opcion<1 || opcion>tanques.size()) {
+            System.out.println("Introduzca un número entero entre 1 y "+tanques.size());
+            opcion = Reader.readTheNumber();
+        }
+        return tanques.get(opcion-1);
+    }
+
+    /**
+     * Añade comida a la piscifactoría
+     * @param food la cantidad de comida
+     * @param tipoComida el tipo de comida (true animal, false vegetal)
+     */
+    public void addFood(int food, boolean tipoComida){
+        if(tipoComida){
+            comidaAnimal += food;
+        } else{
+            comidaVegetal += food;
         }
     }
 

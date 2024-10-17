@@ -20,6 +20,8 @@ public class Tanque {
     private Pez[] peces;
     /** Capacidad maxima del tanque */
     private int maxSize;
+    /** El tipo de pez que admite */
+    private String tipoPez;
 
     public String getTipo() {
         return tipo;
@@ -31,6 +33,10 @@ public class Tanque {
 
     public int getMaxSize() {
         return maxSize;
+    }
+
+    public String getTipoPez(){
+        return tipoPez;
     }
     
     /**
@@ -144,12 +150,14 @@ public class Tanque {
         if(ocupacion()==maxSize){
             System.out.println("No hay espacio suficiente en este tanque");
         }else if(ocupacion()==0){
-            if(tipo=="Mar"){
+            if(tipo.equals("mar")){
                 menuEspeciesMar();
                 creadorEspeciesMar(Reader.readTheNumber(),false);
+                tipoPez = peces[0].getNombre();
             }else{
                 menuEspeciesRio();
                 creadorEspeciesRio(Reader.readTheNumber(),false);
+                tipoPez = peces[0].getNombre();
             }
         }else{
             System.out.println("Quiere añadir un "+peces[0].getNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
@@ -157,7 +165,7 @@ public class Tanque {
             if(opcion==1){
                 Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
                 Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
-                if(tipo=="Mar"){
+                if(tipo.equals("mar")){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==peces[0].getNombre()){
                             peces[findSpace()] = creadorEspeciesMar(i,false);
