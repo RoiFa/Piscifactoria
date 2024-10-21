@@ -63,6 +63,7 @@ public abstract class Pez {
         this.alimentado = false;
         this.coste = fish.getCoste();
         this.monedas = fish.getMonedas();
+        this.huevos = fish.getHuevos();
         this.ciclo = fish.getCiclo();
         this.madurez = fish.getMadurez();
         this.optimo = fish.getOptimo();
@@ -213,5 +214,23 @@ public abstract class Pez {
         this.fertil = false;
         this.vivo = true;
         this.alimentado = false;
+    }
+
+    @Override
+    /**
+     * Muestra información relevante del pez
+     */
+    public String toString(){
+        return (
+            "---------- " + this.nombre + " ----------" + "\n" +
+            "Nombre científico: " + this.nombreCientifico + "\n" +
+            "Tipo: " + this.tipo + "\n" +
+            "Coste: " + this.coste + " monedas\n" +
+            "Monedas: " + this.monedas + " monedas\n" +
+            "Huevos: " + this.huevos + " huevos\n" + 
+            "Ciclo: " + this.ciclo + " días\n" +
+            "Madurez: " + this.madurez + " días\n" +
+            "Óptimo: " + this.optimo + " días"
+        );
     }
 }

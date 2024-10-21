@@ -4,6 +4,10 @@ import almacen.Almacen;
 import estadisticas.Estadisticas;
 import helpers.Reader;
 import monedas.Monedas;
+import peces.Pez;
+import peces.mar.*;
+import peces.doble.*;
+import peces.rio.*;
 import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
@@ -167,10 +171,26 @@ public class Simulador {
      * Muestra la información de un pez a seleccionar entre los implementados
      */
     private void showIctio(){
+
+        Pez[] peces = {new Abadejo(),new ArenqueDelAtlantico(),new BagreDeCanal(),new Besugo(),new Carpa(),
+                       new Cobia(),new Dorada(),new Koi(),new Pejerrey(),new Rodaballo(),
+                       new SalmonChinook(),new TilapiaDelNilo()};
         int pez = 0;
-        System.out.println("---------- Seleccione un pez ----------");
-        System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
-        "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo");
+        while (pez!=13) {
+            System.out.println("---------- Seleccione un pez ----------");
+            System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
+            "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo\n13. Volver al menú");
+            pez = Reader.readTheNumber();
+            while (pez<1 || pez>13) {
+                System.out.println("Introduzca un entero entre 1 y 13");
+                pez = Reader.readTheNumber();
+            }
+            if(pez==13){
+                System.out.println("Vuelta con éxito");
+            } else{
+                peces[pez-1].toString();
+            }
+        }
         
     }
 
