@@ -11,14 +11,15 @@ import peces.doble.*;
 public class Tanque {
     
     /** Identifica si el tanque es de agua salada o dulce */
-    protected String tipo;
+    private String tipo;
     /** Indica el número del tanque */
-    protected int numTanque;
+    private int numTanque;
+    /** Cuenta la creción de tanques */
+    private static int contador=0;
     /** Lista de peces que avitan este tanque */
-    protected Pez[] peces;
+    private Pez[] peces;
     /** Capacidad maxima del tanque */
-    protected int maxSize=20;
-    public int pezMax;
+    private int maxSize=20;
 
     public String getTipo() {
         return tipo;
@@ -31,6 +32,10 @@ public class Tanque {
     public int getMaxSize() {
         return maxSize;
     }
+
+    public Pez[] getPeces() {
+        return peces;
+    }
     
     /**
      * Constructor de la clase tanque
@@ -40,8 +45,9 @@ public class Tanque {
      * @param tipo TIpo de tanque, mar o rio
      */
     public Tanque(int numTanque,String tipo){
+        contador++;
         this.peces=new Pez[20];
-        this.numTanque=numTanque;
+        this.numTanque=contador;
         this.tipo=tipo;
     }
 
@@ -77,6 +83,12 @@ public class Tanque {
         System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+(ocupacion()/maxSize)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
     }
 
+    /**
+     * Hace la logica al pasar de dia para el tanque y los peces dentro de este
+     * @param carne Cantidad de comida para carnivoros en el almacen
+     * @param vegetal Cantidad de comida para herbivoros en el almacen
+     * @return Nuevas cantidades de alimento luego de alimentar a los peces
+     */
     public int[] nextDay(int carne, int vegetal){
         int[] cants;
         for(int i=0;i<peces.length;i++){
@@ -111,6 +123,10 @@ public class Tanque {
         return new int[]{carne,vegetal};
     }
 
+    /**
+     * Comprueba si hay un macho en el tanque
+     * @return true o false dependiendo de si hay o no un macho
+     */
     public boolean hayMacho(){
         for(int i=0;i<peces.length;i++) {
             if(peces[i].isMale()&&peces[i].isFertil()){
@@ -120,8 +136,9 @@ public class Tanque {
         return false;
     }
 
-
-
+    /**
+     * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez manualmente al tanque
+     */
     public void addFish(){
         if(ocupacion()==maxSize){
             System.out.println("No hay espacio suficiente en este tanque");
@@ -161,6 +178,7 @@ public class Tanque {
         }
     }
 
+    /**Menu de texto para peces de Rio */
     public void menuEspeciesRio(){
         System.out.println("Seleccione una de estas especies a añadir:");
         System.out.println(
@@ -174,6 +192,7 @@ public class Tanque {
         "0.-Cancelar");
     }
     
+    /**Menu de texto para peces de Mar */
     public void menuEspeciesMar(){
         System.out.println(
         "1.-Rodaballo\n" +
@@ -186,6 +205,10 @@ public class Tanque {
         "0.-Cancelar");
     }
 
+    /**
+     * Encuentra un hueco dentro del array del Tanque
+     * @return Devuelve la posicion del hueco
+     */
     public int findSpace(){
         int result=-1;
         for(int i=0;i<peces.length||result==-1;i++){
@@ -196,6 +219,12 @@ public class Tanque {
         return result;
     }
 
+    /**
+     * Hace la logica para la creacion de un pez de Rio
+     * @param opcion Posicion en el switch del pez a querer crear
+     * @param enReproduccion Informa si es a causa de reproduccion o por compra
+     * @return Devuelve el nuevo pez
+     */
     public Pez creadorEspeciesRio(int opcion,boolean enReproduccion){
         switch (opcion) {
             default:
@@ -282,7 +311,12 @@ public class Tanque {
         }
                 return null;
     }
-
+    /**
+     * Hace la logica para la creacion de un pez de Mar
+     * @param opcion Posicion en el switch del pez a querer crear
+     * @param enReproduccion Informa si es a causa de reproduccion o por compra
+     * @return Devuelve el nuevo pez
+     */
     public Pez creadorEspeciesMar(int opcion,boolean enReproduccion){
         switch (opcion) {
             default:
@@ -369,7 +403,11 @@ public class Tanque {
         }
         return null;
     }
-     
+    
+    /**
+     * Identifica que genero predomina en el tanque
+     * @return Devuelve true o false dependiendo si macho o hembra
+     */
     public boolean predominan(){
         int m=0;
         int w=0;
@@ -389,6 +427,10 @@ public class Tanque {
         }
     }
 
+    /**
+     * Devuelve la cantidad ocupada en el tanque
+     * @return Numero de espacios ocupados
+     */
     public int ocupacion(){
         int count=0;
         for(int i=0;i<peces.length;i++){
@@ -399,6 +441,10 @@ public class Tanque {
         return count;
     }
 
+    /**
+     * Devuelve la cantidad de peces vivos en el tanque
+     * @return Número de peces vivos
+     */
     public int vivos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
@@ -408,6 +454,11 @@ public class Tanque {
         }
         return count;
     }
+
+    /**
+     * Devuelve la cantidad de peces alimentados
+     * @return Numero de peces alimentados
+     */
     public int alimentados(){
         int count=0;
         for(int i=0;i<peces.length;i++){
@@ -417,6 +468,11 @@ public class Tanque {
         }
         return count;
     }
+
+    /**
+     * Devuelve la cantidad de peces adultos
+     * @return Número de peces adultos
+     */
     public int adultos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
@@ -426,6 +482,11 @@ public class Tanque {
         }
         return count;
     }
+
+    /**
+     * Devuelve la cantidad de peces hembra
+     * @return Numero de peces hembra
+     */
     public int hembras(){
         int count=0;
         for(int i=0;i<peces.length;i++){
@@ -435,6 +496,11 @@ public class Tanque {
         }
         return count;
     }
+
+    /**
+     * Devuelve la cantidad de peces macho
+     * @return Numero de peces macho
+     */
     public int machos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
@@ -444,6 +510,11 @@ public class Tanque {
         }
         return count;
     }
+
+    /**
+     * Devuelve la cantidad de peces fertiles
+     * @return Numero de peces fertiles
+     */
     public int fertiles(){
         int count=0;
         for(int i=0;i<peces.length;i++){
