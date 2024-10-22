@@ -1,5 +1,3 @@
-package almacen;
-
 import java.util.ArrayList;
 
 import piscifactoria.Piscifactoria;

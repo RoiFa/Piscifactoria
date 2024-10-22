@@ -10,7 +10,7 @@ public class Simulador {
     /** Los días que han pasado */
     private int dias;
     /** Las piscifactorías que hay */
-    private ArrayList<Piscifactoria> piscis;
+    private static ArrayList<Piscifactoria> piscis;
     /** El nombre de la entidad */
     private String nombre;
     /** Las monedas */
@@ -455,7 +455,7 @@ public class Simulador {
         }
     }
 
-    public ArrayList<Piscifactoria> getPiscis() {
+    public static ArrayList<Piscifactoria> getPiscis() {
         return piscis;
     }
 }
