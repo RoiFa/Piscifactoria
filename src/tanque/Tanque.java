@@ -32,6 +32,10 @@ public class Tanque {
     public int getMaxSize() {
         return maxSize;
     }
+
+    public Pez[] getPeces() {
+        return peces;
+    }
     
     /**
      * Constructor de la clase tanque
