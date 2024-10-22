@@ -454,6 +454,10 @@ public class Simulador {
             Reader.closer();
         }
     }
+
+    public ArrayList<Piscifactoria> getPiscis() {
+        return piscis;
+    }
 }
 
 
