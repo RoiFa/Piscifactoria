@@ -33,7 +33,7 @@ public class Almacen {
         Almacen.vegetalMax = vegetalMax;
     }
 
-    public void repartirComida(int carneAdd, int vegetalAdd){
+    public ArrayList<Piscifactoria> repartirComida(int carneAdd, int vegetalAdd){
         ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
         if((carneAdd+carne)>carneMax){
             System.out.println("Se esta intentando añadir mas carne de lo que se es capaz de almacenar");
@@ -57,5 +57,6 @@ public class Almacen {
                 setVegetal(restos[1]+probisional[1]);
             }
         }
+        return piscis;
     }
 }
