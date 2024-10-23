@@ -179,7 +179,8 @@ public class Simulador {
         while (pez!=13) {
             System.out.println("---------- Seleccione un pez ----------");
             System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
-            "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo\n13. Volver al menú");
+            "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo\n13. Volver al menú"
+            );
             pez = Reader.readTheNumber();
             while (pez<1 || pez>13) {
                 System.out.println("Introduzca un entero entre 1 y 13");
@@ -203,6 +204,7 @@ public class Simulador {
         for(Piscifactoria p : piscis){
             p.nextDay();
         }
+        //TODO terminar
     }
 
     /**
@@ -212,15 +214,91 @@ public class Simulador {
     private void addFood(){
         if(almacen==null){
             int piscifactoria = selectPisc();
-            //TODO terminar
+            
+        } else{
+            
         }
+        //TODO terminar
     }
 
     /**
      * Añade un pez a una piscifactoría si hay sitio
      */
     private void addFish(){
-        //TODO hacer
+        System.out.println("----- Escoja un pez a comprar. El coste está en monedas. Disponibles: "+monedas.getCantidad()+" monedas -----");
+            System.out.println("1. Abadejo: "+AlmacenPropiedades.ABADEJO.getCoste()+
+            "\n2. Arenque del Atlántico: "+AlmacenPropiedades.ARENQUE_ATLANTICO.getCoste()+
+            "\n3. Bagre de Canal"+AlmacenPropiedades.BAGRE_CANAL.getCoste()+
+            "\n4. Besugo"+AlmacenPropiedades.BESUGO.getCoste()+
+            "\n5. Carpa"+AlmacenPropiedades.CARPA.getCoste()+
+            "\n6. Cobia"+AlmacenPropiedades.COBIA.getCoste()+
+            "\n7. Dorada"+AlmacenPropiedades.DORADA.getCoste()+
+            "\n8. Koi"+AlmacenPropiedades.KOI.getCoste()+
+            "\n9. Pejerrey"+AlmacenPropiedades.PEJERREY.getCoste()+
+            "\n10. Rodaballo"+AlmacenPropiedades.RODABALLO.getCoste()+
+            "\n11. Salmon Chinook"+AlmacenPropiedades.SALMON_CHINOOK.getCoste()+
+            "\n12. Tilapia del Nilo"+AlmacenPropiedades.TILAPIA_NILO.getCoste()+
+            "\n13. Volver al menú"
+        );
+        int pez = Reader.readTheNumber();
+        while (pez<1 || pez>13) {
+            System.out.println("Introduzca un entero entre 1 y 13");
+            pez = Reader.readTheNumber();
+        }
+        
+        int coste;
+        boolean anadido = false;
+        switch (pez) { //TODO terminar
+            case 1:
+                coste = AlmacenPropiedades.ABADEJO.getCoste();
+                if(this.monedas.getCantidad()>=coste){
+                    for(Piscifactoria p : piscis){
+                        
+                    }
+                    if(!anadido){
+                        System.out.println("No ha habido un tanque o espacio disponible para el pez");
+                    }
+                } else{
+                    System.out.println("Monedas insuficientes");
+                }
+                break;
+            case 2:
+                
+                break;
+            case 3:
+                
+                break;
+            case 4:
+                
+                break;
+            case 5:
+                
+                break;
+            case 6:
+                
+                break;
+            case 7:
+                
+                break;
+            case 8:
+                
+                break;
+            case 9:
+                
+                break;
+            case 10:
+                
+                break;
+            case 11:
+                
+                break;
+            case 12:
+                
+                break;
+            case 13:
+                System.out.println("Vuelta con éxito");
+                break;
+        }
     }
 
     /**
@@ -307,12 +385,7 @@ public class Simulador {
                         }
                         int costeRio = (500+500*piscRio);
                         System.out.println("Coste: "+costeRio+" monedas. Disponibles: "+monedas.getCantidad()+" monedas.");
-                        System.out.println("Introduzca 1 para continuar o 2 para cancelar");
-                        int cont = Reader.readTheNumber();
-                        while (cont<1 || cont>2) {
-                            System.out.println("Por favor, introduzca 1 o 2");
-                            cont = Reader.readTheNumber();
-                        }
+                        int cont = escogeDos();
                         if(cont==1){
                             if(monedas.getCantidad()>=costeRio){
                                 monedas.gastar(costeRio);
@@ -339,12 +412,7 @@ public class Simulador {
                         }
                         int costeMar = (2000+2000*piscMar);
                         System.out.println("Coste: "+costeMar+" monedas. Disponibles: "+monedas.getCantidad()+" monedas.");
-                        System.out.println("Introduzca 1 para continuar o 2 para cancelar");
-                        int cont = Reader.readTheNumber();
-                        while (cont<1 || cont>2) {
-                            System.out.println("Por favor, introduzca 1 o 2");
-                            cont = Reader.readTheNumber();
-                        }
+                        int cont = escogeDos();
                         if(cont==1){
                             if(monedas.getCantidad()>=costeMar){
                                 monedas.gastar(costeMar);
@@ -400,18 +468,74 @@ public class Simulador {
             case 1:
                 System.out.println("1. Comprar tanque");
                 System.out.println("2. Aumentar almacén de comida");
-                //TODO Comprar tanques y mejorar almacén comida
+                System.out.println("3. Volver");
+                int mejora = escogeTres();
+
+                if(mejora==3){
+                    mejorar();
+                } else{
+                    
+                    if(mejora==1){
+                        int piscifactoria = selectPisc();
+                        int numTanques = piscis.get(piscifactoria).getTanques().size();
+                        if(numTanques<10){
+                            int costeTanque;
+                            if(piscis.get(piscifactoria).getTipo().equals("rio")){
+                                costeTanque = 150+(150*numTanques);
+                            } else{
+                                costeTanque = 600+(600*numTanques);
+                            }
+                            System.out.println("Coste del nuevo tanque: "+costeTanque+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                            int cont = escogeDos();
+                            if(cont==1){
+                                if(monedas.getCantidad()>=costeTanque){
+                                    monedas.gastar(costeTanque);
+                                    piscis.get(piscifactoria).addTank();
+                                } else{
+                                    System.out.println("Monedas insuficientes");
+                                }
+                            }
+                        } else{
+                            System.out.println("Ya no se admiten más tanques en la piscifactoría");
+                        }
+                    
+                    } else{
+                        int piscifactoria = selectPisc();
+                        if(piscis.get(piscifactoria).getTipo().equals("rio")){
+                            if(piscis.get(piscifactoria).getComidaMax()<250){
+                                System.out.println("Coste mejora almacén de comida: 50 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
+                                int cont = escogeDos();
+                                if(cont==1){
+                                    if(monedas.getCantidad()>=50){
+                                        monedas.gastar(50);
+                                        piscis.get(piscifactoria).upgradeFood();
+                                    }
+                                }
+                            } else{
+                                System.out.println("El almacén de la piscifactoría ya no se puede mejorar más");
+                            }
+                        } else{
+                            if(piscis.get(piscifactoria).getComidaMax()<1000){
+                                System.out.println("Coste mejora almacén de comida: 200 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
+                                int cont = escogeDos();
+                                if(cont==1){
+                                    if(monedas.getCantidad()>=200){
+                                        monedas.gastar(200);
+                                        piscis.get(piscifactoria).upgradeFood();
+                                    }
+                                }
+                            } else{
+                                System.out.println("El almacén de la piscifactoría ya no se puede mejorar más");
+                            }
+                        }
+                    }
+                }
                 break;
         
             case 2:
                 if(almacen!=null){
                     System.out.println("Aumentar capacidad: 200 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
-                    System.out.println("Introduzca 1 para continuar o 2 para cancelar");
-                    int cont = Reader.readTheNumber();
-                    while (cont<1 || cont>2) {
-                        System.out.println("Por favor, introduzca 1 o 2");
-                        cont = Reader.readTheNumber();
-                    }
+                    int cont = escogeDos();
                     if(cont==1){
                         if(monedas.getCantidad()>=200){
                             monedas.gastar(200);
@@ -434,6 +558,23 @@ public class Simulador {
         }
     }
 
+
+    /**
+     * Permite pasar entre 1 y 5 días de golpe con sus consecuencias
+     */
+    private void forwardDays(){
+        System.out.println("Indique entre 1 y 5 cuántos días desea pasar");
+        int numDias = Reader.readTheNumber();
+        while (numDias<1 || numDias>5) {
+            System.out.println("Introduzca un entero entre 1 y 5");
+            numDias = Reader.readTheNumber();
+        }
+        for(int i = 0;i<numDias;i++){
+            nextDay();
+        }
+    }
+
+
     /**
      * Permite escoger una opción entera entre 1 y 3
      * @return el número seleccionado
@@ -448,6 +589,20 @@ public class Simulador {
             }
         }
         return opcion;
+    }
+   
+    /**
+     * Permite escoger una opción entera entre 1 y 2
+     * @return el número seleccionado
+     */
+    private int escogeDos(){
+        System.out.println("Introduzca 1 para continuar o 2 para cancelar");
+        int cont = Reader.readTheNumber();
+        while (cont<1 || cont>2) {
+            System.out.println("Por favor, introduzca 1 o 2");
+            cont = Reader.readTheNumber();
+        }
+        return cont;
     }
 
     /**

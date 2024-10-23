@@ -43,6 +43,14 @@ public class Piscifactoria {
         return tipo;
     }
 
+    public ArrayList<Tanque> getTanques() {
+        return tanques;
+    }
+
+    public int getComidaMax() {
+        return comidaMax;
+    }
+
     /**
      * Método que muestra el estado actual de la piscifactoría.
      */
@@ -216,5 +224,13 @@ public class Piscifactoria {
      */
     public void emptyTank(Tanque tanque){
         tanques.get(tanques.indexOf(tanque)).emptyTank();
+    }
+
+    /**
+     * Añade un nuevo tanque a la piscifactoría
+     */
+    public void addTank(){
+        this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo));
+        System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
     }
 }
