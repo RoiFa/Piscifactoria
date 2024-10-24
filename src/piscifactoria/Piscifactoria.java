@@ -17,7 +17,7 @@ public class Piscifactoria {
     private ArrayList<Tanque> tanques;
     /** La comida máxima que puede ser almacenada en los almacenes */
     private int comidaMax;
-    /** El almacén de comida animal */
+    /** El almacén de comida animal */  
     private int comidaAnimal;
     /** El almacén de comida vegetal */
     private int comidaVegetal;
@@ -36,10 +36,6 @@ public class Piscifactoria {
 
     public int getComidaVegetal() {
         return comidaVegetal;
-    }
-
-    public Piscifactoria() {
-        //TODO Terminar el constructor
     }
 
     /**
@@ -84,6 +80,8 @@ public class Piscifactoria {
         } else {
             this.comidaMax = 100;
         }
+        this.comidaAnimal = 0;
+        this.comidaVegetal = 0;
     }
 
     /**
@@ -212,7 +210,25 @@ public class Piscifactoria {
         return dineroVendido;
     }
 
-    public void upgradeFood() {
-        //TODO terminar
+    /**
+     * Método que mejora los almacenes de comida.
+     * 
+     * @param dinero    El dinero actual de la simulación.
+     * @return          Si se ha mejorado o no.
+     */
+    public boolean upgradeFood(int dinero) {
+        if (this.tipo.equals("mar")) {
+            if (dinero >= 200 && this.comidaMax < 1000) {
+                this.comidaMax += 100;
+                return true;
+            }
+            
+        } else if (this.tipo.equals("rio")) {
+            if (dinero >= 50 && this.comidaMax < 250) {
+                this.comidaMax += 25;
+                return true;
+            }
+        }
+        return false;
     }
 }
