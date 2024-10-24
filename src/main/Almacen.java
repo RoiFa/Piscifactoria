@@ -1,4 +1,4 @@
-package almacen;
+package main;
 
 /**
  * Clase que representa al almacén central
@@ -72,7 +72,7 @@ public class Almacen {
     public String toString(){
         return "------------------ Almacén central ------------------"+
         "\nCapacidad máxima: "+maxCapacidad+
-        "\nComida animal: "+comidaAnimal+"/"+maxCapacidad+". ("+((comidaAnimal/maxCapacidad)*100)+" %)"+
-        "\nComida vegetal: "+comidaVegetal+"/"+maxCapacidad+". ("+((comidaVegetal/maxCapacidad)*100)+" %)";
+        "\nComida animal: "+comidaAnimal+"/"+maxCapacidad+". ("+((int)(comidaAnimal/maxCapacidad)*100)+" %)"+
+        "\nComida vegetal: "+comidaVegetal+"/"+maxCapacidad+". ("+((int)(comidaVegetal/maxCapacidad)*100)+" %)";
     }
 }

@@ -65,9 +65,9 @@ public class Tanque {
         System.out.println("================Tanque"+numTanque+"================"+"\n"+
         "Ocupación: "+ocupacion()+"/"+maxSize+"("+(ocupacion()/maxSize)+"%)");
         if(ocupacion()==0){
-            System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((vivos()/ocupacion())*100)+"%)"+
-            "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((alimentados()/ocupacion())*100)+"%)"+
-            "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((adultos()/ocupacion())*100)+"%)"+
+            System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(vivos()/ocupacion())*100)+"%)"+
+            "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(alimentados()/ocupacion())*100)+"%)"+
+            "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(adultos()/ocupacion())*100)+"%)"+
             "\n"+"Hembras / machos: "+machos()+"/"+hembras());
         }
     }
@@ -87,7 +87,7 @@ public class Tanque {
      * Muestra la capacidad del tanque y su ocupación actual
     */
     public void showCapacity(String nombrePiscifactoria){
-        System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+((ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
+        System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+((int)(ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
     }
 
     /**

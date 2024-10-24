@@ -51,6 +51,14 @@ public class Piscifactoria {
         return comidaMax;
     }
 
+    public int getComidaAnimal() {
+        return comidaAnimal;
+    }
+
+    public int getComidaVegetal() {
+        return comidaVegetal;
+    }
+
     /**
      * Método que muestra el estado actual de la piscifactoría.
      */
@@ -76,19 +84,19 @@ public class Piscifactoria {
         System.out.println(
             "========== " + this.nombre + " ==========\n" +
             "Tanques: " + this.tanques.size() + "\n" +
-            "Ocupación: " +ocupTotal+"/"+maxTotal+"("+((ocupTotal/maxTotal)*100)+"%)");
+            "Ocupación: " +ocupTotal+"/"+maxTotal+"("+((int)(ocupTotal/maxTotal)*100)+"%)");
             if(ocupTotal!=0){
         System.out.println(
-            "Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+((vivosTotal/ocupTotal)*100)+"%)\n"+
-            "Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+((alimTotal/vivosTotal)*100)+"%)\n"+
-            "Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+((adultTotal/vivosTotal)*100)+"%)\n"+
+            "Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+((int)(vivosTotal/ocupTotal)*100)+"%)\n"+
+            "Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+((int)(alimTotal/vivosTotal)*100)+"%)\n"+
+            "Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+((int)(adultTotal/vivosTotal)*100)+"%)\n"+
             "Hembras / Machos: "+hembrasTotal+"/"+machosTotal+"\n"+
-            "Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+((fertilesTotal/vivosTotal)*100)+"%)\n"
+            "Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+((int)(fertilesTotal/vivosTotal)*100)+"%)\n"
         );
             }
         System.out.println(
-            "Almacén de comida animal: "+ this.comidaAnimal + "("+((this.comidaAnimal/this.comidaMax)*100) + "%)\n" +
-            "Almacén de comida vegetal: "+ this.comidaVegetal + "("+((this.comidaVegetal/this.comidaMax)*100) + "%)"
+            "Almacén de comida animal: "+ this.comidaAnimal + "("+((int)(this.comidaAnimal/this.comidaMax)*100) + "%)\n" +
+            "Almacén de comida vegetal: "+ this.comidaVegetal + "("+((int)(this.comidaVegetal/this.comidaMax)*100) + "%)"
         );
     }
 
@@ -116,8 +124,8 @@ public class Piscifactoria {
 
     public void showFood() {
         System.out.println(
-            "Depósito de comida animal al " + ((this.comidaAnimal/this.comidaMax)*100) + "% de su capacidad." +
-            "Depósito de comida vegetal al " + ((this.comidaVegetal/this.comidaMax)*100) + "% de su capacidad."
+            "Depósito de comida animal al " + ((int)(this.comidaAnimal/this.comidaMax)*100) + "% de su capacidad." +
+            "Depósito de comida vegetal al " + ((int)(this.comidaVegetal/this.comidaMax)*100) + "% de su capacidad."
         );
     }
 
@@ -138,7 +146,7 @@ public class Piscifactoria {
      * de peces vivos de la piscifactoría
      * @return el número de peces vivos
      */
-    public int getTotalAlive(){
+    public int getTotalAlive(){ 
         int alive = 0;
         for(Tanque tanque : tanques){
             alive += tanque.vivos();
@@ -204,9 +212,12 @@ public class Piscifactoria {
     public void addFood(int food, boolean tipoComida){
         if(tipoComida){
             comidaAnimal += food;
+            System.out.println("Añadida "+food+" de comida animal");
         } else{
             comidaVegetal += food;
+            System.out.println("Añadida "+food+" de comida vegetal");
         }
+        showFood();
     }
 
     /**
