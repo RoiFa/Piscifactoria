@@ -51,7 +51,7 @@ public class Almacen {
                 int[] restos = {(numPiscis%carneAdd),(numPiscis%vegetalAdd)};
                 int[] probisional = {0,0};
                 for (Piscifactoria pisci : piscis) {
-                    probisional += pisci.addFood(cantRepartCarne,cantRepartVeget);
+                    probisional = pisci.addFood(cantRepartCarne,cantRepartVeget);
                 }
                 setCarne(restos[0]+probisional[0]);
                 setVegetal(restos[1]+probisional[1]);
