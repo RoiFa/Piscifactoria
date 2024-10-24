@@ -2,6 +2,7 @@ package piscifactoria;
 import java.util.ArrayList;
 
 import helpers.RNG;
+import main.Almacen;
 import peces.Pez;
 import peces.rio.Koi;
 import tanque.Tanque;

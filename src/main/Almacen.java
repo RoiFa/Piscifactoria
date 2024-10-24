@@ -1,5 +1,5 @@
+package main;
 import java.util.ArrayList;
-
 import piscifactoria.Piscifactoria;
 
 public class Almacen {
@@ -33,7 +33,7 @@ public class Almacen {
         Almacen.vegetalMax = vegetalMax;
     }
 
-    public ArrayList<Piscifactoria> repartirComida(int carneAdd, int vegetalAdd){
+    public static ArrayList<Piscifactoria> repartirComida(int carneAdd, int vegetalAdd){
         ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
         if((carneAdd+carne)>carneMax){
             System.out.println("Se esta intentando añadir mas carne de lo que se es capaz de almacenar");
@@ -51,7 +51,7 @@ public class Almacen {
                 int[] restos = {(numPiscis%carneAdd),(numPiscis%vegetalAdd)};
                 int[] probisional = {0,0};
                 for (Piscifactoria pisci : piscis) {
-                    probisional += pisci.addFood(cantRepartCarne,cantRepartVeget);
+                    probisional = pisci.addFood(cantRepartCarne,cantRepartVeget);
                 }
                 setCarne(restos[0]+probisional[0]);
                 setVegetal(restos[1]+probisional[1]);
