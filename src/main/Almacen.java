@@ -2,6 +2,7 @@ package main;
 import java.util.ArrayList;
 import piscifactoria.Piscifactoria;
 
+/**Objeto representativo del almacen general, donde se almacena toda la comida de la piscifactoria antes de repartirse entre las piscifactorias */
 public class Almacen {
     private static int vegetal;
     private static int vegetalMax;
@@ -33,6 +34,12 @@ public class Almacen {
         Almacen.vegetalMax = vegetalMax;
     }
 
+    /**
+     * Reparte de manera equivalente a todos los almacenes de todas las piscifactorias y mantiene lo restante y/o lo no divisible en este almacen
+     * @param carneAdd Cantidad de carne a añadir al almacen
+     * @param vegetalAdd Cantidad de alimento vegetal a añadir al almacen
+     * @return Devuelve el nuevo array de piscifactorias
+     */
     public static ArrayList<Piscifactoria> repartirComida(int carneAdd, int vegetalAdd){
         ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
         if((carneAdd+carne)>carneMax){

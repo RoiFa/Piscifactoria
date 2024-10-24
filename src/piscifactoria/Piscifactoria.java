@@ -7,6 +7,7 @@ import peces.Pez;
 import peces.rio.Koi;
 import tanque.Tanque;
 
+/**Objeto representativo de la piscifactoria */
 public class Piscifactoria {
     /** El nombre de la piscifactoría. */
     private String nombre;
