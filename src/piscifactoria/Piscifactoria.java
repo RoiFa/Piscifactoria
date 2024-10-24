@@ -1,6 +1,9 @@
 package piscifactoria;
 import java.util.ArrayList;
 
+import helpers.RNG;
+import peces.Pez;
+import peces.rio.Koi;
 import tanque.Tanque;
 
 public class Piscifactoria {
@@ -17,13 +20,62 @@ public class Piscifactoria {
     /** El almacén de comida vegetal */
     private int comidaVegetal;
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public int getComidaAnimal() {
+        return comidaAnimal;
+    }
+
+    public int getComidaVegetal() {
+        return comidaVegetal;
+    }
+
+    public Piscifactoria() {
+        //TODO Terminar el constructor
+    }
+
+    /**
+     * Método para añadir comida en los almacenes.
+     * 
+     * @param addAnimal     La comida animal a añadir
+     * @param addVegetal    La comida vegetal a añadir
+     * @return              Las sobras de cada tipo de comida
+     */
+    public int[] addFood(int addAnimal, int addVegetal) {
+        int sobraAnimal = 0;
+        int sobraVegetal = 0;
+
+        if (comidaAnimal + addAnimal > comidaMax) {
+            comidaAnimal = comidaMax;
+            sobraAnimal = addAnimal - comidaMax;
+        } else {
+            comidaAnimal += addAnimal;
+        }
+
+        if (comidaVegetal + addVegetal > comidaMax) {
+            comidaVegetal = comidaMax;
+            sobraVegetal = addVegetal - comidaMax;
+        } else {
+            comidaVegetal += addVegetal;
+        }
+
+        return new int[]{sobraAnimal, sobraVegetal};
+    }
+
     /**
      * El constructor de una piscifactoría.
      * 
      * @param tipo  El tipo de piscifactoría (Río o mar)
      */
-    public Piscifactoria(String tipo) {
+    public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
+        this.nombre = nombre;
         this.tanques.add(new Tanque(0, tipo));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
@@ -91,10 +143,18 @@ public class Piscifactoria {
         tanque.showFishStatus();
     }
 
+    /**
+     * Método que muestra la capacidad de un tanque que haya en la piscifactoría.
+     * 
+     * @param tanque    El tanque especificado
+     */
     public void showCapacity(Tanque tanque) {
         tanque.showCapacity(nombre);
     }
 
+    /**
+     * Método que muestre la cantidad comida actual de cada almacén en la piscifactoría.
+     */
     public void showFood() {
         System.out.println(
             "Depósito de comida animal al " + ((this.comidaAnimal/this.comidaMax)*100) + "% de su capacidad." +
@@ -102,12 +162,52 @@ public class Piscifactoria {
         );
     }
 
-    public void nextDay() {
-        //TODO terminar
+    /**
+     * Método que se encarga de hacer crecer y alimentar a todos los peces
+     * 
+     * @return  La cantidad de dinero conseguido por vender peces.
+     */
+    public int nextDay() {
+        int dineroVendido = 0;
+        for (Tanque tank : tanques) {
+            for (Pez pez : tank.getPeces()) {
+                int[] comida = pez.grow(comidaAnimal, comidaVegetal);
+                comidaAnimal -= comida[0];
+                comidaVegetal -= comida[1];
+
+                if (comidaAnimal <= 0 || comidaVegetal <= 0) {
+                    Almacen.repartirComida(0,0);
+                }
+
+                if (pez.getEdad() == pez.getOptimo()) {
+                    if (pez instanceof Koi && RNG.RandomInt(10) == 1) {
+                        pez.setMonedas(pez.getMonedas()+5);
+                    } else {
+                        dineroVendido += pez.getMonedas();
+                        pez = null;
+                    }
+                }
+            }
+        }
+        return dineroVendido;
     }
 
-    public void sellFish() {
-        //TODO termiar
+    /**
+     * Método que vende los peces óptimos en cada tanque.
+     * 
+     * @return  La cantidad de dinero ganado por vender a los peces
+     */
+    public int sellFish() {
+        int dineroVendido = 0;
+        for (Tanque tank : tanques) {
+            for (Pez pez : tank.getPeces()) {
+                if (pez.isAdulto() && pez.isVivo()) {
+                    dineroVendido += pez.getMonedas();
+                    pez = null;
+                }
+            }
+        }
+        return dineroVendido;
     }
 
     public void upgradeFood() {
