@@ -19,7 +19,7 @@ public class Cobia extends Pez{
      * Constructor de una cobia con género aleatorio.
      */
     public Cobia() {
-        super(AlmacenPropiedades.COBIA, RNG.RandomBoolean());
+        super(AlmacenPropiedades.COBIA, RNG.randomBoolean());
     }
 
     @Override

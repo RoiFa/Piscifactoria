@@ -19,7 +19,7 @@ public class Besugo extends Pez{
      * Constructor de un besugo con género aleatorio.
      */
     public Besugo() {
-        super(AlmacenPropiedades.BESUGO, RNG.RandomBoolean());
+        super(AlmacenPropiedades.BESUGO, RNG.randomBoolean());
     }
 
     @Override

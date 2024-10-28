@@ -19,7 +19,7 @@ public class Dorada extends Pez{
      * Constructor de una dorada con género aleatorio.
      */
     public Dorada() {
-        super(AlmacenPropiedades.DORADA, RNG.RandomBoolean());
+        super(AlmacenPropiedades.DORADA, RNG.randomBoolean());
     }
 
     @Override

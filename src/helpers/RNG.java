@@ -17,7 +17,7 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendico entre el origen y el límite.
      */
-    public static int RandomInt(int origin, int bound) {
+    public static int randomInt(int origin, int bound) {
         return rm.nextInt(origin, bound);
     }
 
@@ -27,7 +27,7 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendido entre 0 y el límite
      */
-    public static int RandomInt(int bound) {
+    public static int randomInt(int bound) {
         return rm.nextInt(bound);
     }
 
@@ -38,7 +38,7 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendico entre el origen y el límite.
      */
-    public static float RandomFloat(float origin, float bound) {
+    public static float randomFloat(float origin, float bound) {
         return rm.nextFloat(origin, bound);
     }
 
@@ -48,7 +48,7 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendido entre 0 y el límite
      */
-    public static float RandomFloat(float bound) {
+    public static float randomFloat(float bound) {
         return rm.nextFloat(bound);
     }
 
@@ -59,7 +59,7 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendico entre el origen y el límite.
      */
-    public static double RandomDouble(double origin, double bound) {
+    public static double randomDouble(double origin, double bound) {
         return rm.nextDouble(origin, bound);
     }
 
@@ -69,7 +69,7 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendido entre 0 y el límite
      */
-    public static double RandomDouble(double bound) {
+    public static double randomDouble(double bound) {
         return rm.nextDouble(bound);
     }
 
@@ -77,7 +77,7 @@ public class RNG {
      * Método que devuelve un booleano aletorio
      * @return  True o false, aleatoriamente.
      */
-    public static boolean RandomBoolean() {
-        return ((RandomInt(0,2) == 1) ? true : false);
+    public static boolean randomBoolean() {
+        return rm.nextBoolean();
     }
 }

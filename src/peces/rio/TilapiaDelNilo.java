@@ -19,12 +19,12 @@ public class TilapiaDelNilo extends Pez{
      * Constructor de una tilapia del nilo con género aleatorio.
      */
     public TilapiaDelNilo() {
-        super(AlmacenPropiedades.TILAPIA_NILO, RNG.RandomBoolean());
+        super(AlmacenPropiedades.TILAPIA_NILO, RNG.randomBoolean());
     }
 
     @Override
     protected int[] comer(int a, int v) {
-        if (RNG.RandomBoolean()) {
+        if (RNG.randomBoolean()) {
             setAlimentado(true);
             return new int[]{0,0};
         }

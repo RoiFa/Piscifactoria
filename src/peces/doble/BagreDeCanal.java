@@ -19,7 +19,7 @@ public class BagreDeCanal extends Pez{
      * Constructor de un bagre de canal con género aleatorio.
      */
     public BagreDeCanal() {
-        super(AlmacenPropiedades.BAGRE_CANAL, RNG.RandomBoolean());
+        super(AlmacenPropiedades.BAGRE_CANAL, RNG.randomBoolean());
     }
 
     @Override

@@ -192,7 +192,7 @@ public abstract class Pez {
             if (this.edad == this.madurez) {
                 this.fertil = true;
             }
-            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(0, 100) >= 5)) {
+            if ((!this.alimentado && RNG.randomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.randomInt(0, 100) >= 5)) {
                 setVivo(false);
             }
             return comido;

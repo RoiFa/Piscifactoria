@@ -180,7 +180,7 @@ public class Piscifactoria {
                 }
 
                 if (pez.getEdad() == pez.getOptimo()) {
-                    if (pez instanceof Koi && RNG.RandomInt(10) == 1) {
+                    if (pez instanceof Koi && RNG.randomInt(10) == 1) {
                         pez.setMonedas(pez.getMonedas()+5);
                     } else {
                         dineroVendido += pez.getMonedas();

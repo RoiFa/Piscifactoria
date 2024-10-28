@@ -19,7 +19,7 @@ public class Pejerrey extends Pez{
      * Constructor de una pejerrey con género aleatorio.
      */
     public Pejerrey() {
-        super(AlmacenPropiedades.PEJERREY, RNG.RandomBoolean());
+        super(AlmacenPropiedades.PEJERREY, RNG.randomBoolean());
     }
 
     @Override
