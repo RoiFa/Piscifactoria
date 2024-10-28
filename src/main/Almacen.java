@@ -1,40 +1,53 @@
 package main;
-import java.util.ArrayList;
-import piscifactoria.Piscifactoria;
-
-/**Objeto representativo del almacen general, donde se almacena toda la comida de la piscifactoria antes de repartirse entre las piscifactorias */
+/**
+ * Clase que representa al almacén central
+ */
 public class Almacen {
+
     private static int vegetal;
-    private static int vegetalMax;
     private static int carne;
-    private static int carneMax;
+    private static int maxCapacidad;
 
     public static int getCarne() {
         return carne;
     }
-    public static int getCarneMax() {
-        return carneMax;
-    }
     public static int getVegetal() {
         return vegetal;
-    }
-    public static int getVegetalMax() {
-        return vegetalMax;
     }
     public static void setCarne(int carne) {
         Almacen.carne = carne;
     }
-    public static void setCarneMax(int carneMax) {
-        Almacen.carneMax = carneMax;
-    }
     public static void setVegetal(int vegetal) {
         Almacen.vegetal = vegetal;
     }
-    public static void setVegetalMax(int vegetalMax) {
-        Almacen.vegetalMax = vegetalMax;
+  
+    /**
+     * Constructor para el almacén central
+     */
+    public Almacen(){
+        comidaAnimal = 0;
+        comidaVegetal = 0;
+        maxCapacidad = 200;
     }
 
     /**
+     * Añade una cantidad de comida al almacén
+     * @param comida la cantidad de comida a añadir
+     * @param tipo el tipo de comida (true animal, false vegetal)
+     */
+    public void addFood(int comida, boolean tipo){
+        if(tipo && (carne+comida)<=200){
+            carne += comida;
+            System.out.println("Comida animal actual: "+carne);
+        } else if(!tipo && (vegetal+comida)<=200){
+            comidaVegetal += comida;
+            System.out.println("Comida vegetal actual: "+vegetal);
+        }else{
+            System.out.println("La cantidad que se intenta añadir es mayor a la posible");
+        }
+    }
+  
+  /**
      * Reparte de manera equivalente a todos los almacenes de todas las piscifactorias y mantiene lo restante y/o lo no divisible en este almacen
      * @param carneAdd Cantidad de carne a añadir al almacen
      * @param vegetalAdd Cantidad de alimento vegetal a añadir al almacen
@@ -65,5 +78,24 @@ public class Almacen {
             }
         }
         return piscis;
+    }
+
+    /**
+     * Mejora la capacidad del almacén en 50 unidades
+     */
+    public void upgrade(){
+        maxCapacidad += 50;
+        System.out.println("Almacén central mejorado. Se ha aumentado en 50 la capacidad hasta un total de "+maxCapacidad+" unidades");
+    }
+
+    @Override
+    /**
+     * Devuelve la información relevante del almacén
+     */
+    public String toString(){
+        return "------------------ Almacén central ------------------"+
+        "\nCapacidad máxima: "+maxCapacidad+
+        "\nComida animal: "+comidaAnimal+"/"+maxCapacidad+". ("+((int)(comidaAnimal/maxCapacidad)*100)+" %)"+
+        "\nComida vegetal: "+comidaVegetal+"/"+maxCapacidad+". ("+((int)(comidaVegetal/maxCapacidad)*100)+" %)";
     }
 }

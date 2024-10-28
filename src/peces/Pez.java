@@ -216,4 +216,22 @@ public abstract class Pez {
         this.vivo = true;
         this.alimentado = false;
     }
+
+    @Override
+    /**
+     * Muestra información relevante del pez
+     */
+    public String toString(){
+        return (
+            "---------- " + this.nombre + " ----------" + "\n" +
+            "Nombre científico: " + this.nombreCientifico + "\n" +
+            "Tipo: " + this.tipo + "\n" +
+            "Coste: " + this.coste + " monedas\n" +
+            "Monedas: " + this.monedas + " monedas\n" +
+            "Huevos: " + this.huevos + " huevos\n" + 
+            "Ciclo: " + this.ciclo + " días\n" +
+            "Madurez: " + this.madurez + " días\n" +
+            "Óptimo: " + this.optimo + " días"
+        );
+    }
 }
