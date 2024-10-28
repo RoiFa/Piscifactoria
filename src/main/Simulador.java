@@ -256,7 +256,7 @@ public class Simulador {
                         coste = espacio;
                     }
                     System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                    int cont = escogeDos();
+                    int cont = escogeOpciones(1,2);
                     if(cont==1){
                         if(monedas.getCantidad()>=coste){
                             monedas.gastar(coste);
@@ -276,7 +276,7 @@ public class Simulador {
                         coste = espacio;
                     }
                     System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                    int cont = escogeDos();
+                    int cont = escogeOpciones(1,2);
                     if(cont==1){
                         if(monedas.getCantidad()>=coste){
                             monedas.gastar(coste);
@@ -304,7 +304,7 @@ public class Simulador {
                     coste = espacio;
                 }
                 System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                int cont = escogeDos();
+                int cont = escogeOpciones(1,2);
                 if(cont==1){
                     if(monedas.getCantidad()>=coste){
                         monedas.gastar(coste);
@@ -324,7 +324,7 @@ public class Simulador {
                     coste = espacio;
                 }
                 System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                int cont = escogeDos();
+                int cont = escogeOpciones(1,2);
                 if(cont==1){
                     if(monedas.getCantidad()>=coste){
                         monedas.gastar(coste);
@@ -460,7 +460,7 @@ public class Simulador {
             System.out.println("1. Comprar edificios");
             System.out.println("2. Mejorar edificios");
             System.out.println("3. Cancelar");
-            opcion = escogeTres();
+            opcion = escogeOpciones(1,3);
 
             switch (opcion) {
                 case 1:
@@ -477,14 +477,12 @@ public class Simulador {
 
     }
 
-
-
-
-
     /**
      * Se encarga de la opción comprar del método upgrade
+     * 
+     * @return  Si se ha realizado la operación correctamente (0) o no (1)
      */
-    private int comprar(){
+    private int comprar(){ //TODO mejorar método
 
         int opcion = 0;
 
@@ -497,73 +495,8 @@ public class Simulador {
 
             switch (opcion) {
                 case 1:
-                    System.out.println("1. Río");
-                    System.out.println("2. Mar");
-                    System.out.println("3. Volver");
-                    int buyPisc = escogeTres();
-                    
-                    if(buyPisc == 3){
-                        opcion = 0;
-                    } else{
-                        
-                        if(buyPisc == 1){
-                            int piscRio = 0;
-                            for(Piscifactoria p : piscis){
-                                if(p.getTipo().equals("rio")){
-                                    piscRio++;
-                                }
-                            }
-                            int costeRio = (500+500*piscRio);
-                            System.out.println("Coste: "+costeRio+" monedas. Disponibles: "+monedas.getCantidad()+" monedas.");
-                            int cont = escogeDos();
-                            if(cont==1){
-                                if(monedas.getCantidad()>=costeRio){
-                                    monedas.gastar(costeRio);
-                                    System.out.println("Introduzca el nombre de la nueva piscifactoría");
-                                    String nomRio = Reader.readTheLine();
-                                    while (nomRio.equals("")) {
-                                        System.out.println("Vuelva a introducir un nombre");
-                                        nomRio = Reader.readTheLine();
-                                    }
-                                    piscis.add(new Piscifactoria("rio",nomRio));
-                                } else{
-                                    System.out.println("Monedas insuficientes");
-                                }
-                            } else{
-                                System.out.println("Operación cancelada");
-                            }
-
-                        } else{
-                            int piscMar = 0;
-                            for(Piscifactoria p : piscis){
-                                if(p.getTipo().equals("mar")){
-                                    piscMar++;
-                                }
-                            }
-                            int costeMar = (2000+2000*piscMar);
-                            System.out.println("Coste: "+costeMar+" monedas. Disponibles: "+monedas.getCantidad()+" monedas.");
-                            int cont = escogeDos();
-                            if(cont==1){
-                                if(monedas.getCantidad()>=costeMar){
-                                    monedas.gastar(costeMar);
-                                    System.out.println("Introduzca el nombre de la nueva piscifactoría");
-                                    String nomMar = Reader.readTheLine();
-                                    while (nomMar.equals("")) {
-                                        System.out.println("Vuelva a introducir un nombre");
-                                        nomMar = Reader.readTheLine();
-                                    }
-                                    piscis.add(new Piscifactoria("mar",nomMar));
-                                } else{
-                                    System.out.println("Monedas insuficientes");
-                                }
-                            } else{
-                                System.out.println("Operación cancelada");
-                            }
-                        }
-
-                    }
+                    opcion = comparPisc();
                     break;
-
                 case 2:
                     if(almacen==null){
                         if(monedas.getCantidad()>=2000){
@@ -579,7 +512,52 @@ public class Simulador {
                     break;
 
                 case 3:
+                    return opcion;
+            }
+        }
+        return 1;
+    }
+
+    /**
+     * Método que se encarga de la lógica de comprar piscifactorías.
+     * 
+     * @return  Si se ha realizado la operación correctamente (0) o no (1)
+     */
+    private int comparPisc() {
+        System.out.println("Elige el tipo de piscifactoría a comprar:\n" +
+        "1.- Río\n" +
+        "2.- Mar\n" +
+        "3.- Volver"
+        );
+        int buyPisc = escogeOpciones(1,3);
+
+        if (buyPisc != 3) {
+            int numPisc = 0;
+            for (Piscifactoria p : piscis) {
+                if (p.getTipo().equals(buyPisc == 1 ? "rio" : "mar")) {
+                    numPisc++;
+                }
+            }
+            int coste = buyPisc == 1 ? 500 + 500 * numPisc : 2000 + 2000 * numPisc;
+            System.out.println("Coste: " + coste + " monedas. Disponibles: " + monedas.getCantidad() + " monedas.");
+            if (coste < monedas.getCantidad()) {
+                System.out.println("Monedas insuficientes. Cancelando operación.");
+            } else {
+                System.out.println("Desea proseguir con la operación? (1: sí; 2: no)");
+                int cont = escogeOpciones(1,2);
+                if (cont == 1) {
+                    monedas.gastar(coste);
+                    System.out.println("Introduzca el nombre de la nueva piscifactoría");
+                    String nombre = Reader.readTheLine();
+                    while (nombre.equals("")) {
+                        System.out.println("Nombre no válido. Vuelva a introducir un nombre");
+                        nombre = Reader.readTheLine();
+                    }
+                    piscis.add(new Piscifactoria(buyPisc == 1 ? "rio" : "mar",nombre));
                     return 0;
+                } else {
+                    System.out.println("Cancelando operación.");
+                }
             }
         }
         return 1;
@@ -588,7 +566,7 @@ public class Simulador {
     /**
      * Se encarga de la opción mejorar del método upgrade
      */
-    private int mejorar(){
+    private int mejorar(){  //TODO MEJORAR este método
 
         int opcion = 0;
 
@@ -604,7 +582,7 @@ public class Simulador {
                     System.out.println("1. Comprar tanque");
                     System.out.println("2. Aumentar almacén de comida");
                     System.out.println("3. Volver");
-                    int mejora = escogeTres();
+                    int mejora = escogeOpciones(1,3);
 
                     if(mejora==3){
                         opcion = 0;
@@ -622,7 +600,7 @@ public class Simulador {
                                         costeTanque = 600+(600*numTanques);
                                     }
                                     System.out.println("Coste del nuevo tanque: "+costeTanque+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                                    int cont = escogeDos();
+                                    int cont = escogeOpciones(1,2);
                                     if(cont==1){
                                         if(monedas.getCantidad()>=costeTanque){
                                             monedas.gastar(costeTanque);
@@ -642,7 +620,7 @@ public class Simulador {
                                 if(piscis.get(piscifactoria).getTipo().equals("rio")){
                                     if(piscis.get(piscifactoria).getComidaMax()<250){
                                         System.out.println("Coste mejora almacén de comida: 50 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
-                                        int cont = escogeDos();
+                                        int cont = escogeOpciones(1,2);
                                         if(cont==1){
                                             if(monedas.getCantidad()>=50){
                                                 monedas.gastar(50);
@@ -655,7 +633,7 @@ public class Simulador {
                                 } else{
                                     if(piscis.get(piscifactoria).getComidaMax()<1000){
                                         System.out.println("Coste mejora almacén de comida: 200 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
-                                        int cont = escogeDos();
+                                        int cont = escogeOpciones(1,2);
                                         if(cont==1){
                                             if(monedas.getCantidad()>=200){
                                                 monedas.gastar(200);
@@ -674,7 +652,7 @@ public class Simulador {
                 case 2:
                     if(almacen!=null){
                         System.out.println("Aumentar capacidad: 200 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
-                        int cont = escogeDos();
+                        int cont = escogeOpciones(1,2);
                         if(cont==1){
                             if(monedas.getCantidad()>=200){
                                 monedas.gastar(200);
@@ -717,30 +695,20 @@ public class Simulador {
 
 
     /**
-     * Permite escoger una opción entera entre 1 y 3
-     * @return el número seleccionado
+     * Permite escoger un número entre un mínimo y un máximo pasado
+     * 
+     * @param min   El número mínimo a seleccionar
+     * @param max   El número máximo a seleccionar
+     * @return  El número escogido.
      */
-    private int escogeTres(){
+    private int escogeOpciones(int min, int max) {
+        System.out.println("Escoge una opción entre " + min + " y " + max);
         int opcion = Reader.readTheNumber();
-        while (opcion<1 || opcion>3) {
-            System.out.println("Por favor introduzca un número entero entre 1 y 3");
+        while (opcion<min || opcion>max) {
+            System.out.println("Por favor introduzca una opción válida (entre " + min + " y " + max + ")" );
             opcion = Reader.readTheNumber();
         }
         return opcion;
-    }
-   
-    /**
-     * Permite escoger una opción entera entre 1 y 2
-     * @return el número seleccionado
-     */
-    private int escogeDos(){
-        System.out.println("Introduzca 1 para continuar o 2 para cancelar");
-        int cont = Reader.readTheNumber();
-        while (cont<1 || cont>2) {
-            System.out.println("Por favor, introduzca 1 o 2");
-            cont = Reader.readTheNumber();
-        }
-        return cont;
     }
 
     /**
