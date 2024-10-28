@@ -36,6 +36,7 @@ public class Tanque {
     }
     public String getTipoPez(){
         return tipoPez;
+    }
     public Pez[] getPeces() {
         return peces;
     }
