@@ -1,8 +1,5 @@
-
 package main;
-
 import java.util.ArrayList;
-
 import estadisticas.Estadisticas;
 import helpers.Reader;
 import monedas.Monedas;
@@ -17,56 +14,41 @@ import tanque.Tanque;
 public class Simulador {
     
     /** Los días que han pasado */
-    private int dias;
+    private int dias=0;
     /** Las piscifactorías que hay */
-    private static ArrayList<Piscifactoria> piscis;
+    private static ArrayList<Piscifactoria> piscis= new ArrayList<>();
     /** El nombre de la entidad */
     private String nombre;
     /** Las monedas */
-    private Monedas monedas;
+    public Monedas monedas = new Monedas();
     /** El almacén de comida */
-    private Almacen almacen;
-    /** Las estadísticas */
+    private Almacen almacen = null;
     private Estadisticas estadisticas;
-
-    /**
-     * Constructor básico para la clase Simulador
-     */
-    private Simulador(){
-        dias = 0;
-        piscis = new ArrayList<>();
-        nombre = "";
-        monedas = new Monedas();
-        almacen = null;
-        String[] nomPeces = {AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-                             AlmacenPropiedades.BAGRE_CANAL.getNombre(),AlmacenPropiedades.BESUGO.getNombre(),
-                             AlmacenPropiedades.CARPA.getNombre(),AlmacenPropiedades.COBIA.getNombre(),
-                             AlmacenPropiedades.DORADA.getNombre(),AlmacenPropiedades.KOI.getNombre(),
-                             AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.RODABALLO.getNombre(),
-                             AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
-        estadisticas = new Estadisticas(nomPeces);
-    }
 
     /**
      * Inicializa el sistema desde cero
      */
     private void init(){
-
+        String[] nomPeces = {AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
+            AlmacenPropiedades.BAGRE_CANAL.getNombre(),AlmacenPropiedades.BESUGO.getNombre(),
+            AlmacenPropiedades.CARPA.getNombre(),AlmacenPropiedades.COBIA.getNombre(),
+            AlmacenPropiedades.DORADA.getNombre(),AlmacenPropiedades.KOI.getNombre(),
+            AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.RODABALLO.getNombre(),
+            AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+            estadisticas = new Estadisticas(nomPeces);
         while (nombre.equals("")) {
-            System.out.println("Deme el nombre de la entidad:");
+            System.out.println("Deme el nombre de la nueva empresa:");
             nombre = Reader.readTheLine();
         }
         System.out.println("Deme el nombre de la primera piscifactoría (río)");
         String nomPisc = Reader.readTheLine();
         while (nomPisc.equals("")) {
-            System.out.println("Vuelva a introducir un nombre");
+            System.out.println("Introduzca un nombre valido");
             nomPisc = Reader.readTheLine();
         }
         piscis.add(new Piscifactoria("rio",nomPisc));
-        piscis.get(0).addFood(25,true);
-        piscis.get(0).addFood(25, false);
+        piscis.get(0).addFood(25,25);
         monedas.setCantidad(100);
-
     }
 
     /**
@@ -213,7 +195,6 @@ public class Simulador {
         for(Piscifactoria p : piscis){
             p.nextDay();
         }
-        //TODO terminar
     }
 
     /**
@@ -221,11 +202,11 @@ public class Simulador {
      * o al almacén central si se dispone de el
      */
     private void addFood(){
-        System.out.println("Introduzca el tipo de comida (animal o vegetal)");
-        String tipoComida = Reader.readTheLine();
-        while (!tipoComida.equalsIgnoreCase("animal") && !tipoComida.equalsIgnoreCase("vegetal")) {
+        System.out.println("Introduzca el tipo de comida:\n1.animal\n2.vegetal");
+        int tipoComida = Reader.readTheNumber()+1;
+        while (!(tipoComida==1)||!(tipoComida==2)) {
             System.out.println("Especifique animal o vegetal");
-            tipoComida = Reader.readTheLine();
+            tipoComida = Reader.readTheNumber();
         }
         System.out.println("Introduzca la cantidad (5, 10, 25 o llenar). El coste es 1 moneda por unidad y 5 monedas de descuento cada 25 unidades");
         String cantidad = Reader.readTheLine();
@@ -236,53 +217,60 @@ public class Simulador {
 
         int espacio;
         int add = 0;
-        int coste;
+        int coste=0;
         if(almacen==null){
-            
             int piscifactoria = selectPisc();
-
             if(piscifactoria !=-1){
-                if(!cantidad.equalsIgnoreCase("llenar")){
+                if(cantidad!="llenar"){
                     add = Integer.parseInt(cantidad);
                 }
-                if(tipoComida.equalsIgnoreCase("animal")){
+                if(tipoComida==1){
                     espacio = piscis.get(piscifactoria).getComidaMax()-piscis.get(piscifactoria).getComidaAnimal();
                     if(add==0){
-                        add = espacio;
+                        add = espacio - (5*((int) espacio/25));
                     }
                     if(add<=espacio){
                         coste = add - (5*((int) add/25));
-                    } else{
-                        coste = espacio;
                     }
-                    System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                    int cont = escogeDos();
-                    if(cont==1){
-                        if(monedas.getCantidad()>=coste){
-                            monedas.gastar(coste);
-                            piscis.get(piscifactoria).addFood(add, true);
-                        } else{
-                            System.out.println("Monedas insuficientes");
+
+                    if(add > espacio){
+                        System.out.println("Cantidad a añadir mayor de lo posible");
+                    }else{
+                        System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                        System.out.println("Confirmar compra?");
+                        System.out.println("1. Si    2. No");
+                        if(Reader.readTheNumber()==1){
+                            if(monedas.getCantidad()>=coste){
+                                monedas.gastar(coste);
+                                piscis.get(piscifactoria).addFood(add, 0);
+                            } else{
+                                System.out.println("Monedas insuficientes");
+                            }
                         }
                     }
+                    
                 } else{
-                    espacio = piscis.get(piscifactoria).getComidaMax()-piscis.get(piscifactoria).getComidaVegetal();
+                    espacio = piscis.get(piscifactoria).getComidaMax()-piscis.get(piscifactoria).getComidaAnimal();
                     if(add==0){
-                        add = espacio;
+                        add = espacio - (5*((int) espacio/25));
                     }
                     if(add<=espacio){
                         coste = add - (5*((int) add/25));
-                    } else{
-                        coste = espacio;
                     }
-                    System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                    int cont = escogeDos();
-                    if(cont==1){
-                        if(monedas.getCantidad()>=coste){
-                            monedas.gastar(coste);
-                            piscis.get(piscifactoria).addFood(add, false);
-                        } else{
-                            System.out.println("Monedas insuficientes");
+
+                    if(add > espacio){
+                        System.out.println("Cantidad a añadir mayor de lo posible");
+                    }else{
+                        System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                        System.out.println("Confirmar compra?");
+                        System.out.println("1. Si    2. No");
+                        if(Reader.readTheNumber()==1){
+                            if(monedas.getCantidad()>=coste){
+                                monedas.gastar(coste);
+                                piscis.get(piscifactoria).addFood(0, add);
+                            } else{
+                                System.out.println("Monedas insuficientes");
+                            }
                         }
                     }
                 }
@@ -290,51 +278,59 @@ public class Simulador {
 
         } else{
             
-            if(!cantidad.equalsIgnoreCase("llenar")){
+            if(cantidad!="llenar"){
                 add = Integer.parseInt(cantidad);
             }
-            if(tipoComida.equalsIgnoreCase("animal")){
+            if(tipoComida==1){
                 espacio = Almacen.getMaxCapacidad()-Almacen.getCarne();
                 if(add==0){
-                    add = espacio;
+                    add = espacio - (5*((int) espacio/25));
                 }
                 if(add<=espacio){
                     coste = add - (5*((int) add/25));
-                } else{
-                    coste = espacio;
                 }
-                System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                int cont = escogeDos();
-                if(cont==1){
-                    if(monedas.getCantidad()>=coste){
-                        monedas.gastar(coste);
-                        almacen.addFood(add, true);
-                    } else{
-                        System.out.println("Monedas insuficientes");
+
+                if(add > espacio){
+                    System.out.println("Cantidad a añadir mayor de lo posible");
+                }else{
+                    System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                    System.out.println("Confirmar compra?");
+                    System.out.println("1. Si    2. No");
+                    if(Reader.readTheNumber()==1){
+                        if(monedas.getCantidad()>=coste){
+                            monedas.gastar(coste);
+                            almacen.addFood(add, true);
+                        } else{
+                            System.out.println("Monedas insuficientes");
+                        }
                     }
                 }
+                
             } else{
-                espacio = Almacen.getMaxCapacidad()-Almacen.getVegetal();
+                espacio = Almacen.getMaxCapacidad()-Almacen.getCarne();
                 if(add==0){
-                    add = espacio;
+                    add = espacio - (5*((int) espacio/25));
                 }
                 if(add<=espacio){
                     coste = add - (5*((int) add/25));
-                } else{
-                    coste = espacio;
                 }
-                System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
-                int cont = escogeDos();
-                if(cont==1){
-                    if(monedas.getCantidad()>=coste){
-                        monedas.gastar(coste);
-                        almacen.addFood(add, false);
-                    } else{
-                        System.out.println("Monedas insuficientes");
+
+                if(add > espacio){
+                    System.out.println("Cantidad a añadir mayor de lo posible");
+                }else{
+                    System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                    System.out.println("Confirmar compra?");
+                    System.out.println("1. Si    2. No");
+                    if(Reader.readTheNumber()==1){
+                        if(monedas.getCantidad()>=coste){
+                            monedas.gastar(coste);
+                            almacen.addFood(add, false);
+                        } else{
+                            System.out.println("Monedas insuficientes");
+                        }
                     }
                 }
             }
-            piscis = Almacen.repartirComida(0,0);
         }
     }
 
@@ -474,7 +470,6 @@ public class Simulador {
                     break;
             }
         }
-
     }
 
 
