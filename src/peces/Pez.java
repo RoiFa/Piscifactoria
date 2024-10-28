@@ -63,6 +63,7 @@ public abstract class Pez {
         this.alimentado = false;
         this.coste = fish.getCoste();
         this.monedas = fish.getMonedas();
+        this.huevos = fish.getHuevos();
         this.ciclo = fish.getCiclo();
         this.madurez = fish.getMadurez();
         this.optimo = fish.getOptimo();

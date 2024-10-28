@@ -39,6 +39,24 @@ public class Piscifactoria {
     }
 
     /**
+     * El constructor de una piscifactoría.
+     * 
+     * @param tipo  El tipo de piscifactoría (Río o mar)
+     */
+    public Piscifactoria(String tipo,String nombre) {
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.tanques.add(new Tanque(0, tipo));
+        if (tipo.equals("rio")) {
+            this.comidaMax = 25;
+        } else {
+            this.comidaMax = 100;
+        }
+        this.comidaAnimal = 0;
+        this.comidaVegetal = 0;
+    }
+
+    /**
      * Método para añadir comida en los almacenes.
      * 
      * @param addAnimal     La comida animal a añadir
@@ -64,24 +82,6 @@ public class Piscifactoria {
         }
 
         return new int[]{sobraAnimal, sobraVegetal};
-    }
-
-    /**
-     * El constructor de una piscifactoría.
-     * 
-     * @param tipo  El tipo de piscifactoría (Río o mar)
-     */
-    public Piscifactoria(String tipo,String nombre) {
-        this.tipo = tipo;
-        this.nombre = nombre;
-        this.tanques.add(new Tanque(0, tipo));
-        if (tipo.equals("rio")) {
-            this.comidaMax = 25;
-        } else {
-            this.comidaMax = 100;
-        }
-        this.comidaAnimal = 0;
-        this.comidaVegetal = 0;
     }
 
     /**
