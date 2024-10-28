@@ -159,13 +159,21 @@ public class Tanque {
                 if(tipo=="Mar"){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==peces[0].getNombre()){
-                            peces[findSpace()] = creadorEspeciesMar(i,false);
+                            for(int k=0;k<peces[0].getHuevos();k++){
+                                if(peces.length!=ocupacion()){
+                                    peces[findSpace()] = creadorEspeciesMar(i,false);
+                                }
+                            }
                         }
                     }
                 }else{
                     for(int i=0;i<especiesRio.length;i++){
                         if(especiesRio[i].getNombre()==peces[0].getNombre()){
-                            peces[findSpace()] = creadorEspeciesRio(i,false);
+                            for(int k=0;k<peces[0].getHuevos();k++){
+                                if(peces.length!=ocupacion()){
+                                    peces[findSpace()] = creadorEspeciesRio(i,false);
+                                }
+                            }
                         }
                     }
                 }
