@@ -216,4 +216,14 @@ public abstract class Pez {
         this.vivo = true;
         this.alimentado = false;
     }
+
+    @Override
+    /**
+     * Devuelve información del pez, en formato String: Nombre Científico (nombre común), Tipo, Sexo, Edad.
+     * 
+     * @return  Información básica del pez
+     */
+    public String toString() {
+        return this.nombreCientifico + " (" + this.nombre + "), " + this.getTipo() + (this.sexo ? "Macho" : "Hembra") + ", " + this.edad + " días." ;
+    }
 }
