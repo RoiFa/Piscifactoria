@@ -1,9 +1,7 @@
 package main;
-
 import java.util.ArrayList;
 
 import piscifactoria.Piscifactoria;
-
 /**
  * Clase que representa al almacén central
  */
@@ -36,6 +34,8 @@ public class Almacen {
     public Almacen(){
         carne = 0;
         vegetal = 0;
+        comidaAnimal = 0;
+        comidaVegetal = 0;
         maxCapacidad = 200;
     }
 

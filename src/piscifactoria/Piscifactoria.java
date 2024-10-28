@@ -86,6 +86,13 @@ public class Piscifactoria {
         return new int[]{sobraAnimal, sobraVegetal};
     }
 
+    public String getNombre(){
+        return nombre;
+    }
+
+    public String getTipo(){
+        return tipo;
+    }
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
