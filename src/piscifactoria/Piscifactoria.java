@@ -1,15 +1,17 @@
 package piscifactoria;
 import java.util.ArrayList;
-
+import monedas.Monedas;
 import helpers.Reader;
 import helpers.RNG;
 import main.Almacen;
+import main.Simulador;
 import peces.Pez;
 import peces.rio.Koi;
 import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
 public class Piscifactoria {
+    private static Object monedas;
     /** El nombre de la piscifactoría. */
     private String nombre;
     /** El tipo de piscifactoría (rio o mar) */
@@ -85,7 +87,6 @@ public class Piscifactoria {
 
         return new int[]{sobraAnimal, sobraVegetal};
     }
-  
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
@@ -178,7 +179,7 @@ public class Piscifactoria {
      * @return  La cantidad de dinero conseguido por vender peces.
      */
     public int nextDay() {
-        int dineroVendido = 0;
+        int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             for (Pez pez : tank.getPeces()) {
                 int[] comida = pez.grow(comidaAnimal, comidaVegetal);
@@ -193,13 +194,14 @@ public class Piscifactoria {
                     if (pez instanceof Koi && RNG.RandomInt(10) == 1) {
                         pez.setMonedas(pez.getMonedas()+5);
                     } else {
-                        dineroVendido += pez.getMonedas();
+                        ((Monedas) Piscifactoria.monedas).anadir(pez.getMonedas());
+                        pecesVendidos++;
                         pez = null;
                     }
                 }
             }
         }
-        return dineroVendido;
+        return pecesVendidos;
     }
 
     /**
@@ -299,22 +301,6 @@ public class Piscifactoria {
             opcion = Reader.readTheNumber();
         }
         return tanques.get(opcion-1);
-    }
-
-    /**
-     * Añade comida a la piscifactoría
-     * @param food la cantidad de comida
-     * @param tipoComida el tipo de comida (true animal, false vegetal)
-     */
-    public void addFood(int food, boolean tipoComida){
-        if(tipoComida){
-            comidaAnimal += food;
-            System.out.println("Añadida "+food+" de comida animal");
-        } else{
-            comidaVegetal += food;
-            System.out.println("Añadida "+food+" de comida vegetal");
-        }
-        showFood();
     }
 
     /**
