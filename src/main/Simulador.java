@@ -1,3 +1,4 @@
+
 package main;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Simulador {
     /** Los días que han pasado */
     private int dias;
     /** Las piscifactorías que hay */
-    private ArrayList<Piscifactoria> piscis;
+    private static ArrayList<Piscifactoria> piscis;
     /** El nombre de la entidad */
     private String nombre;
     /** Las monedas */
@@ -293,7 +294,7 @@ public class Simulador {
                 add = Integer.parseInt(cantidad);
             }
             if(tipoComida.equalsIgnoreCase("animal")){
-                espacio = almacen.getMaxCapacidad()-almacen.getComidaAnimal();
+                espacio = Almacen.getMaxCapacidad()-Almacen.getCarne();
                 if(add==0){
                     add = espacio;
                 }
@@ -313,7 +314,7 @@ public class Simulador {
                     }
                 }
             } else{
-                espacio = almacen.getMaxCapacidad()-almacen.getComidaVegetal();
+                espacio = Almacen.getMaxCapacidad()-Almacen.getVegetal();
                 if(add==0){
                     add = espacio;
                 }
@@ -333,7 +334,7 @@ public class Simulador {
                     }
                 }
             }
-            piscis = almacen.repartirComida(piscis);
+            piscis = Almacen.repartirComida(0,0);
         }
     }
 
@@ -819,5 +820,9 @@ public class Simulador {
         } finally{
             Reader.closer();
         }
+    }
+
+    public static ArrayList<Piscifactoria> getPiscis() {
+        return piscis;
     }
 }

@@ -38,4 +38,9 @@ public class Monedas {
     public void gastar(int mon){
         this.cantidad -= mon;
     }
+
+    @Override
+    public String toString() {
+        return "Actualmente hay "+cantidad+" monedas";
+    }
 }

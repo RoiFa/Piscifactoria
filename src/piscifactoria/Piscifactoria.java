@@ -93,21 +93,12 @@ public class Piscifactoria {
     public String getTipo(){
         return tipo;
     }
-
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
 
     public int getComidaMax() {
         return comidaMax;
-    }
-
-    public int getComidaAnimal() {
-        return comidaAnimal;
-    }
-
-    public int getComidaVegetal() {
-        return comidaVegetal;
     }
 
     /**
@@ -242,18 +233,14 @@ public class Piscifactoria {
      * @param dinero    El dinero actual de la simulación.
      * @return          Si se ha mejorado o no.
      */
-    public boolean upgradeFood(int dinero) {
+    public boolean upgradeFood() {
         if (this.tipo.equals("mar")) {
-            if (dinero >= 200 && this.comidaMax < 1000) {
                 this.comidaMax += 100;
                 return true;
-            }
             
         } else if (this.tipo.equals("rio")) {
-            if (dinero >= 50 && this.comidaMax < 250) {
                 this.comidaMax += 25;
                 return true;
-            }
         }
         return false;
     }
@@ -302,7 +289,7 @@ public class Piscifactoria {
     private void menuTank(){
         int i = 1;
         for(Tanque tanque : tanques){
-            System.out.println(i+". Tanque "+tanque.getNumTanque()+": "+tanque.getTipoPez());
+            System.out.println(i+". Tanque "+tanque.getNumTanque()+": "+tanque.peces[0].getNombre());
             i++;
         }
     }
@@ -360,5 +347,10 @@ public class Piscifactoria {
     public void addTank(){
         this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo));
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
+    }
+
+    @Override
+    public String toString() {
+        return "Piscifactoria de "+tipo+" con "+tanques.size()+" tanques";
     }
 }

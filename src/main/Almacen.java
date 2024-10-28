@@ -1,4 +1,7 @@
 package main;
+import java.util.ArrayList;
+
+import piscifactoria.Piscifactoria;
 /**
  * Clase que representa al almacén central
  */
@@ -20,11 +23,17 @@ public class Almacen {
     public static void setVegetal(int vegetal) {
         Almacen.vegetal = vegetal;
     }
+
+    public static int getMaxCapacidad() {
+        return maxCapacidad;
+    }
   
     /**
      * Constructor para el almacén central
      */
     public Almacen(){
+        carne = 0;
+        vegetal = 0;
         comidaAnimal = 0;
         comidaVegetal = 0;
         maxCapacidad = 200;
@@ -40,7 +49,7 @@ public class Almacen {
             carne += comida;
             System.out.println("Comida animal actual: "+carne);
         } else if(!tipo && (vegetal+comida)<=200){
-            comidaVegetal += comida;
+            vegetal += comida;
             System.out.println("Comida vegetal actual: "+vegetal);
         }else{
             System.out.println("La cantidad que se intenta añadir es mayor a la posible");
@@ -55,9 +64,9 @@ public class Almacen {
      */
     public static ArrayList<Piscifactoria> repartirComida(int carneAdd, int vegetalAdd){
         ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
-        if((carneAdd+carne)>carneMax){
+        if((carneAdd+carne)>maxCapacidad){
             System.out.println("Se esta intentando añadir mas carne de lo que se es capaz de almacenar");
-        }else if((vegetalAdd+vegetal)>carneMax){
+        }else if((vegetalAdd+vegetal)>maxCapacidad){
             System.out.println("Se esta intentando añadir mas alimento vegetal de lo que se es capaz de almacenar");
         }else{
             int numPiscis = piscis.size();
@@ -95,7 +104,7 @@ public class Almacen {
     public String toString(){
         return "------------------ Almacén central ------------------"+
         "\nCapacidad máxima: "+maxCapacidad+
-        "\nComida animal: "+comidaAnimal+"/"+maxCapacidad+". ("+((int)(comidaAnimal/maxCapacidad)*100)+" %)"+
-        "\nComida vegetal: "+comidaVegetal+"/"+maxCapacidad+". ("+((int)(comidaVegetal/maxCapacidad)*100)+" %)";
+        "\nComida animal: "+carne+"/"+maxCapacidad+". ("+((int)(carne/maxCapacidad)*100)+" %)"+
+        "\nComida vegetal: "+vegetal+"/"+maxCapacidad+". ("+((int)(vegetal/maxCapacidad)*100)+" %)";
     }
 }
