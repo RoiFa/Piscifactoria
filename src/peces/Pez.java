@@ -209,6 +209,7 @@ public abstract class Pez {
      */
     protected abstract int[] comer(int a, int v);
     
+    /**Reinicia los valores del pez */
     public void reset() {
         this.edad = 0;
         this.fertil = false;
