@@ -85,7 +85,7 @@ public class Piscifactoria {
 
         return new int[]{sobraAnimal, sobraVegetal};
     }
-
+  
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
