@@ -35,9 +35,9 @@ static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             input = Integer.parseInt(br.readLine());
             return input;
         }catch(IOException e){
-            return 0;
+            return -1;
         } catch (Exception e) {
-            return 0;
+            return -1;
         }
     }
 

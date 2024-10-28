@@ -19,7 +19,7 @@ public class Koi extends Pez{
      * Constructor de un koi con género aleatorio.
      */
     public Koi() {
-        super(AlmacenPropiedades.KOI, RNG.randomBoolean());
+        super(AlmacenPropiedades.KOI, RNG.RandomBoolean());
     }
 
     @Override

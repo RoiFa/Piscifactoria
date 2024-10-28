@@ -19,12 +19,12 @@ public class ArenqueDelAtlantico extends Pez{
      * Constructor de un arenque del atlántico con género aleatorio.
      */
     public ArenqueDelAtlantico() {
-        super(AlmacenPropiedades.ARENQUE_ATLANTICO, RNG.randomBoolean());
+        super(AlmacenPropiedades.ARENQUE_ATLANTICO, RNG.RandomBoolean());
     }
 
     @Override
     protected int[] comer(int a, int v) {
-        if (RNG.randomBoolean()) {
+        if (RNG.RandomBoolean()) {
             setAlimentado(true);
             return new int[]{0,0};
         }

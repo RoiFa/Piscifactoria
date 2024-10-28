@@ -192,7 +192,7 @@ public abstract class Pez {
             if (this.edad == this.madurez) {
                 this.fertil = true;
             }
-            if ((!this.alimentado && RNG.randomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.randomInt(0, 100) >= 5)) {
+            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(0, 100) >= 5)) {
                 setVivo(false);
             }
             return comido;
@@ -219,11 +219,19 @@ public abstract class Pez {
 
     @Override
     /**
-     * Devuelve información del pez, en formato String: Nombre Científico (nombre común), Tipo, Sexo, Edad.
-     * 
-     * @return  Información básica del pez
+     * Muestra información relevante del pez
      */
-    public String toString() {
-        return this.nombreCientifico + " (" + this.nombre + "), " + this.getTipo() + (this.sexo ? "Macho" : "Hembra") + ", " + this.edad + " días." ;
+    public String toString(){
+        return (
+            "---------- " + this.nombre + " ----------" + "\n" +
+            "Nombre científico: " + this.nombreCientifico + "\n" +
+            "Tipo: " + this.tipo + "\n" +
+            "Coste: " + this.coste + " monedas\n" +
+            "Monedas: " + this.monedas + " monedas\n" +
+            "Huevos: " + this.huevos + " huevos\n" + 
+            "Ciclo: " + this.ciclo + " días\n" +
+            "Madurez: " + this.madurez + " días\n" +
+            "Óptimo: " + this.optimo + " días"
+        );
     }
 }

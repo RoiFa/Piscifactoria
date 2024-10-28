@@ -19,7 +19,7 @@ public class Carpa extends Pez{
      * Constructor de una carpa con género aleatorio.
      */
     public Carpa() {
-        super(AlmacenPropiedades.CARPA, RNG.randomBoolean());
+        super(AlmacenPropiedades.CARPA, RNG.RandomBoolean());
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Carpa extends Pez{
             setAlimentado(false);
             return new int[]{0,0};
         }
-        if (a >= 1 && v >= 1 && RNG.randomBoolean()) {
+        if (a >= 1 && v >= 1 && RNG.RandomBoolean()) {
             setAlimentado(true);
             return new int[]{1,1};
         }

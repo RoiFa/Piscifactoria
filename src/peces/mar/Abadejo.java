@@ -19,12 +19,12 @@ public class Abadejo extends Pez{
      * Constructor de un abadejo con género aleatorio.
      */
     public Abadejo() {
-        super(AlmacenPropiedades.ABADEJO, RNG.randomBoolean());
+        super(AlmacenPropiedades.ABADEJO, RNG.RandomBoolean());
     }
 
     @Override
     protected int[] comer(int a, int v) {
-        if (RNG.randomInt(100)<=75) {
+        if (RNG.RandomInt(100)<=75) {
             setAlimentado(true);
             return new int[]{0,0};
         }

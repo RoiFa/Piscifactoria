@@ -19,7 +19,7 @@ public class Rodaballo extends Pez{
      * Constructor de un rodaballo con género aleatorio.
      */
     public Rodaballo() {
-        super(AlmacenPropiedades.RODABALLO, RNG.randomBoolean());
+        super(AlmacenPropiedades.RODABALLO, RNG.RandomBoolean());
     }
 
     @Override

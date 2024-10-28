@@ -19,7 +19,7 @@ public class SalmonChinook extends Pez{
      * Constructor de un salmón chinook con género aleatorio.
      */
     public SalmonChinook() {
-        super(AlmacenPropiedades.SALMON_CHINOOK, RNG.randomBoolean());
+        super(AlmacenPropiedades.SALMON_CHINOOK, RNG.RandomBoolean());
     }
 
     @Override
