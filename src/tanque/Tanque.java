@@ -17,7 +17,7 @@ public class Tanque {
     /** Cuenta la creción de tanques */
     private static int contador=0;
     /** Lista de peces que avitan este tanque */
-    private Pez[] peces;
+    public Pez[] peces;
     /** Capacidad maxima del tanque */
     private int maxSize=20;
 
@@ -531,5 +531,32 @@ public class Tanque {
             }
         }
         return count;
+    }
+
+    /**
+     * Elimina los peces muertos del tanque
+     */
+    public void cleanTank(){
+        for(int i = 0;i<maxSize;i++){
+            if(peces[i]!=null && !peces[i].isVivo()){
+                peces[i] = null;
+            }
+        }
+    }
+
+    /**
+     * Elimina todos los peces del tanque independientemente de su estado
+     */
+    public void emptyTank(){
+        for(int i = 0;i<maxSize;i++){
+            if(peces[i]!=null){
+                peces[i] = null;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Tanque de : "+tipo+" con "+peces.length+" peces de la especie "+peces[0].getNombre();
     }
 }
