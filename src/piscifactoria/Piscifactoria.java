@@ -4,7 +4,6 @@ import monedas.Monedas;
 import helpers.Reader;
 import helpers.RNG;
 import main.Almacen;
-import main.Simulador;
 import peces.Pez;
 import peces.rio.Koi;
 import tanque.Tanque;
@@ -17,7 +16,7 @@ public class Piscifactoria {
     /** El tipo de piscifactoría (rio o mar) */
     private String tipo;
     /** La lista de tanques en la piscifactoría */
-    private ArrayList<Tanque> tanques;
+    public ArrayList<Tanque> tanques;
     /** La comida máxima que puede ser almacenada en los almacenes */
     private int comidaMax;
     /** El almacén de comida animal */  
@@ -293,14 +292,14 @@ public class Piscifactoria {
      * Permite seleccionar un tanque y lo devuelve
      * @return el tanque seleccionado
      */
-    public Tanque selectTank(){
+    public int selectTank(){
         menuTank();
         int opcion = Reader.readTheNumber();
         while (opcion<1 || opcion>tanques.size()) {
             System.out.println("Introduzca un número entero entre 1 y "+tanques.size());
             opcion = Reader.readTheNumber();
         }
-        return tanques.get(opcion-1);
+        return opcion-1;
     }
 
     /**
@@ -310,14 +309,6 @@ public class Piscifactoria {
         for(Tanque tanque : tanques){
             tanque.cleanTank();
         }
-    }
-
-    /**
-     * Elimina todos los peces de un tanque de la piscifactoría
-     * independientemente de su estado
-     */
-    public void emptyTank(Tanque tanque){
-        tanques.get(tanques.indexOf(tanque)).emptyTank();
     }
 
     /**
