@@ -1,5 +1,6 @@
 package tanque;
 import helpers.Reader;
+import monedas.Monedas;
 import peces.*;
 import peces.mar.*;
 import peces.rio.*;
@@ -252,6 +253,7 @@ public class Tanque {
                 System.out.println("Cancelando...");
                 break;
             case 1:
+                if(Monedas.comprar(new Carpa().getCoste())){
                     if(ocupacion()==1||enReproduccion){
                         if(peces[0].isMale()){
                             return new Carpa(false);
@@ -261,8 +263,9 @@ public class Tanque {
                     }else{
                         return new Carpa();
                     }
-
+                }
             case 2:
+            if(Monedas.comprar(new Koi().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Koi(false);
@@ -272,8 +275,10 @@ public class Tanque {
                 }else{
                     return new Koi();
                 }
+            }
 
             case 3:
+            if(Monedas.comprar(new SalmonChinook().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new SalmonChinook(false);
@@ -283,8 +288,10 @@ public class Tanque {
                 }else{
                     return new SalmonChinook();
                 }
+            }
 
             case 4:
+            if(Monedas.comprar(new TilapiaDelNilo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new TilapiaDelNilo(false);
@@ -294,8 +301,10 @@ public class Tanque {
                 }else{
                     return new TilapiaDelNilo();
                 }
+            }
     
             case 5:
+            if(Monedas.comprar(new Pejerrey().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Pejerrey(false);
@@ -305,8 +314,10 @@ public class Tanque {
                 }else{
                     return new Pejerrey();
                 }
+            }
 
             case 6:
+            if(Monedas.comprar(new Dorada().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Dorada(false);
@@ -316,8 +327,10 @@ public class Tanque {
                 }else{
                     return new Dorada();
                 }
+            }
 
             case 7:
+            if(Monedas.comprar(new BagreDeCanal().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new BagreDeCanal(false);
@@ -327,6 +340,7 @@ public class Tanque {
                 }else{
                     return new BagreDeCanal();
                 }
+            }
         }
                 return null;
     }
@@ -344,6 +358,7 @@ public class Tanque {
             System.out.println("Cancelando...");
                 break;
                 case 1:
+                if(Monedas.comprar(new Rodaballo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Rodaballo(false);
@@ -353,8 +368,10 @@ public class Tanque {
                 }else{
                     return new Rodaballo();
                 }
+            }
 
             case 2:
+            if(Monedas.comprar(new Besugo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Besugo(false);
@@ -364,8 +381,10 @@ public class Tanque {
                 }else{
                     return new Besugo();
                 }
+            }
 
             case 3:
+            if(Monedas.comprar(new ArenqueDelAtlantico().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new ArenqueDelAtlantico(false);
@@ -375,8 +394,10 @@ public class Tanque {
                 }else{
                     return new ArenqueDelAtlantico();
                 }
+            }
 
             case 4:
+            if(Monedas.comprar(new Abadejo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Abadejo(false);
@@ -386,8 +407,10 @@ public class Tanque {
                 }else{
                     return new Abadejo();
                 }
+            }
 
             case 5:
+            if(Monedas.comprar(new Cobia().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Cobia(false);
@@ -397,8 +420,10 @@ public class Tanque {
                 }else{
                     return new Cobia();
                 }
+            }
 
                 case 6:
+                if(Monedas.comprar(new Dorada().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new Dorada(false);
@@ -408,8 +433,10 @@ public class Tanque {
                 }else{
                     return new Dorada();
                 }
+            }
 
             case 7:
+            if(Monedas.comprar(new BagreDeCanal().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
                         return new BagreDeCanal(false);
@@ -419,6 +446,7 @@ public class Tanque {
                 }else{
                     return new BagreDeCanal();
                 }
+            }
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package piscifactoria;
 import java.util.ArrayList;
-
+import monedas.Monedas;
 import helpers.Reader;
 import helpers.RNG;
 import main.Almacen;
@@ -10,12 +10,13 @@ import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
 public class Piscifactoria {
+    private static Object monedas;
     /** El nombre de la piscifactoría. */
     private String nombre;
     /** El tipo de piscifactoría (rio o mar) */
     private String tipo;
     /** La lista de tanques en la piscifactoría */
-    private ArrayList<Tanque> tanques;
+    public ArrayList<Tanque> tanques;
     /** La comida máxima que puede ser almacenada en los almacenes */
     private int comidaMax;
     /** El almacén de comida animal */  
@@ -85,7 +86,6 @@ public class Piscifactoria {
 
         return new int[]{sobraAnimal, sobraVegetal};
     }
-  
     public ArrayList<Tanque> getTanques() {
         return tanques;
     }
@@ -178,7 +178,7 @@ public class Piscifactoria {
      * @return  La cantidad de dinero conseguido por vender peces.
      */
     public int nextDay() {
-        int dineroVendido = 0;
+        int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             for (Pez pez : tank.getPeces()) {
                 int[] comida = pez.grow(comidaAnimal, comidaVegetal);
@@ -193,13 +193,14 @@ public class Piscifactoria {
                     if (pez instanceof Koi && RNG.RandomInt(10) == 1) {
                         pez.setMonedas(pez.getMonedas()+5);
                     } else {
-                        dineroVendido += pez.getMonedas();
+                        ((Monedas) Piscifactoria.monedas).anadir(pez.getMonedas());
+                        pecesVendidos++;
                         pez = null;
                     }
                 }
             }
         }
-        return dineroVendido;
+        return pecesVendidos;
     }
 
     /**
@@ -291,30 +292,14 @@ public class Piscifactoria {
      * Permite seleccionar un tanque y lo devuelve
      * @return el tanque seleccionado
      */
-    public Tanque selectTank(){
+    public int selectTank(){
         menuTank();
         int opcion = Reader.readTheNumber();
         while (opcion<1 || opcion>tanques.size()) {
             System.out.println("Introduzca un número entero entre 1 y "+tanques.size());
             opcion = Reader.readTheNumber();
         }
-        return tanques.get(opcion-1);
-    }
-
-    /**
-     * Añade comida a la piscifactoría
-     * @param food la cantidad de comida
-     * @param tipoComida el tipo de comida (true animal, false vegetal)
-     */
-    public void addFood(int food, boolean tipoComida){
-        if(tipoComida){
-            comidaAnimal += food;
-            System.out.println("Añadida "+food+" de comida animal");
-        } else{
-            comidaVegetal += food;
-            System.out.println("Añadida "+food+" de comida vegetal");
-        }
-        showFood();
+        return opcion-1;
     }
 
     /**
@@ -324,14 +309,6 @@ public class Piscifactoria {
         for(Tanque tanque : tanques){
             tanque.cleanTank();
         }
-    }
-
-    /**
-     * Elimina todos los peces de un tanque de la piscifactoría
-     * independientemente de su estado
-     */
-    public void emptyTank(Tanque tanque){
-        tanques.get(tanques.indexOf(tanque)).emptyTank();
     }
 
     /**
