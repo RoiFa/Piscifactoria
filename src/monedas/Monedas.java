@@ -1,18 +1,20 @@
 package monedas;
 
+import helpers.Reader;
+
 /**
  * Clase que gestiona el sistema de monedas
  */
 public class Monedas {
 
     /** Las cantidad de monedas disponibles */
-    private int cantidad;
+    private static int cantidad;
 
     /**
      * Constructor básico para el sistema de monedas
      */
     public Monedas() {
-        this.cantidad = 0;
+        Monedas.cantidad = 0;
     }
 
     public int getCantidad() {
@@ -20,7 +22,7 @@ public class Monedas {
     }
 
     public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+        Monedas.cantidad = cantidad;
     }
 
     /**
@@ -28,15 +30,35 @@ public class Monedas {
      * @param mon las monedas a añadir
      */
     public void anadir(int mon){
-        this.cantidad += mon;
+        cantidad += mon;
     }
 
     /**
      * Resta una cantidad de monedas dada
      * @param mon las monedas a restar
      */
-    public void gastar(int mon){
-        this.cantidad -= mon;
+    public static void gastar(int mon){
+        cantidad -= mon;
+    }
+
+    public static boolean comprar(int coste){
+        System.out.println("Esto tiene un valor de: "+coste+"       Dinero actual: "+cantidad);
+        if(coste>cantidad){
+            System.out.println("No tiene dinero suficiente para costear esta compra");
+            return false;
+        }else{
+            System.out.println("Quiere comprarlo?(1.Si/2.No)");
+            int opcion = Reader.readTheNumber();
+            while (opcion!=1||opcion!=2) {
+                System.out.println("Quiere comprarlo?(1.Si/2.No)");
+            }
+            if(opcion==1){
+                gastar(coste);
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
 
     @Override
