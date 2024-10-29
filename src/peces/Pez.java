@@ -188,11 +188,11 @@ public abstract class Pez {
     public int[] grow(int comidaAnimal, int comidaVegetal) { 
         if (vivo) {
             int[] comido = comer(comidaAnimal, comidaVegetal);
-            setEdad(edad++);
+            setEdad(edad+1);
             if (this.edad == this.madurez) {
                 this.fertil = true;
             }
-            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(0, 100) >= 5)) {
+            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(0, 100) <= 5)) {
                 setVivo(false);
             }
             return comido;
