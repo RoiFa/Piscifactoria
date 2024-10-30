@@ -180,14 +180,9 @@ public class Simulador {
      */
     private static void nextDay(){
         dias++;
-        int dineroConseguido = 0;
         for(Piscifactoria p : piscis){
             p.nextDay();
         }
-        if (dineroConseguido != 0) {
-            System.out.println("Se han conseguido " + dineroConseguido + " por vender peces óptimos.");
-        }
-        monedas.anadir(dineroConseguido);
     }
 
     /**

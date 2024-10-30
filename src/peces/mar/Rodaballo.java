@@ -30,4 +30,14 @@ public class Rodaballo extends Pez{
         }
         return new int[]{2,0};
     }
+
+    @Override
+    public Rodaballo reprod() {
+        return new Rodaballo();
+    }
+
+    @Override
+    public Rodaballo reprod(boolean sexo) {
+        return new Rodaballo();
+    }
 }

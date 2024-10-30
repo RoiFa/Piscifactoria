@@ -31,4 +31,14 @@ public class BagreDeCanal extends Pez{
         setAlimentado(true);
         return new int[]{2,0};
     }
+
+    @Override
+    public BagreDeCanal reprod() {
+        return new BagreDeCanal();
+    }
+
+    @Override
+    public BagreDeCanal reprod(boolean sexo) {
+        return new BagreDeCanal();
+    }
 }

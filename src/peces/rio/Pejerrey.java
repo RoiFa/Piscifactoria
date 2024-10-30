@@ -31,4 +31,14 @@ public class Pejerrey extends Pez{
         setAlimentado(true);
         return new int[]{1,0};
     }
+
+    @Override
+    public Pejerrey reprod() {
+        return new Pejerrey();
+    }
+
+    @Override
+    public Pejerrey reprod(boolean sexo) {
+        return new Pejerrey();
+    }
 }

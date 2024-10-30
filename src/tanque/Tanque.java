@@ -111,7 +111,7 @@ public class Tanque {
      * @return Nuevas cantidades de alimento luego de alimentar a los peces
      */
     public int[] nextDay(int carne, int vegetal){
-        int[] cants;
+        int[] cants = new int[]{0,0};
         for(int i=0;i<peces.length;i++){
             if(peces[i]!=null){
                 if(!peces[i].isFertil()&&(peces[i].getEdad()-peces[i].getMadurez())%peces[i].getCiclo()==0){
@@ -129,10 +129,9 @@ public class Tanque {
                         peces[i] = null;
                     }
                 }
-                return cants;
             }
         }
-        return new int[]{0,0};
+        return cants;
     }
 
     /**
@@ -154,7 +153,7 @@ public class Tanque {
     public void addFish(boolean enReproduccion){
         if(enReproduccion){
             Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
-                Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
+            Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
                 if(tipo.equals("mar")){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==peces[0].getNombre()){

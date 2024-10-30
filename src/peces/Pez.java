@@ -208,6 +208,21 @@ public abstract class Pez {
      * @return La cantidad de comida que come de cada tipo.
      */
     protected abstract int[] comer(int a, int v);
+
+    /**
+     * Método abstracto que devuelve un nuevo pez de su misma clase con sexo aleatorio.
+     * 
+     * @return  Un nuevo pez de la misma clase.
+     */
+    protected abstract Pez reprod();
+
+    /**
+     * Método abstracto que devuelve un nuevo pez de su misma clase con sexo definido.
+     * 
+     * @param sexo
+     * @return
+     */
+    protected abstract Pez reprod(boolean sexo);
     
     /**Reinicia los valores del pez */
     public void reset() {

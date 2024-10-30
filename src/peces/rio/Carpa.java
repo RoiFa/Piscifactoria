@@ -39,4 +39,14 @@ public class Carpa extends Pez{
             return new int[]{2,0};
         }
     }
+
+    @Override
+    public Carpa reprod() {
+        return new Carpa();
+    }
+
+    @Override
+    public Carpa reprod(boolean sexo) {
+        return new Carpa();
+    }    
 }
