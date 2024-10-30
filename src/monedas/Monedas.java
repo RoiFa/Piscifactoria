@@ -29,7 +29,7 @@ public class Monedas {
      * Añade una cantidad de monedas dada
      * @param mon las monedas a añadir
      */
-    public void anadir(int mon){
+    public static void anadir(int mon){
         cantidad += mon;
     }
 

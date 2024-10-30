@@ -1,5 +1,7 @@
 package tanque;
+import helpers.RNG;
 import helpers.Reader;
+import main.Simulador;
 import monedas.Monedas;
 import peces.*;
 import peces.mar.*;
@@ -109,21 +111,36 @@ public class Tanque {
      * @return Nuevas cantidades de alimento luego de alimentar a los peces
      */
     public int[] nextDay(int carne, int vegetal){
+        int pecesVendidos=0;
         int[] cants;
         for(int i=0;i<peces.length;i++){
             if(peces[i]!=null){
-                if(!peces[i].isFertil()&&(peces[i].getEdad()-peces[i].getMadurez())%peces[i].getCiclo()==0){
+                if(!peces[i].isFertil()&&(peces[i].getEdad()-peces[i].getMadurez())%peces[i].getCiclo()==0&&peces[i].isAdulto()){
                     peces[i].setFertil(true);
                 }
                 cants = peces[i].grow(carne,vegetal);
                 carne -= cants[0];
                 vegetal -= cants[1];
-                if(peces[i].isVivo()&&!peces[i].isMale()&&peces[i].isFertil()){
+                if(peces[i].isVivo()&&!peces[i].isMale()&&peces[i].isFertil()&&peces[i].isAdulto()&&hayMacho()){
                     addFish(true);
                 }
+                if (peces[i].getEdad() == peces[i].getOptimo()) {
+                    if (peces[i] instanceof Koi && RNG.RandomInt(10) == 1) {
+                        peces[i].setMonedas(peces[i].getMonedas()+5);
+                    } else {
+                        Monedas.anadir(peces[i].getMonedas());
+                        pecesVendidos++;
+                        peces[i] = null;
+                    }
+                }
             }
+            if (Simulador.almacen!=null&&(carne <= 0 || vegetal <= 0)) {
+                Simulador.almacen.repartirComida(0,0);
+                
+            }
+            
         }
-        return new int[]{carne,vegetal};
+        return new int[]{pecesVendidos,carne,vegetal};
     }
 
     /**
@@ -132,8 +149,10 @@ public class Tanque {
      */
     public boolean hayMacho(){
         for(int i=0;i<peces.length;i++) {
-            if(peces[i].isMale()&&peces[i].isFertil()){
-                return true;
+            if(peces[i]!=null){
+                if(peces[i].isMale()&&peces[i].isFertil()){
+                    return true;
+                }
             }
         }
         return false;
@@ -187,24 +206,24 @@ public class Tanque {
                     }
                 }
             }else{
-                System.out.println("Quiere añadir un "+peces[0].getNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
+                System.out.println("Quiere añadir un "+buscaNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
                 int opcion = Reader.readTheNumber();
                 if(opcion==1){
                     Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
                     Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
                     if(tipo=="mar"){
                         for(int i=0;i<especiesMar.length;i++){
-                            if(especiesMar[i].getNombre()==peces[0].getNombre()){
+                            if(especiesMar[i].getNombre()==buscaNombre()){
                                 if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspeciesMar(i+1,false);
+                                    peces[findSpace()] = creadorEspeciesMar((i+1),false);
                                 }
                             }
                         }
                     }else{
                         for(int i=0;i<especiesRio.length;i++){
-                            if(especiesRio[i].getNombre()==peces[0].getNombre()){
+                            if(especiesRio[i].getNombre()==buscaNombre()){
                                 if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspeciesRio(i+1,false);
+                                    peces[findSpace()] = creadorEspeciesRio((i+1),false);
                                 }
                             }
                         }
@@ -217,6 +236,15 @@ public class Tanque {
                 
             }
         }
+    }
+
+    public String buscaNombre(){
+        for(int i=0;i<peces.length;i++){
+            if(peces[i]!=null){
+                return peces[i].getNombre();
+            }
+        }
+        return "";
     }
 
     /**Menu de texto para peces de Rio */
@@ -255,6 +283,7 @@ public class Tanque {
         for(int i=0;i<peces.length||result==-1;i++){
             if(peces[i]==null){
                 result=i;
+                break;
             }
         }
         return result;
@@ -274,7 +303,18 @@ public class Tanque {
                 System.out.println("Cancelando...");
                 break;
             case 1:
-                if(Monedas.comprar(new Carpa().getCoste())){
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
+            if(Monedas.comprar(new Carpa().getCoste())){
                     if(ocupacion()==1||enReproduccion){
                         if(peces[0].isMale()){
                             return new Carpa(false);
@@ -287,7 +327,19 @@ public class Tanque {
                 }else{
                     return null;
                 }
+            }
             case 2:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new Koi().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -301,8 +353,20 @@ public class Tanque {
             }else{
                 return null;
             }
+        }
 
             case 3:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new SalmonChinook().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -316,8 +380,19 @@ public class Tanque {
             }else{
                 return null;
             }
-
+        }
             case 4:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new TilapiaDelNilo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -331,8 +406,19 @@ public class Tanque {
             }else{
                 return null;
             }
-    
+        }    
             case 5:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new Pejerrey().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -346,8 +432,19 @@ public class Tanque {
             }else{
                 return null;
             }
-
+        }
             case 6:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new Dorada().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -361,8 +458,20 @@ public class Tanque {
             }else{
                 return null;
             }
+        }
 
             case 7:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new BagreDeCanal().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -377,6 +486,7 @@ public class Tanque {
                 return null;
             }
         }
+    }
                 return null;
     }
     /**
@@ -393,6 +503,17 @@ public class Tanque {
             System.out.println("Cancelando...");
                 break;
                 case 1:
+                if(enReproduccion){
+                    if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+                }else{
                 if(Monedas.comprar(new Rodaballo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -406,8 +527,20 @@ public class Tanque {
             }else{
                 return null;
             }
+        }
 
             case 2:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new Besugo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -421,8 +554,20 @@ public class Tanque {
             }else{
                 return null;
             }
+        }
 
             case 3:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new ArenqueDelAtlantico().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -436,8 +581,20 @@ public class Tanque {
             }else{
                 return null;
             }
+        }
 
             case 4:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new Abadejo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -451,8 +608,20 @@ public class Tanque {
             }else{
                 return null;
             }
+        }
 
             case 5:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new Cobia().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -466,8 +635,19 @@ public class Tanque {
             }else{
                 return null;
             }
-
+        }
                 case 6:
+                if(enReproduccion){
+                    if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+                }else{
                 if(Monedas.comprar(new Dorada().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -481,8 +661,19 @@ public class Tanque {
             }else{
                 return null;
             }
-
+        }
             case 7:
+            if(enReproduccion){
+                if(ocupacion()==1||enReproduccion){
+                        if(peces[0].isMale()){
+                            return new Carpa(false);
+                        }else {
+                            return new Carpa(true);
+                        }
+                    }else{
+                        return new Carpa();
+                    }
+            }else{
             if(Monedas.comprar(new BagreDeCanal().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
@@ -497,6 +688,7 @@ public class Tanque {
                 return null;
             }
         }
+    }
         return null;
     }
     
@@ -640,6 +832,68 @@ public class Tanque {
                 peces[i] = null;
             }
         }
+    }
+
+    public void randomFish(){
+        if(tipo.equals("mar")){
+            switch (RNG.RandomInt(7)) {
+                case 0:
+                    peces[0] = new Abadejo();
+                    break;
+                case 1:
+                peces[0] = new ArenqueDelAtlantico();
+                    break;
+                case 2:
+                peces[0] = new Besugo();
+                    break;
+                case 3:
+                peces[0] = new Cobia();
+                    break;
+                case 4:
+                peces[0] = new Rodaballo();
+                    break;
+                case 5:
+                peces[0] = new BagreDeCanal();
+                    break;
+                case 6:
+                peces[0] = new Dorada();
+                    break;
+            
+                default:
+                    break;
+            }
+           
+        }else{
+            switch (RNG.RandomInt(7)) {
+                case 0:
+                    peces[0] = new Carpa();
+                    break;
+                case 1:
+                peces[0] = new Koi();
+                    break;
+                case 2:
+                peces[0] = new Pejerrey();
+                    break;
+                case 3:
+                peces[0] = new SalmonChinook();
+                    break;
+                case 4:
+                peces[0] = new TilapiaDelNilo();
+                    break;
+                case 5:
+                peces[0] = new BagreDeCanal();
+                    break;
+                case 6:
+                peces[0] = new Dorada();
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+        if(peces[0]!=null){
+            tipoPez = peces[0].getNombre();
+        }            
     }
 
     @Override

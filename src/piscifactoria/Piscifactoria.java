@@ -1,16 +1,11 @@
 package piscifactoria;
 import java.util.ArrayList;
-import monedas.Monedas;
 import helpers.Reader;
-import helpers.RNG;
-import main.Almacen;
-import peces.Pez;
-import peces.rio.Koi;
 import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
 public class Piscifactoria {
-    private static Object monedas;
+    public static Object monedas;
     /** El nombre de la piscifactoría. */
     private String nombre;
     /** El tipo de piscifactoría (rio o mar) */
@@ -180,28 +175,12 @@ public class Piscifactoria {
      */
     public int nextDay() {
         int pecesVendidos = 0;
+        int[] datos;
         for (Tanque tank : tanques) {
-            for (Pez pez : tank.getPeces()) {
-                if(pez!=null){
-                    int[] comida = pez.grow(comidaAnimal, comidaVegetal);
-                    comidaAnimal -= comida[0];
-                    comidaVegetal -= comida[1];
-    
-                    if (comidaAnimal <= 0 || comidaVegetal <= 0) {
-                        Almacen.repartirComida(0,0);
-                    }
-    
-                    if (pez.getEdad() == pez.getOptimo()) {
-                        if (pez instanceof Koi && RNG.RandomInt(10) == 1) {
-                            pez.setMonedas(pez.getMonedas()+5);
-                        } else {
-                            ((Monedas) Piscifactoria.monedas).anadir(pez.getMonedas());
-                            pecesVendidos++;
-                            pez = null;
-                        }
-                    }
-                }
-            }
+            datos = tank.nextDay(comidaAnimal,comidaVegetal);
+            comidaAnimal = datos[1];
+            comidaVegetal = datos[2];
+            pecesVendidos += datos[0];
         }
         return pecesVendidos;
     }

@@ -43,12 +43,12 @@ public class Almacen {
      * @param tipo el tipo de comida (true animal, false vegetal)
      */
     public void addFood(int comida, boolean tipo){
-        if(tipo && (carne+comida)<=200){
+        if(tipo && (carne+comida)<=maxCapacidad){
             carne += comida;
-            System.out.println("Comida animal actual: "+carne);
-        } else if(!tipo && (vegetal+comida)<=200){
+            System.out.println("Comida animal actual en almacen: "+carne);
+        } else if(!tipo && (vegetal+comida)<=maxCapacidad){
             vegetal += comida;
-            System.out.println("Comida vegetal actual: "+vegetal);
+            System.out.println("Comida vegetal actual en almacen: "+vegetal);
         }else{
             System.out.println("La cantidad que se intenta añadir es mayor a la posible");
         }
@@ -84,6 +84,7 @@ public class Almacen {
                 setVegetal(restos[1]+probisional[1]);
             }
         }
+        Simulador.setPiscis(piscis);
         return piscis;
     }
 
