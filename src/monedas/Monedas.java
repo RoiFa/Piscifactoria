@@ -21,7 +21,7 @@ public class Monedas {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public static void setCantidad(int cantidad) {
         Monedas.cantidad = cantidad;
     }
 
@@ -49,8 +49,9 @@ public class Monedas {
         }else{
             System.out.println("Quiere comprarlo?(1.Si/2.No)");
             int opcion = Reader.readTheNumber();
-            while (opcion!=1||opcion!=2) {
+            while (opcion!=1&&opcion!=2) {
                 System.out.println("Quiere comprarlo?(1.Si/2.No)");
+                opcion = Reader.readTheNumber();
             }
             if(opcion==1){
                 gastar(coste);

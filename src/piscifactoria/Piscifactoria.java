@@ -1,22 +1,18 @@
 package piscifactoria;
+
 import java.util.ArrayList;
-import monedas.Monedas;
+
 import helpers.Reader;
-import helpers.RNG;
-import main.Almacen;
-import peces.Pez;
-import peces.rio.Koi;
 import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
 public class Piscifactoria {
-    private static Object monedas;
     /** El nombre de la piscifactoría. */
     private String nombre;
     /** El tipo de piscifactoría (rio o mar) */
     private String tipo;
     /** La lista de tanques en la piscifactoría */
-    public ArrayList<Tanque> tanques;
+    public ArrayList<Tanque> tanques = new ArrayList<>();
     /** La comida máxima que puede ser almacenada en los almacenes */
     private int comidaMax;
     /** El almacén de comida animal */  
@@ -49,7 +45,7 @@ public class Piscifactoria {
     public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
         this.nombre = nombre;
-        this.tanques.add(new Tanque(this.tanques.size()+1, tipo));
+        this.tanques.add(new Tanque(1, tipo));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
         } else {
@@ -121,18 +117,19 @@ public class Piscifactoria {
             "Tanques: " + this.tanques.size() + "\n" +
             "Ocupación: " +ocupTotal+"/"+maxTotal+"("+((int)(ocupTotal/maxTotal)*100)+"%)");
             if(ocupTotal!=0){
-        System.out.println(
-            "Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+((int)(vivosTotal/ocupTotal)*100)+"%)\n"+
-            "Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+((int)(alimTotal/vivosTotal)*100)+"%)\n"+
-            "Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+((int)(adultTotal/vivosTotal)*100)+"%)\n"+
-            "Hembras / Machos: "+hembrasTotal+"/"+machosTotal+"\n"+
-            "Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+((int)(fertilesTotal/vivosTotal)*100)+"%)\n"
-        );
-            }
-        System.out.println(
-            "Almacén de comida animal: "+ this.comidaAnimal + "("+((int)(this.comidaAnimal/this.comidaMax)*100) + "%)\n" +
-            "Almacén de comida vegetal: "+ this.comidaVegetal + "("+((int)(this.comidaVegetal/this.comidaMax)*100) + "%)"
-        );
+                System.out.println("Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+((vivosTotal/ocupTotal)*100)+"%)");
+            }else{System.out.println("Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"(0%)");}
+            if(alimTotal!=0&&vivosTotal!=0){
+                System.out.println("Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+""+((alimTotal/vivosTotal)*100)+"%)");
+            }else{System.out.println("Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"(0%)");}
+            if(adultTotal!=0&&vivosTotal!=0){
+                System.out.println("Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+((adultTotal/vivosTotal)*100)+"%)");
+            }else{System.out.println("Peces adultos: "+ adultTotal +"/"+ vivosTotal +"(0%)");}
+            System.out.println("Hembras / Machos: "+hembrasTotal+"/"+machosTotal);
+            if(fertilesTotal!=0&&vivosTotal!=0){
+                System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+((fertilesTotal/vivosTotal)*100)+"%)");
+            }else{System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"(0%)");}
+        
     }
 
     /**
@@ -167,8 +164,8 @@ public class Piscifactoria {
      */
     public void showFood() {
         System.out.println(
-            "Depósito de comida animal al " + ((int)(this.comidaAnimal/this.comidaMax)*100) + "% de su capacidad." +
-            "Depósito de comida vegetal al " + ((int)(this.comidaVegetal/this.comidaMax)*100) + "% de su capacidad."
+            "Depósito de comida animal al " + this.comidaAnimal+"/"+this.comidaMax + " de su capacidad.\n" +
+            "Depósito de comida vegetal al " + this.comidaVegetal+"/"+this.comidaMax+ " de su capacidad."
         );
     }
 
@@ -177,30 +174,12 @@ public class Piscifactoria {
      * 
      * @return  La cantidad de dinero conseguido por vender peces.
      */
-    public int nextDay() {
-        int pecesVendidos = 0;
+    public void nextDay() {
         for (Tanque tank : tanques) {
-            for (Pez pez : tank.getPeces()) {
-                int[] comida = pez.grow(comidaAnimal, comidaVegetal);
-                comidaAnimal -= comida[0];
-                comidaVegetal -= comida[1];
-
-                if (comidaAnimal <= 0 || comidaVegetal <= 0) {
-                    Almacen.repartirComida(0,0);
-                }
-
-                if (pez.getEdad() == pez.getOptimo()) {
-                    if (pez instanceof Koi && RNG.RandomInt(10) == 1) {
-                        pez.setMonedas(pez.getMonedas()+5);
-                    } else {
-                        ((Monedas) Piscifactoria.monedas).anadir(pez.getMonedas());
-                        pecesVendidos++;
-                        pez = null;
-                    }
-                }
-            }
+            int comidaGastada[] = tank.nextDay(comidaAnimal, comidaVegetal);
+            comidaAnimal -= comidaGastada[0];
+            comidaVegetal -= comidaGastada[1];
         }
-        return pecesVendidos;
     }
 
     /**
@@ -211,14 +190,16 @@ public class Piscifactoria {
     public int sellFish() {
         int dineroVendido = 0;
         for (Tanque tank : tanques) {
-            for (Pez pez : tank.getPeces()) {
-                if (pez.isAdulto() && pez.isVivo()) {
-                    dineroVendido += pez.getMonedas();
-                    pez = null;
+            for(int i=0;i<tank.peces.length;i++){
+                if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
+                    dineroVendido += tank.peces[i].getMonedas();
+                    tank.peces[i] = null;
                 }
             }
         }
         return dineroVendido;
+
+        
     }
 
     /**
@@ -282,8 +263,14 @@ public class Piscifactoria {
      */
     private void menuTank(){
         int i = 1;
+        System.out.println("Seleccione un tanque:");
         for(Tanque tanque : tanques){
-            System.out.println(i+". Tanque "+tanque.getNumTanque()+": "+tanque.peces[0].getNombre());
+            System.out.print(i+". Tanque "+tanque.getNumTanque());
+            if(tanque.ocupacion()==0){
+                System.out.println();
+            }else{
+                System.out.println(": "+tanque.peces[0].getNombre());
+            }
             i++;
         }
     }

@@ -1,5 +1,7 @@
 package tanque;
+import helpers.RNG;
 import helpers.Reader;
+import main.Simulador;
 import monedas.Monedas;
 import peces.*;
 import peces.mar.*;
@@ -65,24 +67,33 @@ public class Tanque {
      * Muestra el estado actual del tanque
      */
     public void showStatus(){
-        System.out.println("================Tanque"+numTanque+"================"+"\n"+
+        System.out.println("================Tanque "+numTanque+"================"+"\n"+
         "Ocupación: "+ocupacion()+"/"+maxSize+"("+(ocupacion()/maxSize)+"%)");
-        if(ocupacion()==0){
-            System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(vivos()/ocupacion())*100)+"%)"+
-            "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(alimentados()/ocupacion())*100)+"%)"+
-            "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(adultos()/ocupacion())*100)+"%)"+
-            "\n"+"Hembras / machos: "+machos()+"/"+hembras());
+        try {
+            if(ocupacion()==0){
+                System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(vivos()/ocupacion())*100)+"%)"+
+                "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(alimentados()/ocupacion())*100)+"%)"+
+                "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(adultos()/ocupacion())*100)+"%)"+
+                "\n"+"Hembras / machos: "+machos()+"/"+hembras());
+            }
+        } catch (Exception e) {
+            //Skip en caso de error debido a divisiones con 0
         }
+        
     }
 
     /**
      * Muestra el estado de todos los peces de este tanque
      */
     public void showFishStatus(){
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null){
-                peces[i].showStatus();
+        if(ocupacion()!=0){
+            for(int i=0;i<peces.length;i++){
+                if(peces[i]!=null){
+                    peces[i].showStatus();
+                }
             }
+        }else{
+            System.out.println("Este tanque no tiene ningun pez");
         }
     }
 
@@ -107,30 +118,21 @@ public class Tanque {
                     peces[i].setFertil(true);
                 }
                 cants = peces[i].grow(carne,vegetal);
-                carne -= cants[0];
-                vegetal -= cants[1];
                 if(peces[i].isVivo()&&!peces[i].isMale()&&peces[i].isFertil()){
-                    for(int k=0;k<peces[i].getHuevos();k++){
-                        Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
-                        Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
-                        if(tipo=="Mar"){
-                            for(int j=0;j<especiesMar.length;j++){
-                                if(especiesMar[j].getNombre()==peces[0].getNombre()){
-                                    peces[findSpace()] = creadorEspeciesMar(j,true);
-                                }
-                            }
-                        }else{
-                            for(int j=0;j<especiesRio.length;j++){
-                                if(especiesRio[j].getNombre()==peces[0].getNombre()){
-                                    peces[findSpace()] = creadorEspeciesRio(j,true);
-                                }
-                            }
-                        }
+                    addFish(true);
+                }
+                if (peces[i].getEdad() == peces[i].getOptimo()) {
+                    if (peces[i] instanceof Koi && RNG.RandomInt(10) == 1) {
+                        peces[i].setMonedas(peces[i].getMonedas()+5);
+                    } else {
+                        ((Monedas) Simulador.monedas).anadir(peces[i].getMonedas());
+                        peces[i] = null;
                     }
                 }
+                return cants;
             }
         }
-        return new int[]{carne,vegetal};
+        return new int[]{0,0};
     }
 
     /**
@@ -149,31 +151,16 @@ public class Tanque {
     /**
      * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez manualmente al tanque
      */
-    public void addFish(){
-        if(ocupacion()==maxSize){
-            System.out.println("No hay espacio suficiente en este tanque");
-        }else if(ocupacion()==0){
-            if(tipo.equals("mar")){
-                menuEspeciesMar();
-                creadorEspeciesMar(Reader.readTheNumber(),false);
-                tipoPez = peces[0].getNombre();
-            }else{
-                menuEspeciesRio();
-                creadorEspeciesRio(Reader.readTheNumber(),false);
-                tipoPez = peces[0].getNombre();
-            }
-        }else{
-            System.out.println("Quiere añadir un "+peces[0].getNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
-            int opcion = Reader.readTheNumber();
-            if(opcion==1){
-                Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
+    public void addFish(boolean enReproduccion){
+        if(enReproduccion){
+            Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
                 Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
                 if(tipo.equals("mar")){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==peces[0].getNombre()){
-                            for(int k=0;k<peces[0].getHuevos();k++){
-                                if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspeciesMar(i,false);
+                            if(peces.length!=ocupacion()){
+                                for(int k=0;k<especiesMar[i].getHuevos();k++){
+                                    peces[findSpace()] = creadorEspeciesMar(i,true);
                                 }
                             }
                         }
@@ -183,18 +170,61 @@ public class Tanque {
                         if(especiesRio[i].getNombre()==peces[0].getNombre()){
                             for(int k=0;k<peces[0].getHuevos();k++){
                                 if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspeciesRio(i,false);
+                                    for(int j=0;j<especiesMar[i].getHuevos();j++){
+                                        peces[findSpace()] = creadorEspeciesRio(i,true);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }else if(opcion==2){
-                System.out.println("Opción cancelada");
+        }else{
+            if(ocupacion()==maxSize){
+                System.out.println("No hay espacio suficiente en este tanque");
+            }else if(ocupacion()==0){
+                if(tipo.equals("mar")){
+                    menuEspeciesMar();
+                    peces[0] = creadorEspeciesMar(Reader.readTheNumber(),false);
+                    if(peces[0]!=null){
+                        tipoPez = peces[0].getNombre();
+                    }
+                }else{
+                    menuEspeciesRio();
+                    peces[0] = creadorEspeciesRio(Reader.readTheNumber(),false);
+                    if(peces[0]!=null){
+                        tipoPez = peces[0].getNombre();
+                    }
+                }
             }else{
-                System.out.println("Opción no valida");
+                System.out.println("Quiere añadir un "+peces[0].getNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
+                int opcion = Reader.readTheNumber();
+                if(opcion==1){
+                    Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
+                    Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
+                    if(tipo=="mar"){
+                        for(int i=0;i<especiesMar.length;i++){
+                            if(especiesMar[i].getNombre()==peces[0].getNombre()){
+                                if(peces.length!=ocupacion()){
+                                    peces[findSpace()] = creadorEspeciesMar(i+1,false);
+                                }
+                            }
+                        }
+                    }else{
+                        for(int i=0;i<especiesRio.length;i++){
+                            if(especiesRio[i].getNombre()==peces[0].getNombre()){
+                                if(peces.length!=ocupacion()){
+                                    peces[findSpace()] = creadorEspeciesRio(i+1,false);
+                                }
+                            }
+                        }
+                    }
+                }else if(opcion==2){
+                    System.out.println("Opción cancelada");
+                }else{
+                    System.out.println("Opción no valida");
+                }
+                
             }
-            
         }
     }
 
@@ -263,6 +293,8 @@ public class Tanque {
                     }else{
                         return new Carpa();
                     }
+                }else{
+                    return null;
                 }
             case 2:
             if(Monedas.comprar(new Koi().getCoste())){
@@ -275,6 +307,8 @@ public class Tanque {
                 }else{
                     return new Koi();
                 }
+            }else{
+                return null;
             }
 
             case 3:
@@ -288,6 +322,8 @@ public class Tanque {
                 }else{
                     return new SalmonChinook();
                 }
+            }else{
+                return null;
             }
 
             case 4:
@@ -301,6 +337,8 @@ public class Tanque {
                 }else{
                     return new TilapiaDelNilo();
                 }
+            }else{
+                return null;
             }
     
             case 5:
@@ -314,6 +352,8 @@ public class Tanque {
                 }else{
                     return new Pejerrey();
                 }
+            }else{
+                return null;
             }
 
             case 6:
@@ -327,6 +367,8 @@ public class Tanque {
                 }else{
                     return new Dorada();
                 }
+            }else{
+                return null;
             }
 
             case 7:
@@ -340,6 +382,8 @@ public class Tanque {
                 }else{
                     return new BagreDeCanal();
                 }
+            }else{
+                return null;
             }
         }
                 return null;
@@ -368,6 +412,8 @@ public class Tanque {
                 }else{
                     return new Rodaballo();
                 }
+            }else{
+                return null;
             }
 
             case 2:
@@ -381,6 +427,8 @@ public class Tanque {
                 }else{
                     return new Besugo();
                 }
+            }else{
+                return null;
             }
 
             case 3:
@@ -394,6 +442,8 @@ public class Tanque {
                 }else{
                     return new ArenqueDelAtlantico();
                 }
+            }else{
+                return null;
             }
 
             case 4:
@@ -407,6 +457,8 @@ public class Tanque {
                 }else{
                     return new Abadejo();
                 }
+            }else{
+                return null;
             }
 
             case 5:
@@ -420,6 +472,8 @@ public class Tanque {
                 }else{
                     return new Cobia();
                 }
+            }else{
+                return null;
             }
 
                 case 6:
@@ -433,6 +487,8 @@ public class Tanque {
                 }else{
                     return new Dorada();
                 }
+            }else{
+                return null;
             }
 
             case 7:
@@ -446,6 +502,8 @@ public class Tanque {
                 }else{
                     return new BagreDeCanal();
                 }
+            }else{
+                return null;
             }
         }
         return null;
