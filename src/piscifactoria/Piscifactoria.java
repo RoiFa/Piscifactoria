@@ -1,6 +1,7 @@
 package piscifactoria;
 import java.util.ArrayList;
 import helpers.Reader;
+import main.Simulador;
 import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
@@ -196,6 +197,7 @@ public class Piscifactoria {
             for(int i=0;i<tank.peces.length;i++){
                 if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
                     dineroVendido += tank.peces[i].getMonedas();
+                    Simulador.estadisticas.registrarVenta(tank.buscaNombre(), tank.peces[i].getMonedas());
                     tank.peces[i] = null;
                 }
             }

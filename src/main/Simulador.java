@@ -35,10 +35,10 @@ public class Simulador {
             AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
             estadisticas = new Estadisticas(nomPeces);
         
-        System.out.println("Deme el nombre de la nueva empresa:");
+        System.out.println("Introduzca el nombre de la nueva empresa a crear:");
         Reader.readTheLine();
         
-        System.out.println("Deme el nombre de la primera piscifactoría (río)");
+        System.out.println("Introduzca el nombre de la primera piscifactoría (río)");
         String nomPisc = Reader.readTheLine();
         while (nomPisc.equals("")) {
             System.out.println("Introduzca un nombre valido");
@@ -162,15 +162,14 @@ public class Simulador {
         System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
         "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo\n13. Volver al menú"
         );
-        pez = Reader.readTheNumber();
-        while (pez<1 || pez>13 || pez!=13) {
+        while (pez<1 || pez>13) {
             System.out.println("Introduzca un entero entre 1 y 13");
             pez = Reader.readTheNumber();
         }
         if(pez==13){
             System.out.println("Vuelta con éxito");
         } else{
-            peces[pez-1].toString();
+            System.out.println(peces[(pez-1)].toString());
         }
     
         
@@ -193,7 +192,7 @@ public class Simulador {
      */
     private static void addFood(){
         System.out.println("Introduzca el tipo de comida:\n1.animal\n2.vegetal");
-        int tipoComida = Reader.readTheNumber()+1;
+        int tipoComida = Reader.readTheNumber();
         while (tipoComida!=1&&tipoComida!=2) {
             System.out.println("Especifique animal o vegetal");
             tipoComida = Reader.readTheNumber();
