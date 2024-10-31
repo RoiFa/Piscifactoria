@@ -303,7 +303,9 @@ public class Simulador {
     private static void sell(){
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            Monedas.setCantidad(piscis.get(piscifactoria).sellFish());
+            int dineroGanado=piscis.get(piscifactoria).sellFish();
+            Monedas.setCantidad(dineroGanado);
+            System.out.println("Se han conseguido "+dineroGanado+" monedas por la venta de peces adultos");
         }
     }
 

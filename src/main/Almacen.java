@@ -73,11 +73,32 @@ public class Almacen {
             }else if(numPiscis<vegetalAdd){
                 System.out.println("No se alcanza el numero minimo de alimento de herbivoros para repartirse entre las piscifactorias");
             }else {
-                int cantRepartCarne = (int)numPiscis/carneAdd;
-                int cantRepartVeget = (int)numPiscis/vegetalAdd;
-                int[] restos = {(numPiscis%carneAdd),(numPiscis%vegetalAdd)};
+                carne += carneAdd;
+                vegetal += vegetalAdd;
+                int cantRepartCarne = carne/numPiscis;
+                int cantRepartVeget = vegetal/numPiscis;
+                int[] restos = {(carne%numPiscis),(vegetal%numPiscis)};
                 int[] probisional = {0,0};
                 for (Piscifactoria pisci : piscis) {
+                    if(pisci.getTipo()=="mar"){
+                        if(cantRepartCarne>100){
+                            pisci.addFood(100,0);
+                            carne -= 100;
+                        }
+                        if(cantRepartVeget>100){
+                            pisci.addFood(0,100);
+                            vegetal -= 100;
+                        }
+                    }else{
+                        if(cantRepartCarne>25){
+                            pisci.addFood(25,0);
+                            carne -= 25;
+                        }
+                        if(cantRepartVeget>25){
+                            pisci.addFood(0,25);
+                            vegetal -= 25;
+                        }
+                    }
                     probisional = pisci.addFood(cantRepartCarne,cantRepartVeget);
                 }
                 setCarne(restos[0]+probisional[0]);

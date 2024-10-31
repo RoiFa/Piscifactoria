@@ -150,7 +150,7 @@ public class Tanque {
     public boolean hayMacho(){
         for(int i=0;i<peces.length;i++) {
             if(peces[i]!=null){
-                if(peces[i].isMale()&&peces[i].isFertil()){
+                if(peces[i].isMale()&&peces[i].isFertil()&&peces[i].isVivo()){
                     return true;
                 }
             }
@@ -208,7 +208,7 @@ public class Tanque {
                     }
                 }
             }else{
-                System.out.println("Quiere añadir un "+buscaNombre()+" mas al tanque?"+"\n"+"1.Si"+"\n"+"2.No");
+                System.out.println("Quiere añadir un "+buscaNombre()+" mas al tanque?");
                 Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
                 Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
                 if(tipo=="mar"){
@@ -696,7 +696,7 @@ public class Tanque {
         int w=0;
         for(int i=0;i<peces.length;i++){
             if(peces[i]!=null){
-                if(peces[i].isMale()){
+                if(peces[i].isMale()&&peces[i].isVivo()){
                     m++;
                 }else{
                     w++;
@@ -745,7 +745,7 @@ public class Tanque {
     public int alimentados(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isAlimentado()){
+            if(peces[i]!=null&&peces[i].isAlimentado()&&peces[i].isVivo()){
                 count++;
             }
         }
@@ -759,7 +759,7 @@ public class Tanque {
     public int adultos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isAdulto()){
+            if(peces[i]!=null&&peces[i].isAdulto()&&peces[i].isVivo()){
                 count++;
             }
         }
@@ -773,7 +773,7 @@ public class Tanque {
     public int hembras(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].getSexo()=="Hembra"){
+            if(peces[i]!=null&&peces[i].getSexo()=="Hembra"&&peces[i].isVivo()){
                 count++;
             }
         }
@@ -787,7 +787,7 @@ public class Tanque {
     public int machos(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].getSexo()=="Macho"){
+            if(peces[i]!=null&&peces[i].getSexo()=="Macho"&&peces[i].isVivo()){
                 count++;
             }
         }
@@ -801,7 +801,7 @@ public class Tanque {
     public int fertiles(){
         int count=0;
         for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isFertil()){
+            if(peces[i]!=null&&peces[i].isFertil()&&peces[i].isVivo()){
                 count++;
             }
         }
@@ -827,6 +827,7 @@ public class Tanque {
                 peces[i] = null;
             }
         }
+        System.out.println("El tanque se ah vaciado por completo");
     }
 
     public void randomFish(){
