@@ -682,6 +682,7 @@ public class Simulador {
                         break;
                     case 13:
                         forwardDays();
+                        showGeneralStatus();
                         break;
                     case 14:
                         System.out.println("Salida con éxito");

@@ -77,32 +77,23 @@ public class Almacen {
                 vegetal += vegetalAdd;
                 int cantRepartCarne = carne/numPiscis;
                 int cantRepartVeget = vegetal/numPiscis;
-                int[] restos = {(carne%numPiscis),(vegetal%numPiscis)};
-                int[] probisional = {0,0};
                 for (Piscifactoria pisci : piscis) {
-                    if(pisci.getTipo()=="mar"){
-                        if(cantRepartCarne>100){
-                            pisci.addFood(100,0);
-                            carne -= 100;
-                        }
-                        if(cantRepartVeget>100){
-                            pisci.addFood(0,100);
-                            vegetal -= 100;
-                        }
+                    if(cantRepartCarne>pisci.getComidaMax()){
+                        pisci.addFood(pisci.getComidaMax(),0);
+                        carne -= pisci.getComidaMax();
                     }else{
-                        if(cantRepartCarne>25){
-                            pisci.addFood(25,0);
-                            carne -= 25;
-                        }
-                        if(cantRepartVeget>25){
-                            pisci.addFood(0,25);
-                            vegetal -= 25;
-                        }
+                        pisci.addFood(cantRepartCarne,0);
+                        carne -= cantRepartCarne;
                     }
-                    probisional = pisci.addFood(cantRepartCarne,cantRepartVeget);
+                    if(cantRepartVeget>100){
+                        pisci.addFood(0,pisci.getComidaMax());
+                        vegetal -= pisci.getComidaMax();
+                    }else{
+                        pisci.addFood(0,cantRepartVeget);
+                        vegetal -= cantRepartVeget;
+                    }
+                   
                 }
-                setCarne(restos[0]+probisional[0]);
-                setVegetal(restos[1]+probisional[1]);
             }
         }
         Simulador.setPiscis(piscis);
