@@ -4,6 +4,9 @@ import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
+/**
+ * Clase que representa un arenque del atlántico
+ */
 public class ArenqueDelAtlantico extends Pez{
 
     /**

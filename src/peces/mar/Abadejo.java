@@ -4,6 +4,9 @@ import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
+/**
+ * Clase que representa un abadejo
+ */
 public class Abadejo extends Pez{
 
     /**
