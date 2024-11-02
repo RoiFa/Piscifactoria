@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class RNG {
 
-    /** La variable de clase Random */
+    /** Generador de números aleatorios */
     static Random rm = new Random();
 
     /**
@@ -78,6 +78,6 @@ public class RNG {
      * @return  True o false, aleatoriamente.
      */
     public static boolean RandomBoolean() {
-        return ((RandomInt(2) == 1) ? true : false);
+        return rm.nextBoolean();
     }
 }

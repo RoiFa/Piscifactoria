@@ -7,8 +7,11 @@ import piscifactoria.Piscifactoria;
  */
 public class Almacen {
 
+    /** Cantidad de comida vegetal. */
     private static int vegetal;
+    /** Cantidad de comida animal. */
     private static int carne;
+    /** Cantidad maxima de cada tipo de comida. */
     private static int maxCapacidad;
 
     public static int getCarne() {
@@ -111,6 +114,8 @@ public class Almacen {
     @Override
     /**
      * Devuelve la información relevante del almacén
+     * 
+     * @return Información del almacén
      */
     public String toString(){
         return "------------------ Almacén central ------------------"+

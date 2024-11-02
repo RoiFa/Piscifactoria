@@ -10,6 +10,9 @@ import peces.rio.*;
 import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 
+/**
+ * Clase encargada de la lógica del simulador de la piscifactoría.
+ */
 public class Simulador {
     
     /** Los días que han pasado */
@@ -103,7 +106,8 @@ public class Simulador {
 
     /**
      * Muestra el estado de las piscifactorías, su comida disponible, 
-     * el día actual y las monedas disponibles y la info del almacén si se dispone de el
+     * el día actual, las monedas disponibles y la información del
+     * almacén si se dispone de el
      */
     private static void showGeneralStatus(){
         for(Piscifactoria p : piscis){
@@ -120,7 +124,7 @@ public class Simulador {
     }
 
     /**
-     * Permite seleccionar una piscifactoría y mostrar el estado de sus tanques
+     * Muestra el estado de los tanques de una piscifactoría seleccionada
      */
     private static void showSpecificStatus(){
         int piscifactoria = selectPisc();
@@ -130,7 +134,8 @@ public class Simulador {
     }
 
     /**
-     * Permite seleccionar un tanque y muestra la información de sus peces
+     * Muestra la información de los peces de un tanque específico de una
+     * piscifactoría seleccionada.
      */
     private static void showTankStatus(){
         int piscifactoria = selectPisc();
@@ -141,8 +146,8 @@ public class Simulador {
     }
 
     /**
-     * Muestra el nombre, el número de comprados y nacidos, el número de vendidos 
-     * y el dinero que se ha ganado con los peces del sistema
+     * Muestra el nombre, el número de peces comprados, nacidos y vendidos 
+     * y el dinero que se ha ganado durante la simulación
      */
     private static void showStats(){
         estadisticas.mostrar();
@@ -176,8 +181,8 @@ public class Simulador {
     }
 
     /**
-     * Avanza un día haciendo la lógica necesaria y muestra un mensaje con los
-     * peces vendidos por piscifactoría y despues en general
+     * Avanza un día haciendo crecer a todos los peces de todos los tanques
+     * de todas las piscifactorías
      */
     private static void nextDay(){
         dias++;
@@ -287,9 +292,9 @@ public class Simulador {
         }
     
 
-        
-
-
+    /**
+     * Añade un pez a un tanque de una piscifactoría seleccionada
+     */
     private static void addFish(){
         int opcion = selectPisc();
         int tankSelec = piscis.get(opcion).selectTank();
@@ -298,7 +303,7 @@ public class Simulador {
 
     /**
      * Vende todos los peces adultos vivos de una piscifactoría
-     * a la mitad de dinero de lo normal
+     * a la mitad de dinero normal
      */
     private static void sell(){
         int piscifactoria = selectPisc();
@@ -324,7 +329,7 @@ public class Simulador {
 
 
     /**
-     * Elimina los peces muertos de un tanque seleccionado
+     * Elimina los peces muertos de una piscifactoría seleccionada
      */
     private static void cleanTank(){
         int piscifactoria = selectPisc();
@@ -599,7 +604,6 @@ public class Simulador {
     /**
      * Permite pasar entre 1 y 5 días de golpe con sus consecuencias
      */
-
     private static void forwardDays(){
         System.out.println("Indique entre 1 y 5 cuántos días desea pasar");
         int numDias = Reader.readTheNumber();
@@ -630,7 +634,9 @@ public class Simulador {
     }
 
     /**
-     * Realiza toda la lógica
+     * Inicializa la simulación. Después, muestra el menú y pide al usuario
+     * una opción en bucle hasta que el usuario decida acabar el programa.
+     * 
      * @param args
      */
     public static void main(String[] args) {
@@ -705,10 +711,17 @@ public class Simulador {
         }
     }
 
+    /**
+     * Método oculto que añade 1000 monedas.
+     */
     public static void cheat99(){
         Monedas.anadir(1000);
     }
 
+    /**
+     * Método oculto que añade 4 tanques con 1 pez aleatorio cada uno
+     * a una piscifactoría seleccionada
+     */
     public static void cheat98(){
         int opcion = selectPisc();
         piscis.get(opcion).addTank();

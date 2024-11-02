@@ -1,6 +1,7 @@
 package tanque;
 import helpers.RNG;
 import helpers.Reader;
+import main.Almacen;
 import main.Simulador;
 import monedas.Monedas;
 import peces.*;
@@ -136,7 +137,7 @@ public class Tanque {
                 }
             }
             if (Simulador.almacen!=null&&(carne <= 0 || vegetal <= 0)) {
-                Simulador.almacen.repartirComida(0,0);
+                Almacen.repartirComida(0,0);
             }
             
         }
@@ -144,7 +145,7 @@ public class Tanque {
     }
 
     /**
-     * Comprueba si hay un macho en el tanque
+     * Comprueba si hay un macho fértil y vivo en el tanque
      * @return true o false dependiendo de si hay o no un macho
      */
     public boolean hayMacho(){
@@ -159,7 +160,7 @@ public class Tanque {
     }
 
     /**
-     * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez manualmente al tanque
+     * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez al tanque
      */
     public void addFish(boolean enReproduccion){
         if(enReproduccion){
@@ -233,6 +234,11 @@ public class Tanque {
         }
     }
 
+    /**
+     * Método que busca el nombre del tipo de peces que hay en el tanque.
+     * 
+     * @return  El nombre del tipo de peces
+     */
     public String buscaNombre(){
         for(int i=0;i<peces.length;i++){
             if(peces[i]!=null){
@@ -286,6 +292,7 @@ public class Tanque {
 
     /**
      * Hace la logica para la creacion de un pez de Rio
+     * 
      * @param opcion Posicion en el switch del pez a querer crear
      * @param enReproduccion Informa si es a causa de reproduccion o por compra
      * @return Devuelve el nuevo pez
@@ -830,6 +837,9 @@ public class Tanque {
         System.out.println("El tanque se ah vaciado por completo");
     }
 
+    /**
+     * Método que añade un pez aleatorio al tanque.
+     */
     public void randomFish(){
         if(tipo.equals("mar")){
             switch (RNG.RandomInt(7)) {
@@ -892,6 +902,9 @@ public class Tanque {
         }            
     }
 
+    /**
+     * Devuelve información del tanque
+     */
     @Override
     public String toString() {
         return "Tanque de : "+tipo+" con "+peces.length+" peces de la especie "+peces[0].getNombre();

@@ -4,9 +4,8 @@ import helpers.Reader;
 import main.Simulador;
 import tanque.Tanque;
 
-/**Objeto representativo de la piscifactoria */
+/**Clase que representa una la piscifactoria */
 public class Piscifactoria {
-    public static Object monedas;
     /** El nombre de la piscifactoría. */
     private String nombre;
     /** El tipo de piscifactoría (rio o mar) */
@@ -160,7 +159,7 @@ public class Piscifactoria {
     }
 
     /**
-     * Método que muestre la cantidad comida actual de cada almacén en la piscifactoría.
+     * Método que muestra la cantidad comida actual de cada almacén en la piscifactoría.
      */
     public void showFood() {
         System.out.println(
@@ -187,7 +186,7 @@ public class Piscifactoria {
     }
 
     /**
-     * Método que vende los peces óptimos en cada tanque.
+     * Método que vende los peces adultos en cada tanque.
      * 
      * @return  La cantidad de dinero ganado por vender a los peces
      */
@@ -203,15 +202,12 @@ public class Piscifactoria {
             }
         }
         return dineroVendido;
-
-        
     }
 
     /**
      * Método que mejora los almacenes de comida.
      * 
-     * @param dinero    El dinero actual de la simulación.
-     * @return          Si se ha mejorado o no.
+     * @return  Si se ha mejorado o no.
      */
     public boolean upgradeFood() {
         if (this.tipo.equals("mar")) {
@@ -311,6 +307,10 @@ public class Piscifactoria {
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
     }
 
+    /**
+     * Devuelve información de la piscifactoría
+     * @return  La información de la piscifactoría
+     */
     @Override
     public String toString() {
         return "Piscifactoria de "+tipo+" con "+tanques.size()+" tanques";
