@@ -17,7 +17,7 @@ public class Monedas {
         Monedas.cantidad = 0;
     }
 
-    public int getCantidad() {
+    public static int getCantidad() {
         return cantidad;
     }
 

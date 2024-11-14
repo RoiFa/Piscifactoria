@@ -163,15 +163,15 @@ public class Tanque {
      * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez al tanque
      */
     public void addFish(boolean enReproduccion){
-        if(enReproduccion){
-            Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
+        Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
             Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
+        if(enReproduccion){
             if(tipo.equals("mar")){
                 for(int i=0;i<especiesMar.length;i++){
                     if(especiesMar[i].getNombre()==buscaNombre()){
                         if(peces.length!=ocupacion()){
                             for(int k=0;k<especiesMar[i].getHuevos();k++){
-                                peces[findSpace()] = creadorEspeciesMar((i+1),true);
+                                peces[findSpace()] = creadorEspeciesMar(especiesMar[(i+1)],true);
                                 Simulador.estadisticas.registrarNacimiento(buscaNombre());
                             }
                         }
@@ -183,7 +183,7 @@ public class Tanque {
                         for(int k=0;k<peces[0].getHuevos();k++){
                             for(int j=0;j<especiesMar[i].getHuevos();j++){
                                 if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspeciesRio((i+1),true);
+                                    peces[findSpace()] = creadorEspeciesRio(especiesRio[(i+1)],true);
                                     Simulador.estadisticas.registrarNacimiento(buscaNombre());
                                 }
                             }
@@ -197,26 +197,24 @@ public class Tanque {
             }else if(ocupacion()==0){
                 if(tipo.equals("mar")){
                     menuEspeciesMar();
-                    peces[0] = creadorEspeciesMar(Reader.readTheNumber(),false);
+                    peces[0] = creadorEspeciesMar(especiesMar[(Reader.readTheNumber()+1)],false);
                     if(peces[0]!=null){
                         tipoPez = peces[0].getNombre();
                     }
                 }else{
                     menuEspeciesRio();
-                    peces[0] = creadorEspeciesRio(Reader.readTheNumber(),false);
+                    peces[0] = creadorEspeciesRio(especiesRio[(Reader.readTheNumber()+1)],false);
                     if(peces[0]!=null){
                         tipoPez = peces[0].getNombre();
                     }
                 }
             }else{
                 System.out.println("Quiere añadir un "+buscaNombre()+" mas al tanque?");
-                Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
-                Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
                 if(tipo=="mar"){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==buscaNombre()){
                             if(peces.length!=ocupacion()){
-                                peces[findSpace()] = creadorEspeciesMar((i+1),false);
+                                peces[findSpace()] = creadorEspeciesMar(especiesMar[(i+1)],false);
                             }
                         }
                     }
@@ -224,7 +222,7 @@ public class Tanque {
                     for(int i=0;i<especiesRio.length;i++){
                         if(especiesRio[i].getNombre()==buscaNombre()){
                             if(peces.length!=ocupacion()){
-                                peces[findSpace()] = creadorEspeciesRio((i+1),false);
+                                peces[findSpace()] = creadorEspeciesRio(especiesRio[(i+1)],false);
                             }
                         }
                     }
@@ -297,199 +295,32 @@ public class Tanque {
      * @param enReproduccion Informa si es a causa de reproduccion o por compra
      * @return Devuelve el nuevo pez
      */
-    public Pez creadorEspeciesRio(int opcion,boolean enReproduccion){
-        switch (opcion) {
-            default:
-                return null;
-            case 0:
-                System.out.println("Cancelando...");
-                break;
-            case 1:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Carpa(false);
-                        }else {
-                            return new Carpa(true);
-                        }
-                    }else{
-                        return new Carpa();
-                    }
-            }else{
-            if(Monedas.comprar(new Carpa().getCoste())){
-                    if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Carpa(false);
-                        }else {
-                            return new Carpa(true);
-                        }
-                    }else{
-                        return new Carpa();
+    public Pez creadorEspeciesRio(Pez pez,boolean enReproduccion){
+        if(enReproduccion){
+            if(ocupacion()==1||enReproduccion){
+                    if(predominan()){
+                        return pez.reprod(false);
+                    }else {
+                        return pez.reprod(true);
                     }
                 }else{
-                    return null;
+                    return pez.reprod();
                 }
-            }
-            case 2:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Koi(false);
-                        }else {
-                            return new Koi(true);
-                        }
-                    }else{
-                        return new Koi();
-                    }
-            }else{
-            if(Monedas.comprar(new Koi().getCoste())){
+        }else{
+        if(Monedas.comprar(new Carpa().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
-                        return new Koi(false);
+                        return pez.reprod(false);
                     }else {
-                        return new Koi(true);
+                        return pez.reprod(true);
                     }
                 }else{
-                    return new Koi();
+                    return pez.reprod();
                 }
             }else{
                 return null;
             }
         }
-
-            case 3:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new SalmonChinook(false);
-                        }else {
-                            return new SalmonChinook(true);
-                        }
-                    }else{
-                        return new SalmonChinook();
-                    }
-            }else{
-            if(Monedas.comprar(new SalmonChinook().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new SalmonChinook(false);
-                    }else {
-                        return new SalmonChinook(true);
-                    }
-                }else{
-                    return new SalmonChinook();
-                }
-            }else{
-                return null;
-            }
-        }
-            case 4:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new TilapiaDelNilo(false);
-                        }else {
-                            return new TilapiaDelNilo(true);
-                        }
-                    }else{
-                        return new TilapiaDelNilo();
-                    }
-            }else{
-            if(Monedas.comprar(new TilapiaDelNilo().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new TilapiaDelNilo(false);
-                    }else {
-                        return new TilapiaDelNilo(true);
-                    }
-                }else{
-                    return new TilapiaDelNilo();
-                }
-            }else{
-                return null;
-            }
-        }    
-            case 5:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Pejerrey(false);
-                        }else {
-                            return new Pejerrey(true);
-                        }
-                    }else{
-                        return new Pejerrey();
-                    }
-            }else{
-            if(Monedas.comprar(new Pejerrey().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new Pejerrey(false);
-                    }else {
-                        return new Pejerrey(true);
-                    }
-                }else{
-                    return new Pejerrey();
-                }
-            }else{
-                return null;
-            }
-        }
-            case 6:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Dorada(false);
-                        }else {
-                            return new Dorada(true);
-                        }
-                    }else{
-                        return new Dorada();
-                    }
-            }else{
-            if(Monedas.comprar(new Dorada().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new Dorada(false);
-                    }else {
-                        return new Dorada(true);
-                    }
-                }else{
-                    return new Dorada();
-                }
-            }else{
-                return null;
-            }
-        }
-
-            case 7:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new BagreDeCanal(false);
-                        }else {
-                            return new BagreDeCanal(true);
-                        }
-                    }else{
-                        return new BagreDeCanal();
-                    }
-            }else{
-            if(Monedas.comprar(new BagreDeCanal().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new BagreDeCanal(false);
-                    }else {
-                        return new BagreDeCanal(true);
-                    }
-                }else{
-                    return new BagreDeCanal();
-                }
-            }else{
-                return null;
-            }
-        }
-    }
-                return null;
     }
     /**
      * Hace la logica para la creacion de un pez de Mar
@@ -497,201 +328,32 @@ public class Tanque {
      * @param enReproduccion Informa si es a causa de reproduccion o por compra
      * @return Devuelve el nuevo pez
      */
-    public Pez creadorEspeciesMar(int opcion,boolean enReproduccion){
-        switch (opcion) {
-            default:
-                return null;
-            case 0:
-            System.out.println("Cancelando...");
-                break;
-                case 1:
-                if(enReproduccion){
-                    if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Rodaballo(false);
-                        }else {
-                            return new Rodaballo(true);
-                        }
-                    }else{
-                        return new Rodaballo();
-                    }
-                }else{
-                if(Monedas.comprar(new Rodaballo().getCoste())){
+    public Pez creadorEspeciesMar(Pez pez,boolean enReproduccion){
+        if(enReproduccion){
+            if(ocupacion()==1||enReproduccion){
+                if(predominan()){
+                    return pez.reprod(false);
+                }else {
+                    return pez.reprod(true);
+                }
+            }else{
+                return pez.reprod();
+            }
+        }else{
+            if(Monedas.comprar(new Rodaballo().getCoste())){
                 if(ocupacion()==1||enReproduccion){
                     if(predominan()){
-                        return new Rodaballo(false);
+                        return pez.reprod(false);
                     }else {
-                        return new Rodaballo(true);
+                        return pez.reprod(true);
                     }
                 }else{
-                    return new Rodaballo();
+                    return pez.reprod();
                 }
             }else{
                 return null;
             }
         }
-
-            case 2:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Besugo(false);
-                        }else {
-                            return new Besugo(true);
-                        }
-                    }else{
-                        return new Besugo();
-                    }
-            }else{
-            if(Monedas.comprar(new Besugo().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new Besugo(false);
-                    }else {
-                        return new Besugo(true);
-                    }
-                }else{
-                    return new Besugo();
-                }
-            }else{
-                return null;
-            }
-        }
-
-            case 3:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new ArenqueDelAtlantico(false);
-                        }else {
-                            return new ArenqueDelAtlantico(true);
-                        }
-                    }else{
-                        return new ArenqueDelAtlantico();
-                    }
-            }else{
-            if(Monedas.comprar(new ArenqueDelAtlantico().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new ArenqueDelAtlantico(false);
-                    }else {
-                        return new ArenqueDelAtlantico(true);
-                    }
-                }else{
-                    return new ArenqueDelAtlantico();
-                }
-            }else{
-                return null;
-            }
-        }
-
-            case 4:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Abadejo(false);
-                        }else {
-                            return new Abadejo(true);
-                        }
-                    }else{
-                        return new Abadejo();
-                    }
-            }else{
-            if(Monedas.comprar(new Abadejo().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new Abadejo(false);
-                    }else {
-                        return new Abadejo(true);
-                    }
-                }else{
-                    return new Abadejo();
-                }
-            }else{
-                return null;
-            }
-        }
-
-            case 5:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Cobia(false);
-                        }else {
-                            return new Cobia(true);
-                        }
-                    }else{
-                        return new Cobia();
-                    }
-            }else{
-            if(Monedas.comprar(new Cobia().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new Cobia(false);
-                    }else {
-                        return new Cobia(true);
-                    }
-                }else{
-                    return new Cobia();
-                }
-            }else{
-                return null;
-            }
-        }
-                case 6:
-                if(enReproduccion){
-                    if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new Dorada(false);
-                        }else {
-                            return new Dorada(true);
-                        }
-                    }else{
-                        return new Dorada();
-                    }
-                }else{
-                if(Monedas.comprar(new Dorada().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new Dorada(false);
-                    }else {
-                        return new Dorada(true);
-                    }
-                }else{
-                    return new Dorada();
-                }
-            }else{
-                return null;
-            }
-        }
-            case 7:
-            if(enReproduccion){
-                if(ocupacion()==1||enReproduccion){
-                        if(predominan()){
-                            return new BagreDeCanal(false);
-                        }else {
-                            return new BagreDeCanal(true);
-                        }
-                    }else{
-                        return new BagreDeCanal();
-                    }
-            }else{
-            if(Monedas.comprar(new BagreDeCanal().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return new BagreDeCanal(false);
-                    }else {
-                        return new BagreDeCanal(true);
-                    }
-                }else{
-                    return new BagreDeCanal();
-                }
-            }else{
-                return null;
-            }
-        }
-    }
-        return null;
     }
     
     /**
