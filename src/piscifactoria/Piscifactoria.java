@@ -1,11 +1,11 @@
 package piscifactoria;
 
 import java.util.ArrayList;
-
 import helpers.Reader;
+import main.Simulador;
 import tanque.Tanque;
 
-/**Objeto representativo de la piscifactoria */
+/**Clase que representa una la piscifactoria */
 public class Piscifactoria {
     /** El nombre de la piscifactoría. */
     private String nombre;
@@ -160,7 +160,7 @@ public class Piscifactoria {
     }
 
     /**
-     * Método que muestre la cantidad comida actual de cada almacén en la piscifactoría.
+     * Método que muestra la cantidad comida actual de cada almacén en la piscifactoría.
      */
     public void showFood() {
         System.out.println(
@@ -174,16 +174,20 @@ public class Piscifactoria {
      * 
      * @return  La cantidad de dinero conseguido por vender peces.
      */
-    public void nextDay() {
+
+    public int nextDay() {
+        int pecesVendidos = 0;
+        int[] datos;
         for (Tanque tank : tanques) {
-            int comidaGastada[] = tank.nextDay(comidaAnimal, comidaVegetal);
-            comidaAnimal -= comidaGastada[0];
-            comidaVegetal -= comidaGastada[1];
+            datos = tank.nextDay(comidaAnimal,comidaVegetal);
+            comidaAnimal = datos[1];
+            comidaVegetal = datos[2];
+            pecesVendidos += datos[0];
         }
     }
 
     /**
-     * Método que vende los peces óptimos en cada tanque.
+     * Método que vende los peces adultos en cada tanque.
      * 
      * @return  La cantidad de dinero ganado por vender a los peces
      */
@@ -193,6 +197,7 @@ public class Piscifactoria {
             for(int i=0;i<tank.peces.length;i++){
                 if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
                     dineroVendido += tank.peces[i].getMonedas();
+                    Simulador.estadisticas.registrarVenta(tank.buscaNombre(), tank.peces[i].getMonedas());
                     tank.peces[i] = null;
                 }
             }
@@ -205,8 +210,7 @@ public class Piscifactoria {
     /**
      * Método que mejora los almacenes de comida.
      * 
-     * @param dinero    El dinero actual de la simulación.
-     * @return          Si se ha mejorado o no.
+     * @return  Si se ha mejorado o no.
      */
     public boolean upgradeFood() {
         if (this.tipo.equals("mar")) {
@@ -306,6 +310,10 @@ public class Piscifactoria {
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
     }
 
+    /**
+     * Devuelve información de la piscifactoría
+     * @return  La información de la piscifactoría
+     */
     @Override
     public String toString() {
         return "Piscifactoria de "+tipo+" con "+tanques.size()+" tanques";

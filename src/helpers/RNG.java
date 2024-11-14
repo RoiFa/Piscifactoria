@@ -7,7 +7,7 @@ import java.util.Random;
  */
 public class RNG {
 
-    /** La variable de clase Random */
+    /** Generador de números aleatorios */
     static Random rm = new Random();
 
     /**
@@ -17,9 +17,9 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendico entre el origen y el límite.
      */
-    public static int RandomInt(int origin, int bound) {
-        return rm.nextInt(origin, bound);
-    }
+    // public static int RandomInt(int origin, int bound) {
+    //     return rm.nextInt(origin, bound);
+    // }
 
     /**
      * Método que devuelve un Int aleatorio
@@ -38,9 +38,9 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendico entre el origen y el límite.
      */
-    public static float RandomFloat(float origin, float bound) {
-        return rm.nextFloat(origin, bound);
-    }
+    // public static float RandomFloat(float origin, float bound) {
+    //     return rm.nextFloat(origin, bound);
+    // }
 
     /**
      * Método que devuelve un Float aleatorio
@@ -48,9 +48,9 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendido entre 0 y el límite
      */
-    public static float RandomFloat(float bound) {
-        return rm.nextFloat(bound);
-    }
+    // public static float RandomFloat(float bound) {
+    //     return rm.nextFloat(bound);
+    // }
 
     /**
      * Método que devuelve un Double aleatorio
@@ -59,9 +59,9 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendico entre el origen y el límite.
      */
-    public static double RandomDouble(double origin, double bound) {
-        return rm.nextDouble(origin, bound);
-    }
+    // public static double RandomDouble(double origin, double bound) {
+    //     return rm.nextDouble(origin, bound);
+    // }
 
     /**
      * Método que devuelve un Double aleatorio
@@ -69,15 +69,15 @@ public class RNG {
      * @param bound El límite del número aleatorio.
      * @return  Un número aleatorio comprendido entre 0 y el límite
      */
-    public static double RandomDouble(double bound) {
-        return rm.nextDouble(bound);
-    }
+    // public static double RandomDouble(double bound) {
+    //     return rm.nextDouble(bound);
+    // }
 
     /**
      * Método que devuelve un booleano aletorio
      * @return  True o false, aleatoriamente.
      */
     public static boolean RandomBoolean() {
-        return ((RandomInt(0,2) == 1) ? true : false);
+        return rm.nextBoolean();
     }
 }

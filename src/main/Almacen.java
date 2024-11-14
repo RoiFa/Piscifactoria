@@ -7,8 +7,11 @@ import piscifactoria.Piscifactoria;
  */
 public class Almacen {
 
+    /** Cantidad de comida vegetal. */
     private static int vegetal;
+    /** Cantidad de comida animal. */
     private static int carne;
+    /** Cantidad maxima de cada tipo de comida. */
     private static int maxCapacidad;
 
     public static int getCarne() {
@@ -43,12 +46,12 @@ public class Almacen {
      * @param tipo el tipo de comida (true animal, false vegetal)
      */
     public void addFood(int comida, boolean tipo){
-        if(tipo && (carne+comida)<=200){
+        if(tipo && (carne+comida)<=maxCapacidad){
             carne += comida;
-            System.out.println("Comida animal actual: "+carne);
-        } else if(!tipo && (vegetal+comida)<=200){
+            System.out.println("Comida animal actual en almacen: "+carne);
+        } else if(!tipo && (vegetal+comida)<=maxCapacidad){
             vegetal += comida;
-            System.out.println("Comida vegetal actual: "+vegetal);
+            System.out.println("Comida vegetal actual en almacen: "+vegetal);
         }else{
             System.out.println("La cantidad que se intenta añadir es mayor a la posible");
         }
@@ -73,17 +76,30 @@ public class Almacen {
             }else if(numPiscis<vegetalAdd){
                 System.out.println("No se alcanza el numero minimo de alimento de herbivoros para repartirse entre las piscifactorias");
             }else {
-                int cantRepartCarne = (int)numPiscis/carneAdd;
-                int cantRepartVeget = (int)numPiscis/vegetalAdd;
-                int[] restos = {(numPiscis%carneAdd),(numPiscis%vegetalAdd)};
-                int[] probisional = {0,0};
+                carne += carneAdd;
+                vegetal += vegetalAdd;
+                int cantRepartCarne = carne/numPiscis;
+                int cantRepartVeget = vegetal/numPiscis;
                 for (Piscifactoria pisci : piscis) {
-                    probisional = pisci.addFood(cantRepartCarne,cantRepartVeget);
+                    if(cantRepartCarne>pisci.getComidaMax()){
+                        pisci.addFood(pisci.getComidaMax(),0);
+                        carne -= pisci.getComidaMax();
+                    }else{
+                        pisci.addFood(cantRepartCarne,0);
+                        carne -= cantRepartCarne;
+                    }
+                    if(cantRepartVeget>100){
+                        pisci.addFood(0,pisci.getComidaMax());
+                        vegetal -= pisci.getComidaMax();
+                    }else{
+                        pisci.addFood(0,cantRepartVeget);
+                        vegetal -= cantRepartVeget;
+                    }
+                   
                 }
-                setCarne(restos[0]+probisional[0]);
-                setVegetal(restos[1]+probisional[1]);
             }
         }
+        Simulador.setPiscis(piscis);
         return piscis;
     }
 
@@ -98,6 +114,8 @@ public class Almacen {
     @Override
     /**
      * Devuelve la información relevante del almacén
+     * 
+     * @return Información del almacén
      */
     public String toString(){
         return "------------------ Almacén central ------------------"+

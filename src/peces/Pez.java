@@ -14,7 +14,7 @@ public abstract class Pez {
     private String nombreCientifico;
     /** La edad en días del pez */
     protected int edad;
-    /** El sexo deñ pez (True = Macho; False = Hembra) */
+    /** El sexo del pez (True = Macho; False = Hembra) */
     private boolean sexo;
     /** Si el pez es fértil */
     protected boolean fertil;
@@ -24,7 +24,7 @@ public abstract class Pez {
     protected boolean alimentado;
     /** El coste del pez al comprarlo */
     private int coste;
-    /** El dinero que recibes al vender al pez */
+    /** El valor del pezvenderlo */
     protected int monedas;
     /** La cantidad de huevos que pone el pez */
     private int huevos;
@@ -43,15 +43,8 @@ public abstract class Pez {
     /**
      * El constructor básico de un pez genérico.
      * 
-     * @param nombre    El nombre común del pez
-     * @param nombreCientifico  El nombre científico del pez
-     * @param sexo  El sexo del pez
-     * @param coste El coste del pez
-     * @param monedas   Las monedas que vale el pez
-     * @param huevos    La cantidad de huevos que pone el pez
-     * @param ciclo El número de días hasta qe vuelva a ser fértil
-     * @param madurez   El número de días que tarda en ser fértil por primera vez
-     * @param optimo    La edad óptima para vender al pez
+     * @param fish La información del pez
+     * @param sexo El sexo del pez
      */
     protected Pez(PecesDatos fish, boolean sexo) {
         this.nombre = fish.getNombre();
@@ -178,8 +171,8 @@ public abstract class Pez {
         );
     }
 
-  /**
-     * Método que se encarga de toda la lógica de hacer crecer al pez.
+    /**
+     * Método que se encarga de la lógica de hacer crecer al pez.
      * 
      * @param comidaAnimal  La comida animal que hay en el almacén
      * @param comidaVegetal La comida vegetal que hay en el almacén
@@ -192,12 +185,12 @@ public abstract class Pez {
             if (this.edad == this.madurez) {
                 this.fertil = true;
             }
-            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(0, 100) <= 5)) {
+            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5)) {
                 setVivo(false);
             }
             return comido;
         }
-        return new int[]{0,0};
+        return new int[] {0, 0};
     }
 
     /**
@@ -224,7 +217,9 @@ public abstract class Pez {
      */
     protected abstract Pez reprod(boolean sexo);
     
-    /**Reinicia los valores del pez */
+    /**
+     * Reinicia los valores del pez
+     */
     public void reset() {
         this.edad = 0;
         this.fertil = false;
@@ -232,17 +227,18 @@ public abstract class Pez {
         this.alimentado = false;
     }
 
-    @Override
+    
     /**
-     * Muestra información relevante del pez
+     * Devuelve información relevante del pez
      */
+    @Override
     public String toString(){
         return (
             "---------- " + this.nombre + " ----------" + "\n" +
             "Nombre científico: " + this.nombreCientifico + "\n" +
             "Tipo: " + this.tipo + "\n" +
             "Coste: " + this.coste + " monedas\n" +
-            "Monedas: " + this.monedas + " monedas\n" +
+            "Valor: " + this.monedas + " monedas\n" +
             "Huevos: " + this.huevos + " huevos\n" + 
             "Ciclo: " + this.ciclo + " días\n" +
             "Madurez: " + this.madurez + " días\n" +

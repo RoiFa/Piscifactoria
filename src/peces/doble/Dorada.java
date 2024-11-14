@@ -4,6 +4,9 @@ import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
+/**
+ * Clase que representa una dorada
+ */
 public class Dorada extends Pez{
 
     /**

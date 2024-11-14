@@ -4,6 +4,9 @@ import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
 
+/**
+ * Clase que representa una tilapia del nilo
+ */
 public class TilapiaDelNilo extends Pez{
 
     /**
@@ -45,5 +48,4 @@ public class TilapiaDelNilo extends Pez{
     public TilapiaDelNilo reprod(boolean sexo) {
         return new TilapiaDelNilo();
     }
-    
 }

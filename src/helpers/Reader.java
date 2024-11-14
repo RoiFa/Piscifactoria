@@ -3,11 +3,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Clase helper para la lectura de datos pedidos al usuario.
+ */
 public class Reader {
     
-static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    /** Búfer para la lectura */
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-/**
+    /**
      * Pide texto para poder devolverlo
      * @return Devuelve el texto dado
      * @throws IOException
@@ -59,6 +63,9 @@ static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
+    /**
+     * Cierra el búfer
+     */
     public static void closer(){
         try {
             br.close();

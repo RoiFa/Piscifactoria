@@ -7,7 +7,7 @@ import helpers.Reader;
  */
 public class Monedas {
 
-    /** Las cantidad de monedas disponibles */
+    /** La cantidad de monedas disponibles */
     private static int cantidad;
 
     /**
@@ -29,18 +29,24 @@ public class Monedas {
      * Añade una cantidad de monedas dada
      * @param mon las monedas a añadir
      */
-    public void anadir(int mon){
+    public static void anadir(int mon){
         cantidad += mon;
     }
 
     /**
-     * Resta una cantidad de monedas dada
+     * Quita una cantidad de monedas dada
      * @param mon las monedas a restar
      */
     public static void gastar(int mon){
         cantidad -= mon;
     }
 
+    /**
+     * Se encarga de la lógica de comprar.
+     * 
+     * @param coste El coste del objeto a comprar
+     * @return  Si se ha realizado la compra o no.
+     */
     public static boolean comprar(int coste){
         System.out.println("Esto tiene un valor de: "+coste+"       Dinero actual: "+cantidad);
         if(coste>cantidad){
@@ -62,6 +68,11 @@ public class Monedas {
         }
     }
 
+    /**
+     * Devuelve la información del monedero
+     * 
+     * @return  Información del monedero
+     */
     @Override
     public String toString() {
         return "Actualmente hay "+cantidad+" monedas";
