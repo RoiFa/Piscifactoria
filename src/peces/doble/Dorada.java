@@ -38,4 +38,14 @@ public class Dorada extends Pez{
             return new int[]{1,0};
         }
     }
+
+    @Override
+    public Dorada reprod() {
+        return new Dorada();
+    }
+
+    @Override
+    public Dorada reprod(boolean sexo) {
+        return new Dorada();
+    }
 }

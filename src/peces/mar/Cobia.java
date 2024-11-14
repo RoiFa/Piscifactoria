@@ -33,4 +33,14 @@ public class Cobia extends Pez{
         }
         return new int[]{2,0};
     }
+
+    @Override
+    public Cobia reprod() {
+        return new Cobia();
+    }
+
+    @Override
+    public Cobia reprod(boolean sexo) {
+        return new Cobia();
+    }
 }

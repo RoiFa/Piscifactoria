@@ -1,4 +1,5 @@
 package piscifactoria;
+
 import java.util.ArrayList;
 import helpers.Reader;
 import main.Simulador;
@@ -173,6 +174,7 @@ public class Piscifactoria {
      * 
      * @return  La cantidad de dinero conseguido por vender peces.
      */
+
     public int nextDay() {
         int pecesVendidos = 0;
         int[] datos;
@@ -182,7 +184,6 @@ public class Piscifactoria {
             comidaVegetal = datos[2];
             pecesVendidos += datos[0];
         }
-        return pecesVendidos;
     }
 
     /**
@@ -202,6 +203,8 @@ public class Piscifactoria {
             }
         }
         return dineroVendido;
+
+        
     }
 
     /**
