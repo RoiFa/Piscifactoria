@@ -38,4 +38,14 @@ public class Abadejo extends Pez{
         setAlimentado(true);
         return new int[]{1,0};
     }
+
+    @Override
+    public Abadejo reprod() {
+        return new Abadejo();
+    }
+
+    @Override
+    public Abadejo reprod(boolean sexo) {
+        return new Abadejo();
+    }
 }

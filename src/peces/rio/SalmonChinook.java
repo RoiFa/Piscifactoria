@@ -34,4 +34,14 @@ public class SalmonChinook extends Pez{
         setAlimentado(true);
         return new int[]{1,0};
     }
+
+    @Override
+    public SalmonChinook reprod() {
+        return new SalmonChinook();
+    }
+
+    @Override
+    public SalmonChinook reprod(boolean sexo) {
+        return new SalmonChinook();
+    }
 }

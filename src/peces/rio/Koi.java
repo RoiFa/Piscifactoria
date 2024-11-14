@@ -34,4 +34,14 @@ public class Koi extends Pez{
         setAlimentado(true);
         return new int[]{1,0};
     }
+
+    @Override
+    public Koi reprod() {
+        return new Koi();
+    }
+
+    @Override
+    public Pejerrey reprod(boolean sexo) {
+        return new Pejerrey();
+    }
 }

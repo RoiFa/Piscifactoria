@@ -38,10 +38,10 @@ public class Simulador {
             AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
             estadisticas = new Estadisticas(nomPeces);
         
-        System.out.println("Introduzca el nombre de la nueva empresa a crear:");
-        Reader.readTheLine();
+        System.out.println("Deme el nombre de la nueva empresa:");
+        nombre = Reader.readTheLine();
         
-        System.out.println("Introduzca el nombre de la primera piscifactoría (río)");
+        System.out.println("Deme el nombre de la primera piscifactoría (río)");
         String nomPisc = Reader.readTheLine();
         while (nomPisc.equals("")) {
             System.out.println("Introduzca un nombre valido");
@@ -167,9 +167,12 @@ public class Simulador {
         System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
         "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo\n13. Volver al menú"
         );
-        while (pez<1 || pez>13) {
-            System.out.println("Introduzca un entero entre 1 y 13");
-            pez = Reader.readTheNumber();
+        System.out.println("Introduzca un entero entre 1 y 13");
+        pez = escogeOpciones(1,13);
+        if(pez!=13){
+            peces[pez-1].toString();
+        } else {
+            System.out.println("Volviendo...");
         }
         if(pez==13){
             System.out.println("Vuelta con éxito");
@@ -309,7 +312,7 @@ public class Simulador {
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
             int dineroGanado=piscis.get(piscifactoria).sellFish();
-            Monedas.setCantidad(dineroGanado);
+            Monedas.setCantidad(dineroGanado+Monedas.getCantidad());
             System.out.println("Se han conseguido "+dineroGanado+" monedas por la venta de peces adultos");
         }
     }
@@ -642,7 +645,7 @@ public class Simulador {
     public static void main(String[] args) {
         init();
         int op = 0;
-        try{
+        
             showGeneralStatus();
             while (op!=14) {
                 menu();
@@ -703,12 +706,7 @@ public class Simulador {
                         break;
                 }
             }
-
-        }catch(Exception e){
-            System.out.println("Ha ocurrido un error");
-        } finally{
-            Reader.closer();
-        }
+        Reader.closer();
     }
 
     /**

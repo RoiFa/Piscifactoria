@@ -38,4 +38,14 @@ public class TilapiaDelNilo extends Pez{
         setAlimentado(true);
         return new int[]{0,1};
     }
+
+    @Override
+    public TilapiaDelNilo reprod() {
+        return new TilapiaDelNilo();
+    }
+
+    @Override
+    public TilapiaDelNilo reprod(boolean sexo) {
+        return new TilapiaDelNilo();
+    }
 }

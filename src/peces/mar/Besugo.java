@@ -33,4 +33,14 @@ public class Besugo extends Pez{
         }
         return new int[]{1,0};
     }
+
+    @Override
+    public Besugo reprod() {
+        return new Besugo();
+    }
+
+    @Override
+    public Besugo reprod(boolean sexo) {
+        return new Besugo();
+    }
 }

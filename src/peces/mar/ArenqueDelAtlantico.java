@@ -36,5 +36,15 @@ public class ArenqueDelAtlantico extends Pez{
             return new int[]{0,0};
         }
         return new int[]{0,1};
-        }
+    }
+
+    @Override
+    public ArenqueDelAtlantico reprod() {
+        return new ArenqueDelAtlantico();
+    }
+
+    @Override
+    public ArenqueDelAtlantico reprod(boolean sexo) {
+        return new ArenqueDelAtlantico();
+    }
 }
