@@ -207,7 +207,7 @@ public abstract class Pez {
      * 
      * @return  Un nuevo pez de la misma clase.
      */
-    protected abstract Pez reprod();
+    public abstract Pez reprod();
 
     /**
      * Método abstracto que devuelve un nuevo pez de su misma clase con sexo definido.
@@ -215,7 +215,7 @@ public abstract class Pez {
      * @param sexo
      * @return
      */
-    protected abstract Pez reprod(boolean sexo);
+    public abstract Pez reprod(boolean sexo);
     
     /**
      * Reinicia los valores del pez

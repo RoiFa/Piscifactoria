@@ -184,6 +184,7 @@ public class Piscifactoria {
             comidaVegetal = datos[2];
             pecesVendidos += datos[0];
         }
+        return pecesVendidos;
     }
 
     /**
