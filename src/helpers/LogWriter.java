@@ -32,12 +32,12 @@ public class LogWriter {
                 try {
                     log.createNewFile();
                 } catch (IOException e) {
-                    writeInLog("Error al inicializar el log principal.");
+                    ErrorWriter.writeInErrorLog("Error al crear el archivo de log principal.");
                 }
             }
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(log, true)));
         } catch (FileNotFoundException e) {
-            //TODO añadir al log de errores.
+            ErrorWriter.writeInErrorLog("Error al inicializar el log principal. Archivo no encontrado.");
         }
     }
 
@@ -52,7 +52,7 @@ public class LogWriter {
             bw.append(timeStamp + " " + logLine);
             bw.flush();
         } catch (IOException e) {
-            //TODO añadir al log de errores.
+            ErrorWriter.writeInErrorLog("Error al escribir una línea al log principal.");
         }
     }
 
@@ -63,7 +63,7 @@ public class LogWriter {
         try {
             bw.close();
         } catch (IOException e) {
-            //TODO añadir al log de errores.
+            ErrorWriter.writeInErrorLog("Error al cerrar el escritor del log principal");
         }
     }
 }

@@ -50,6 +50,6 @@ public class Carpa extends Pez{
 
     @Override
     public Carpa reprod(boolean sexo) {
-        return new Carpa();
+        return new Carpa(sexo);
     }    
 }

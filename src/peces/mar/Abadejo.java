@@ -46,6 +46,6 @@ public class Abadejo extends Pez{
 
     @Override
     public Abadejo reprod(boolean sexo) {
-        return new Abadejo();
+        return new Abadejo(sexo);
     }
 }

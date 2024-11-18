@@ -46,6 +46,6 @@ public class Dorada extends Pez{
 
     @Override
     public Dorada reprod(boolean sexo) {
-        return new Dorada();
+        return new Dorada(sexo);
     }
 }

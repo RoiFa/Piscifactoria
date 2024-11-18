@@ -42,6 +42,6 @@ public class SalmonChinook extends Pez{
 
     @Override
     public SalmonChinook reprod(boolean sexo) {
-        return new SalmonChinook();
+        return new SalmonChinook(sexo);
     }
 }

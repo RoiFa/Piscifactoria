@@ -46,6 +46,6 @@ public class TilapiaDelNilo extends Pez{
 
     @Override
     public TilapiaDelNilo reprod(boolean sexo) {
-        return new TilapiaDelNilo();
+        return new TilapiaDelNilo(sexo);
     }
 }

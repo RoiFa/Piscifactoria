@@ -41,6 +41,6 @@ public class Besugo extends Pez{
 
     @Override
     public Besugo reprod(boolean sexo) {
-        return new Besugo();
+        return new Besugo(sexo);
     }
 }

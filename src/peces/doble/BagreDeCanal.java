@@ -42,6 +42,6 @@ public class BagreDeCanal extends Pez{
 
     @Override
     public BagreDeCanal reprod(boolean sexo) {
-        return new BagreDeCanal();
+        return new BagreDeCanal(sexo);
     }
 }

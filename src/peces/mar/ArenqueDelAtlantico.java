@@ -45,6 +45,6 @@ public class ArenqueDelAtlantico extends Pez{
 
     @Override
     public ArenqueDelAtlantico reprod(boolean sexo) {
-        return new ArenqueDelAtlantico();
+        return new ArenqueDelAtlantico(sexo);
     }
 }
