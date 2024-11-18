@@ -1,6 +1,7 @@
 package tanque;
 import helpers.RNG;
 import helpers.Reader;
+import helpers.TranscripWriter;
 import main.Almacen;
 import main.Simulador;
 import monedas.Monedas;
@@ -112,6 +113,7 @@ public class Tanque {
      * @return Nuevas cantidades de alimento luego de alimentar a los peces
      */
     public int[] nextDay(int carne, int vegetal){
+        int dineroGanado=0;
         int pecesVendidos=0;
         int[] cants;
         for(int i=0;i<peces.length;i++){
@@ -120,7 +122,7 @@ public class Tanque {
                     peces[i].setFertil(true);
                 }
                 if(peces[i].isVivo()&&!peces[i].isMale()&&peces[i].isFertil()&&peces[i].isAdulto()&&hayMacho()){
-                    addFish(true);
+                    addFish(true,"");
                 }
                 cants = peces[i].grow(carne,vegetal);
                 carne -= cants[0];
@@ -130,6 +132,7 @@ public class Tanque {
                         peces[i].setMonedas(peces[i].getMonedas()+5);
                     } else {
                         Monedas.anadir(peces[i].getMonedas());
+                        dineroGanado+=peces[i].getMonedas();
                         pecesVendidos++;
                         Simulador.estadisticas.registrarVenta(peces[i].getNombre(), peces[i].getMonedas());
                         peces[i] = null;
@@ -141,7 +144,7 @@ public class Tanque {
             }
             
         }
-        return new int[]{pecesVendidos,carne,vegetal};
+        return new int[]{pecesVendidos,carne,vegetal,dineroGanado};
     }
 
     /**
@@ -162,7 +165,7 @@ public class Tanque {
     /**
      * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez al tanque
      */
-    public void addFish(boolean enReproduccion){
+    public void addFish(boolean enReproduccion,String nombre){
         Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
             Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
         if(enReproduccion){
@@ -197,14 +200,18 @@ public class Tanque {
             }else if(ocupacion()==0){
                 if(tipo.equals("mar")){
                     menuEspeciesMar();
-                    peces[0] = creadorEspeciesMar(especiesMar[(Reader.readTheNumber()+1)],false);
+                    int opcion=Reader.readTheNumber();
+                    peces[0] = creadorEspeciesMar(especiesMar[(opcion+1)],false);
                     if(peces[0]!=null){
+                        TranscripWriter.writeInTranscript(especiesMar[(opcion+1)].getNombre()+"("+peces[0].getSexo().charAt(0)+") comprado por "+peces[0].getMonedas()+". Añadido al tanque "+numTanque+" de la piscifactoría "+nombre+".");
                         tipoPez = peces[0].getNombre();
                     }
                 }else{
                     menuEspeciesRio();
-                    peces[0] = creadorEspeciesRio(especiesRio[(Reader.readTheNumber()+1)],false);
+                    int opcion=Reader.readTheNumber();
+                    peces[0] = creadorEspeciesRio(especiesRio[(opcion+1)],false);
                     if(peces[0]!=null){
+                        TranscripWriter.writeInTranscript(especiesRio[(opcion+1)].getNombre()+"("+peces[0].getSexo().charAt(0)+") comprado por "+peces[0].getMonedas()+". Añadido al tanque "+numTanque+" de la piscifactoría "+nombre+".");
                         tipoPez = peces[0].getNombre();
                     }
                 }
@@ -214,7 +221,9 @@ public class Tanque {
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre()==buscaNombre()){
                             if(peces.length!=ocupacion()){
-                                peces[findSpace()] = creadorEspeciesMar(especiesMar[(i+1)],false);
+                                Pez holder = creadorEspeciesMar(especiesMar[(i+1)],false);
+                                peces[findSpace()] = holder;
+                                TranscripWriter.writeInTranscript(especiesMar[i].getNombre()+"("+holder.getSexo().charAt(0)+") comprado por "+holder.getMonedas()+". Añadido al tanque "+numTanque+" de la piscifactoría "+nombre+".");
                             }
                         }
                     }
@@ -222,12 +231,13 @@ public class Tanque {
                     for(int i=0;i<especiesRio.length;i++){
                         if(especiesRio[i].getNombre()==buscaNombre()){
                             if(peces.length!=ocupacion()){
-                                peces[findSpace()] = creadorEspeciesRio(especiesRio[(i+1)],false);
+                                Pez holder = creadorEspeciesRio(especiesRio[(i+1)],false);
+                                peces[findSpace()] = holder;
+                                TranscripWriter.writeInTranscript(especiesRio[i].getNombre()+"("+holder.getSexo().charAt(0)+") comprado por "+holder.getMonedas()+". Añadido al tanque "+numTanque+" de la piscifactoría "+nombre+".");
                             }
                         }
                     }
                 }
-                
             }
         }
     }

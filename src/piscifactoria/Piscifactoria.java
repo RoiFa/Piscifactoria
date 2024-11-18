@@ -2,6 +2,7 @@ package piscifactoria;
 
 import java.util.ArrayList;
 import helpers.Reader;
+import helpers.TranscripWriter;
 import main.Simulador;
 import tanque.Tanque;
 
@@ -178,13 +179,16 @@ public class Piscifactoria {
     public int nextDay() {
         int pecesVendidos = 0;
         int[] datos;
+        int dineroGanado=0;
         for (Tanque tank : tanques) {
             datos = tank.nextDay(comidaAnimal,comidaVegetal);
             comidaAnimal = datos[1];
             comidaVegetal = datos[2];
             pecesVendidos += datos[0];
+            dineroGanado+=datos[3];
         }
-        return pecesVendidos;
+        System.out.println("Se han vendido "+pecesVendidos+" peces por "+dineroGanado);
+        return dineroGanado;
     }
 
     /**
@@ -192,18 +196,20 @@ public class Piscifactoria {
      * 
      * @return  La cantidad de dinero ganado por vender a los peces
      */
-    public int sellFish() {
+    public int[] sellFish() {
         int dineroVendido = 0;
+        int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             for(int i=0;i<tank.peces.length;i++){
                 if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
                     dineroVendido += tank.peces[i].getMonedas();
                     Simulador.estadisticas.registrarVenta(tank.buscaNombre(), tank.peces[i].getMonedas());
                     tank.peces[i] = null;
+                    pecesVendidos++;
                 }
             }
         }
-        return dineroVendido;
+        return new int[]{dineroVendido,pecesVendidos};
 
         
     }
@@ -297,9 +303,10 @@ public class Piscifactoria {
     /**
      * Elimina los peces muertos de los tanques de la piscifactoría
      */
-    public void cleanTank(){
+    public void cleanTank(String pisciName){
         for(Tanque tanque : tanques){
             tanque.cleanTank();
+            TranscripWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+pisciName);
         }
     }
 
