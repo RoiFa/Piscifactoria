@@ -26,6 +26,8 @@ public class Simulador {
     /**Recopila las estadisticas del programa */
     public static Estadisticas estadisticas;
 
+    public static String nombre;
+
     /**
      * Inicializa el sistema desde cero
      */
@@ -116,7 +118,7 @@ public class Simulador {
             System.out.println();
         }
         System.out.println("Día actual: "+dias);
-        System.out.println("Monedas disponibles: "+monedas.getCantidad());
+        System.out.println("Monedas disponibles: "+Monedas.getCantidad());
         System.out.println();
         if(almacen!=null){
             almacen.toString();
@@ -236,11 +238,11 @@ public class Simulador {
                     if(add > espacio){
                         System.out.println("Cantidad a añadir mayor de lo posible");
                     }else{
-                        System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                        System.out.println("Coste: "+coste+" monedas. Disponible: "+Monedas.getCantidad()+" monedas");
                         System.out.println("Confirmar compra?");
                         System.out.println("1. Si    2. No");
                         if(Reader.readTheNumber()==1){
-                            if(monedas.getCantidad()>=coste){
+                            if(Monedas.getCantidad()>=coste){
                                 Monedas.gastar(coste);
                                 if(tipoComida==1){
                                     piscis.get(piscifactoria).addFood(add, 0);
@@ -274,11 +276,11 @@ public class Simulador {
                 if(add<=espacio){
                     coste = add - (5*((int) add/25));
                 }
-                System.out.println("Coste: "+coste+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                System.out.println("Coste: "+coste+" monedas. Disponible: "+Monedas.getCantidad()+" monedas");
                 System.out.println("Confirma la compra?(1.Si/2.No)");
                 int cont = escogeOpciones(1,2);
                 if(cont==1){
-                    if(monedas.getCantidad()>=coste){
+                    if(Monedas.getCantidad()>=coste){
                         Monedas.gastar(coste);
                         if(tipoComida==1){
                             almacen.addFood(add, true);
@@ -381,7 +383,7 @@ public class Simulador {
 
         while (opcion<1 || opcion>3) {
             System.out.println("1. Piscifactoría");
-            System.out.println("2. Almacén central: 2000 monedas. Disponible: "+monedas.getCantidad()+" monedas");
+            System.out.println("2. Almacén central: 2000 monedas. Disponible: "+Monedas.getCantidad()+" monedas");
             System.out.println("3. Volver");
 
             opcion = Reader.readTheNumber();
@@ -392,10 +394,10 @@ public class Simulador {
                     break;
                 case 2:
                     if(almacen==null){
-                        if(monedas.getCantidad()>=2000){
+                        if(Monedas.getCantidad()>=2000){
                             Monedas.gastar(2000);
                             almacen = new Almacen();
-                            System.out.println("Monedas restantes: "+monedas.getCantidad());
+                            System.out.println("Monedas restantes: "+Monedas.getCantidad());
                         } else{
                             System.out.println("Monedas insuficientes");
                         }
@@ -439,8 +441,8 @@ public class Simulador {
             }else{
                 coste = 2000 + 2000 * numPisc;
             }
-            System.out.println("Coste: " + coste + " monedas. Disponibles: " + monedas.getCantidad() + " monedas.");
-            if (coste > monedas.getCantidad()) {
+            System.out.println("Coste: " + coste + " monedas. Disponibles: " + Monedas.getCantidad() + " monedas.");
+            if (coste > Monedas.getCantidad()) {
                 System.out.println("Monedas insuficientes. Cancelando operación.");
             } else {
                 System.out.println("Desea proseguir con la operación? (1: sí; 2: no)");
@@ -523,11 +525,11 @@ public class Simulador {
             int numTanques = piscis.get(piscifactoria).getTanques().size();
             if (numTanques < 10) {
                 int costeTanque = piscis.get(piscifactoria).getTipo().equals("rio") ? 150 + 150 * numTanques : 600 + 600 * numTanques;
-                System.out.println("Coste del nuevo tanque: "+costeTanque+" monedas. Disponible: "+monedas.getCantidad()+" monedas");
+                System.out.println("Coste del nuevo tanque: "+costeTanque+" monedas. Disponible: "+Monedas.getCantidad()+" monedas");
                 System.out.println("Desea proseguir con la operación? (1: sí; 2: no)");
                 int cont = escogeOpciones(1,2);
                 if(cont==1){
-                    if(monedas.getCantidad()>=costeTanque){
+                    if(Monedas.getCantidad()>=costeTanque){
                         Monedas.gastar(costeTanque);
                         piscis.get(piscifactoria).addTank();
                     } else{
@@ -552,8 +554,8 @@ public class Simulador {
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
             int coste = piscis.get(piscifactoria).getTipo().equals("rio") ? 50 : 200;
-            if (monedas.getCantidad() >= coste) {
-                System.out.println("Coste mejora almacén de comida: " + coste + " monedas. Disponibles: "+monedas.getCantidad()+" monedas");
+            if (Monedas.getCantidad() >= coste) {
+                System.out.println("Coste mejora almacén de comida: " + coste + " monedas. Disponibles: "+Monedas.getCantidad()+" monedas");
                 System.out.println("Desea proseguir con la operación? (1: sí; 2: no)");
                 int cont = escogeOpciones(1,2);
                 if (cont == 1) {
@@ -582,11 +584,11 @@ public class Simulador {
      */
     private static int upgradeCentral() {
         if(almacen!=null){
-            System.out.println("Aumentar capacidad: 200 monedas. Disponibles: "+monedas.getCantidad()+" monedas");
+            System.out.println("Aumentar capacidad: 200 monedas. Disponibles: "+Monedas.getCantidad()+" monedas");
             System.out.println("Desea proseguir con la operación? (1: sí; 2: no)");
             int cont = escogeOpciones(1,2);
             if(cont==1){
-                if(monedas.getCantidad()>=200){
+                if(Monedas.getCantidad()>=200){
                     Monedas.gastar(200);
                     almacen.upgrade();
                 } else{
