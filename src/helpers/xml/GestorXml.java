@@ -11,6 +11,8 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import main.Simulador;
+
 public class GestorXml {
 
     private static String[] romanNum = new String[]{"I","II","III","IV","V"};
@@ -57,12 +59,12 @@ public class GestorXml {
         System.out.println("Guardado");
     }
 
-    public static void rewardAlga(int lvl,String origin){
+    public static void rewardAlga(int lvl){
         int res = (lvl-1)>=3 ? ((lvl-1)*300)+((lvl-1)==4 ? 800 : 100) : ((lvl-1)*100+(lvl==3 ? 300 : 100));
         Document doc = leible("algas_"+lvl+".xml");
         Element root = doc.addElement("reward");
         root.addElement("name").addText("Algas "+romanNum[lvl]);
-        root.addElement("origin").addText(origin);
+        root.addElement("origin").addText(Simulador.getNombre());
         root.addElement("desc").addText(res+" cápsula de algas para alimentar peces filtradores y omnívoros");
         root.addElement("rarity").addText(String.valueOf(lvl-1));
         Element give = root.addElement("give");
@@ -70,12 +72,12 @@ public class GestorXml {
         root.addElement("quantity").addText("1");
     }
 
-    public static void rewardPienso(int lvl,String origin){
+    public static void rewardPienso(int lvl){
         int res = (lvl-1)>=3 ? ((lvl-1)*300)+((lvl-1)==4 ? 800 : 100) : ((lvl-1)*100+(lvl==3 ? 300 : 100));
         Document doc = leible("pienso_"+lvl+".xml");
         Element root = doc.addElement("reward");
         root.addElement("name").addText("Pienso de peces "+romanNum[lvl]);
-        root.addElement("origin").addText(origin);
+        root.addElement("origin").addText(Simulador.getNombre());
         root.addElement("desc").addText(res+" unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.");
         root.addElement("rarity").addText(String.valueOf(lvl-1));
         Element give = root.addElement("give");
@@ -83,16 +85,59 @@ public class GestorXml {
         root.addElement("quantity").addText("1");
     }
 
-    public static void rewardGeneral(int lvl,String origin){
+    public static void rewardGeneral(int lvl){
         int res = (lvl-1)>=2 ? ((lvl-1)>=3 ? (((lvl-1)*150)+(lvl==5 ? 400 : 50)) : ((lvl-1)*100)+50) : ((lvl-1)*50)+50;
         Document doc = leible("comida_"+lvl+".xml");
         Element root = doc.addElement("reward");
         root.addElement("name").addText("Comida general "+romanNum[lvl]);
-        root.addElement("origin").addText(origin);
+        root.addElement("origin").addText(Simulador.getNombre());
         root.addElement("desc").addText(res+" unidades de pienso multipropósito para todo tipo de peces.");
         root.addElement("rarity").addText(String.valueOf(lvl-1));
         Element give = root.addElement("give");
         give.addElement("food").addAttribute("type","general").addText(String.valueOf(res));
+        root.addElement("quantity").addText("1");
+    }
+
+    public static void rewardAlmacen(String part){
+        Document doc = leible("almacen_"+part+".xml");
+        Element root = doc.addElement("reward");
+        root.addElement("name").addText("Almacén central ["+part+"]");
+        root.addElement("origin").addText(Simulador.getNombre());
+        root.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
+        root.addElement("rarity").addText("3");
+        Element give = root.addElement("give");
+        give.addElement("building").addAttribute("code", "4").addText("Almacén central");
+        give.addElement("part").addText(part);
+        give.addElement("total").addText("ABCD");
+        root.addElement("quantity").addText("1");
+    }
+
+    public static void rewardCoins(int lvl){
+        int res = ((lvl-1)*200)+((lvl==5) ? 200 : ((lvl==4) ? 150 : 100));
+        Document doc = leible("monedas_"+lvl+"xml");
+        Element root = doc.addElement("reward");
+        root.addElement("name").addText("Monedas "+romanNum[(lvl-1)]);
+        root.addElement("origin").addText(Simulador.getNombre());
+        root.addElement("desc").addText(res+" monedas");
+        root.addElement("rarity").addText(String.valueOf(lvl-1));
+        Element give = root.addElement("give");
+        give.addElement("coins").addText(String.valueOf(res));
+        root.addElement("quantity").addText("1");
+    }
+
+    public static void rewardPisci(int rarity,String part){
+        String type = (rarity==3) ? "río" : "mar";
+        Document doc = leible("pisci_"+type.charAt(0)+"_"+part+".xml");
+        //TODO V
+        Element root = doc.addElement("reward");
+        root.addElement("name").addText("Almacén central ["+part+"]");
+        root.addElement("origin").addText(Simulador.getNombre());
+        root.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
+        root.addElement("rarity").addText("3");
+        Element give = root.addElement("give");
+        give.addElement("building").addAttribute("code", "4").addText("Almacén central");
+        give.addElement("part").addText(part);
+        give.addElement("total").addText("ABCD");
         root.addElement("quantity").addText("1");
     }
 }

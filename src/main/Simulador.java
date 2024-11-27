@@ -26,7 +26,11 @@ public class Simulador {
     /**Recopila las estadisticas del programa */
     public static Estadisticas estadisticas;
 
-    public static String nombre;
+    private static String nombre;
+
+    public static String getNombre() {
+        return nombre;
+    }
 
     /**
      * Inicializa el sistema desde cero
