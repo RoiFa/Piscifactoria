@@ -55,6 +55,7 @@ public class Almacen {
         }else{
             System.out.println("La cantidad que se intenta añadir es mayor a la posible");
         }
+        repartirComida();
     }
   
   /**
@@ -63,41 +64,27 @@ public class Almacen {
      * @param vegetalAdd Cantidad de alimento vegetal a añadir al almacen
      * @return Devuelve el nuevo array de piscifactorias
      */
-    public static ArrayList<Piscifactoria> repartirComida(int carneAdd, int vegetalAdd){
+    public static ArrayList<Piscifactoria> repartirComida(){
         ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
-        if((carneAdd+carne)>maxCapacidad){
-            System.out.println("Se esta intentando añadir mas carne de lo que se es capaz de almacenar");
-        }else if((vegetalAdd+vegetal)>maxCapacidad){
-            System.out.println("Se esta intentando añadir mas alimento vegetal de lo que se es capaz de almacenar");
-        }else{
-            int numPiscis = piscis.size();
-            if(numPiscis<carneAdd){
-                System.out.println("No se alcanza el numero minimo de alimento de carnivoros para repartirse entre las piscifactorias");
-            }else if(numPiscis<vegetalAdd){
-                System.out.println("No se alcanza el numero minimo de alimento de herbivoros para repartirse entre las piscifactorias");
-            }else {
-                carne += carneAdd;
-                vegetal += vegetalAdd;
-                int cantRepartCarne = carne/numPiscis;
-                int cantRepartVeget = vegetal/numPiscis;
-                for (Piscifactoria pisci : piscis) {
-                    if(cantRepartCarne>pisci.getComidaMax()){
-                        pisci.addFood(pisci.getComidaMax(),0);
-                        carne -= pisci.getComidaMax();
-                    }else{
-                        pisci.addFood(cantRepartCarne,0);
-                        carne -= cantRepartCarne;
-                    }
-                    if(cantRepartVeget>100){
-                        pisci.addFood(0,pisci.getComidaMax());
-                        vegetal -= pisci.getComidaMax();
-                    }else{
-                        pisci.addFood(0,cantRepartVeget);
-                        vegetal -= cantRepartVeget;
-                    }
-                   
-                }
+        int numPiscis = piscis.size();
+        int cantRepartCarne = carne/numPiscis;
+        int cantRepartVeget = vegetal/numPiscis;
+        for (Piscifactoria pisci : piscis) {
+            if(cantRepartCarne>pisci.getComidaMax()){
+                pisci.addFood(pisci.getComidaMax(),0);
+                carne -= pisci.getComidaMax();
+            }else{
+                pisci.addFood(cantRepartCarne,0);
+                carne -= cantRepartCarne;
             }
+            if(cantRepartVeget>100){
+                pisci.addFood(0,pisci.getComidaMax());
+                vegetal -= pisci.getComidaMax();
+            }else{
+                pisci.addFood(0,cantRepartVeget);
+                vegetal -= cantRepartVeget;
+            }
+            
         }
         Simulador.setPiscis(piscis);
         return piscis;

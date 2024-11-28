@@ -1,4 +1,5 @@
 package tanque;
+import helpers.ErrorWriter;
 import helpers.RNG;
 import helpers.Reader;
 import main.Almacen;
@@ -27,20 +28,27 @@ public class Tanque {
     /** El tipo de pez que admite */
     private String tipoPez;
 
+    /** @return El tipo de tanque (mar o río) */
     public String getTipo() {
         return tipo;
     }
 
+    /** @return El número de tanque en la piscifactoría. */
     public int getNumTanque() {
         return numTanque;
     }
 
+    /** @return La capacidad máxima del tanque. */
     public int getMaxSize() {
         return maxSize;
     }
+
+    /** @return El tipo de pez que admite el tanque. */
     public String getTipoPez(){
         return tipoPez;
     }
+
+    /** @return La lista de peces en el tanque. */
     public Pez[] getPeces() {
         return peces;
     }
@@ -77,10 +85,11 @@ public class Tanque {
                 "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(adultos()/ocupacion())*100)+"%)"+
                 "\n"+"Hembras / machos: "+machos()+"/"+hembras());
             }
-        } catch (Exception e) {
-            //Skip en caso de error debido a divisiones con 0
+        } catch (ArithmeticException e) {
+            //TODO Borrar el e.printStackTrace al teriminar el debugging.
+            ErrorWriter.writeInErrorLog("Error al mostrar el estado actual del tanque.\n");
+            e.printStackTrace();
         }
-        
     }
 
     /**
@@ -102,7 +111,13 @@ public class Tanque {
      * Muestra la capacidad del tanque y su ocupación actual
     */
     public void showCapacity(String nombrePiscifactoria){
-        System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+((int)(ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
+        try {
+            System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+((int)(ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
+        } catch (ArithmeticException e) {
+            ErrorWriter.writeInErrorLog("Error al mostrar la capacidad de un tanque.\n");
+            //TODO Borrar el e.printStackTrace al terminar el debugging.
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -137,9 +152,8 @@ public class Tanque {
                 }
             }
             if (Simulador.almacen!=null&&(carne <= 0 || vegetal <= 0)) {
-                Almacen.repartirComida(0,0);
+                Almacen.repartirComida();
             }
-            
         }
         return new int[]{pecesVendidos,carne,vegetal};
     }
@@ -163,72 +177,82 @@ public class Tanque {
      * Muestra las opciones y hace las comprobaciones a la hora de intentar añadir un pez al tanque
      */
     public void addFish(boolean enReproduccion){
-        Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
-            Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
-        if(enReproduccion){
-            if(tipo.equals("mar")){
-                for(int i=0;i<especiesMar.length;i++){
-                    if(especiesMar[i].getNombre()==buscaNombre()){
-                        if(peces.length!=ocupacion()){
-                            for(int k=0;k<especiesMar[i].getHuevos();k++){
-                                peces[findSpace()] = creadorEspeciesMar(especiesMar[(i+1)],true);
-                                Simulador.estadisticas.registrarNacimiento(buscaNombre());
+        try {
+            Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
+                Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
+            if(enReproduccion){
+                try {
+                    if(tipo.equals("mar")){
+                        for(int i=0;i<especiesMar.length;i++){
+                            if(especiesMar[i].getNombre()==buscaNombre()){
+                                if(peces.length!=ocupacion()){
+                                    for(int k=0;k<especiesMar[i].getHuevos();k++){
+                                        peces[findSpace()] = creadorEspecies(especiesMar[(i+1)],true);
+                                        Simulador.estadisticas.registrarNacimiento(buscaNombre());
+                                    }
+                                }
                             }
                         }
-                    }
-                }
-            }else{
-                for(int i=0;i<especiesRio.length;i++){
-                    if(especiesRio[i].getNombre()==buscaNombre()){
-                        for(int k=0;k<peces[0].getHuevos();k++){
-                            for(int j=0;j<especiesMar[i].getHuevos();j++){
-                                if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspeciesRio(especiesRio[(i+1)],true);
-                                    Simulador.estadisticas.registrarNacimiento(buscaNombre());
+                    }else{
+                        for(int i=0;i<especiesRio.length;i++){
+                            if(especiesRio[i].getNombre()==buscaNombre()){
+                                for(int k=0;k<peces[0].getHuevos();k++){
+                                    for(int j=0;j<especiesMar[i].getHuevos();j++){
+                                        if(peces.length!=ocupacion()){
+                                            peces[findSpace()] = creadorEspecies(especiesRio[(i+1)],true);
+                                            Simulador.estadisticas.registrarNacimiento(buscaNombre());
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            }
-        }else{
-            if(ocupacion()==maxSize){
-                System.out.println("No hay espacio suficiente en este tanque");
-            }else if(ocupacion()==0){
-                if(tipo.equals("mar")){
-                    menuEspeciesMar();
-                    peces[0] = creadorEspeciesMar(especiesMar[(Reader.readTheNumber()+1)],false);
-                    if(peces[0]!=null){
-                        tipoPez = peces[0].getNombre();
-                    }
-                }else{
-                    menuEspeciesRio();
-                    peces[0] = creadorEspeciesRio(especiesRio[(Reader.readTheNumber()+1)],false);
-                    if(peces[0]!=null){
-                        tipoPez = peces[0].getNombre();
-                    }
+                } catch (Exception e) {
+                    ErrorWriter.writeInErrorLog("Error en la reproducción de peces.");
                 }
             }else{
-                System.out.println("Quiere añadir un "+buscaNombre()+" mas al tanque?");
-                if(tipo=="mar"){
-                    for(int i=0;i<especiesMar.length;i++){
-                        if(especiesMar[i].getNombre()==buscaNombre()){
-                            if(peces.length!=ocupacion()){
-                                peces[findSpace()] = creadorEspeciesMar(especiesMar[(i+1)],false);
-                            }
+                if(ocupacion()==maxSize){
+                    System.out.println("No hay espacio suficiente en este tanque");
+                }else if(ocupacion()==0){
+                    if(tipo.equals("mar")){
+                        menuEspeciesMar();
+                        peces[0] = creadorEspecies(especiesMar[(Reader.readTheNumber()+1)],false);
+                        if(peces[0]!=null){
+                            tipoPez = peces[0].getNombre();
+                        }
+                    }else{
+                        menuEspeciesRio();
+                        peces[0] = creadorEspecies(especiesRio[(Reader.readTheNumber()+1)],false);
+                        if(peces[0]!=null){
+                            tipoPez = peces[0].getNombre();
                         }
                     }
                 }else{
-                    for(int i=0;i<especiesRio.length;i++){
-                        if(especiesRio[i].getNombre()==buscaNombre()){
-                            if(peces.length!=ocupacion()){
-                                peces[findSpace()] = creadorEspeciesRio(especiesRio[(i+1)],false);
+                    System.out.println("Quiere añadir un "+buscaNombre()+" mas al tanque?");
+                    if(tipo=="mar"){
+                        for(int i=0;i<especiesMar.length;i++){
+                            if(especiesMar[i].getNombre()==buscaNombre()){
+                                if(peces.length!=ocupacion()){
+                                    peces[findSpace()] = creadorEspecies(especiesMar[(i+1)],false);
+                                }
+                            }
+                        }
+                    }else{
+                        for(int i=0;i<especiesRio.length;i++){
+                            if(especiesRio[i].getNombre()==buscaNombre()){
+                                if(peces.length!=ocupacion()){
+                                    peces[findSpace()] = creadorEspecies(especiesRio[(i+1)],false);
+                                }
                             }
                         }
                     }
+                    
                 }
-                
             }
+        } catch (Exception e) {
+            ErrorWriter.writeInErrorLog("Error en la reproducción de peces.");
+            //TODO Borrar e.printStackTrace al terminar el debugging.
+            e.printStackTrace();
         }
     }
 
@@ -289,73 +313,28 @@ public class Tanque {
     }
 
     /**
-     * Hace la logica para la creacion de un pez de Rio
+     * Hace la logica para la creacion de un pez.
      * 
      * @param opcion Posicion en el switch del pez a querer crear
      * @param enReproduccion Informa si es a causa de reproduccion o por compra
      * @return Devuelve el nuevo pez
      */
-    public Pez creadorEspeciesRio(Pez pez,boolean enReproduccion){
+    public Pez creadorEspecies(Pez pez,boolean enReproduccion){
         if(enReproduccion){
             if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return pez.reprod(false);
-                    }else {
-                        return pez.reprod(true);
-                    }
-                }else{
-                    return pez.reprod();
-                }
-        }else{
-        if(Monedas.comprar(new Carpa().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return pez.reprod(false);
-                    }else {
-                        return pez.reprod(true);
-                    }
-                }else{
-                    return pez.reprod();
-                }
-            }else{
-                return null;
+                return pez.reprod(!predominan());
             }
+            return pez.reprod();
         }
-    }
-    /**
-     * Hace la logica para la creacion de un pez de Mar
-     * @param opcion Posicion en el switch del pez a querer crear
-     * @param enReproduccion Informa si es a causa de reproduccion o por compra
-     * @return Devuelve el nuevo pez
-     */
-    public Pez creadorEspeciesMar(Pez pez,boolean enReproduccion){
-        if(enReproduccion){
+        if(Monedas.comprar(pez.getCoste())){
             if(ocupacion()==1||enReproduccion){
-                if(predominan()){
-                    return pez.reprod(false);
-                }else {
-                    return pez.reprod(true);
-                }
-            }else{
-                return pez.reprod();
+                return pez.reprod(!predominan());
             }
-        }else{
-            if(Monedas.comprar(new Rodaballo().getCoste())){
-                if(ocupacion()==1||enReproduccion){
-                    if(predominan()){
-                        return pez.reprod(false);
-                    }else {
-                        return pez.reprod(true);
-                    }
-                }else{
-                    return pez.reprod();
-                }
-            }else{
-                return null;
-            }
+            return pez.reprod();
         }
+        return null;
     }
-    
+    //TODO Continuar comprobando errores aqui
     /**
      * Identifica que genero predomina en el tanque
      * @return Devuelve true o false dependiendo si macho o hembra

@@ -64,94 +64,112 @@ public abstract class Pez {
         this.tipo = fish.getTipo();
     }
 
+    /** @return El nombre común del pez. */
     public String getNombre() {
         return nombre;
     }
 
+    /** @return El nombre científico del pez. */
     public String getNombreCientifico() {
         return nombreCientifico;
     }
 
+    /** @return La edad actual del pez. */
     public int getEdad() {
         return edad;
     }
 
+    /** @return El sexo del pez (Macho o Hembra). */
     public String getSexo() {
         return sexo ? "Macho" : "Hembra";
     }
 
+    /** @return Si el pez es macho. */
     public boolean isMale() {
         return sexo;
     }
 
+    /** @return Si el pez es fértil. */
     public boolean isFertil() {
         return fertil;
     }
 
+    /** @return Si el pez está vivo. */
     public boolean isVivo() {
         return vivo;
     }
 
+    /** @return Si el pez está alimentado. */
     public boolean isAlimentado() {
         return alimentado;
     }
 
+    /** @return El precio del pez al comprarlo. */
     public int getCoste() {
         return coste;
     }
 
+    /** @return El precio del pez al venderlo. */
     public int getMonedas() {
         return monedas;
     }
 
+    /** @return El número de huevos que pone el pez. */
     public int getHuevos() {
         return huevos;
     }
 
+    /** @return El ciclo de días hasta volver a ser fértil. */
     public int getCiclo() {
         return ciclo;
     }
 
+    /** @return El número de días que tarda el pez en madurar. */
     public int getMadurez() {
         return madurez;
     }
 
+    /** @return El número de días que tarda el pez en alcanzar su edad óptima. */
     public int getOptimo() {
         return optimo;
     }
 
+    /** @return La clase de piscifactoría en la que se puede criar. */
     public CriaTipo getPiscifactoria() {
         return piscifactoria;
     }
 
+    /** @return El tipo de pez (Base, normal, inversión o riesgo) */
     public PecesTipo getTipo() {
         return tipo;
     }
 
+    /** @param edad La edad a cambiar. */
     public void setEdad(int edad) {
         this.edad = edad;
     }
 
+    /** @param fertil Si el pez es fértil o no. */
     public void setFertil(boolean fertil) {
         this.fertil = fertil;
     }
 
+    /** @param vivo Si el pez está vivo o no. */
     public void setVivo(boolean vivo) {
         this.vivo = vivo;
     }
 
+    /** @param alimentado Si el pez está alimentado o no. */
     public void setAlimentado(boolean alimentado) {
         this.alimentado = alimentado;
     }
 
+    /** @param monedas La nueva cantidad de monedas que cuesta al venderlo. */
     public void setMonedas(int monedas) {
         this.monedas = monedas;
     }
 
-
-    /**
-     * Método que devuelve un boolean dependiendo de si el pez es adulto o no
-     */
+    /** @return Si el pez es adulto o no. */
     public boolean isAdulto() {
         return (this.edad >= this.madurez);
     }
