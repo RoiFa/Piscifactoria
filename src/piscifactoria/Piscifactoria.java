@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import helpers.ErrorWriter;
 import helpers.Reader;
+import helpers.TranscripWriter;
 import main.Simulador;
 import tanque.Tanque;
 
@@ -194,11 +195,13 @@ public class Piscifactoria {
     public int nextDay() {
         int pecesVendidos = 0;
         int[] datos;
+        int dineroGanado=0;
         for (Tanque tank : tanques) {
             datos = tank.nextDay(comidaAnimal,comidaVegetal);
             comidaAnimal = datos[1];
             comidaVegetal = datos[2];
             pecesVendidos += datos[0];
+            dineroGanado+=datos[3];
         }
         return pecesVendidos;
     }
@@ -208,8 +211,9 @@ public class Piscifactoria {
      * 
      * @return  La cantidad de dinero ganado por vender a los peces
      */
-    public int sellFish() {
+    public int[] sellFish() {
         int dineroVendido = 0;
+        int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             try {
                 for(int i=0;i<tank.peces.length;i++){
@@ -223,7 +227,7 @@ public class Piscifactoria {
                 ErrorWriter.writeInErrorLog("Error al intentar vender peces del tanque " + tank.getNumTanque() + " de la piscifactoría " + this.nombre);
             }
         }
-        return dineroVendido;
+        return new int[]{dineroVendido,pecesVendidos};
 
         
     }
@@ -313,9 +317,10 @@ public class Piscifactoria {
     /**
      * Elimina los peces muertos de los tanques de la piscifactoría
      */
-    public void cleanTank(){
+    public void cleanTank(String pisciName){
         for(Tanque tanque : tanques){
             tanque.cleanTank();
+            TranscripWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+pisciName);
         }
     }
 

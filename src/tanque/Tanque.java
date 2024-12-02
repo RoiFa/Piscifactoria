@@ -2,6 +2,7 @@ package tanque;
 import helpers.ErrorWriter;
 import helpers.RNG;
 import helpers.Reader;
+import helpers.TranscripWriter;
 import main.Almacen;
 import main.Simulador;
 import monedas.Monedas;
@@ -127,6 +128,7 @@ public class Tanque {
      * @return Nuevas cantidades de alimento luego de alimentar a los peces
      */
     public int[] nextDay(int carne, int vegetal){
+        int dineroGanado=0;
         int pecesVendidos=0;
         int[] cants;
         for(int i=0;i<peces.length;i++){
@@ -135,7 +137,7 @@ public class Tanque {
                     peces[i].setFertil(true);
                 }
                 if(peces[i].isVivo()&&!peces[i].isMale()&&peces[i].isFertil()&&peces[i].isAdulto()&&hayMacho()){
-                    addFish(true);
+                    addFish(true,"");
                 }
                 cants = peces[i].grow(carne,vegetal);
                 carne -= cants[0];
@@ -145,6 +147,7 @@ public class Tanque {
                         peces[i].setMonedas(peces[i].getMonedas()+5);
                     } else {
                         Monedas.anadir(peces[i].getMonedas());
+                        dineroGanado+=peces[i].getMonedas();
                         pecesVendidos++;
                         Simulador.estadisticas.registrarVenta(peces[i].getNombre(), peces[i].getMonedas());
                         peces[i] = null;
@@ -155,7 +158,7 @@ public class Tanque {
                 Almacen.repartirComida();
             }
         }
-        return new int[]{pecesVendidos,carne,vegetal};
+        return new int[]{pecesVendidos,carne,vegetal,dineroGanado};
     }
 
     /**
