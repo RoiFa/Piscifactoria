@@ -41,6 +41,6 @@ public class Cobia extends Pez{
 
     @Override
     public Cobia reprod(boolean sexo) {
-        return new Cobia();
+        return new Cobia(sexo);
     }
 }

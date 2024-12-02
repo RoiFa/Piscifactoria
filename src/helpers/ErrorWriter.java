@@ -65,7 +65,7 @@ public class ErrorWriter {
         try {
             bw.close();
         } catch (IOException e) {
-            writeInErrorLog("Fallo al cerrar el escritor de errores.");
+            System.out.println(("Fallo al cerrar el escritor de errores."));
         }
     }
 }

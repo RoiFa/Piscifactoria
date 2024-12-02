@@ -42,6 +42,6 @@ public class Pejerrey extends Pez{
 
     @Override
     public Pejerrey reprod(boolean sexo) {
-        return new Pejerrey();
+        return new Pejerrey(sexo);
     }
 }
