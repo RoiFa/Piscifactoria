@@ -21,8 +21,7 @@ public class Reader {
         try {
             return br.readLine();
         }catch(IOException e){
-            return "";
-        } catch (Exception e) {
+            ErrorWriter.writeInErrorLog("Error al pedirle una línea de texto al usuario.");
             return "";
         }
     }
@@ -39,8 +38,7 @@ public class Reader {
             input = Integer.parseInt(br.readLine());
             return input;
         }catch(IOException e){
-            return -1;
-        } catch (Exception e) {
+            ErrorWriter.writeInErrorLog("Error al pedirle un número entero al usuario.");
             return -1;
         }
     }
@@ -57,8 +55,7 @@ public class Reader {
             input = Float.parseFloat(br.readLine());
             return input;
         }catch(IOException e){
-            return 0;
-        } catch (Exception e) {
+            ErrorWriter.writeInErrorLog("Error al pedirle un número decimal al usuario.");
             return 0;
         }
     }
@@ -70,7 +67,7 @@ public class Reader {
         try {
             br.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            ErrorWriter.writeInErrorLog("Error al intentar cerrar el helper de Reader");
         }
     }
 }

@@ -1,6 +1,7 @@
 package main;
 import java.util.ArrayList;
 
+import helpers.ErrorWriter;
 import piscifactoria.Piscifactoria;
 /**
  * Clase que representa al almacén central
@@ -14,19 +15,27 @@ public class Almacen {
     /** Cantidad maxima de cada tipo de comida. */
     private static int maxCapacidad;
 
+    /** @return La cantidad de comida animal almacenada. */
     public static int getCarne() {
         return carne;
     }
+
+    /** @return La cantidad de comida vegetal almacenada. */
     public static int getVegetal() {
         return vegetal;
     }
+
+    /** @param carne La cantidad de comida animal a guardar en el almacen */
     public static void setCarne(int carne) {
         Almacen.carne = carne;
     }
+
+    /** @param vegetal La cantidad de comida vegetal a guardar en el almacen */
     public static void setVegetal(int vegetal) {
         Almacen.vegetal = vegetal;
     }
 
+    /** @return La capacidad máxima del almacén */
     public static int getMaxCapacidad() {
         return maxCapacidad;
     }
@@ -58,36 +67,35 @@ public class Almacen {
         repartirComida();
     }
   
-  /**
+    /**
      * Reparte de manera equivalente a todos los almacenes de todas las piscifactorias y mantiene lo restante y/o lo no divisible en este almacen
-     * @param carneAdd Cantidad de carne a añadir al almacen
-     * @param vegetalAdd Cantidad de alimento vegetal a añadir al almacen
-     * @return Devuelve el nuevo array de piscifactorias
      */
-    public static ArrayList<Piscifactoria> repartirComida(){
+    public static void repartirComida(){
         ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
-        int numPiscis = piscis.size();
-        int cantRepartCarne = carne/numPiscis;
-        int cantRepartVeget = vegetal/numPiscis;
-        for (Piscifactoria pisci : piscis) {
-            if(cantRepartCarne>pisci.getComidaMax()){
-                pisci.addFood(pisci.getComidaMax(),0);
-                carne -= pisci.getComidaMax();
-            }else{
-                pisci.addFood(cantRepartCarne,0);
-                carne -= cantRepartCarne;
+        try {
+            int numPiscis = piscis.size();
+            int cantRepartCarne = carne/numPiscis;
+            int cantRepartVeget = vegetal/numPiscis;
+            for (Piscifactoria pisci : piscis) {
+                if(cantRepartCarne>pisci.getComidaMax()){
+                    pisci.addFood(pisci.getComidaMax(),0);
+                    carne -= pisci.getComidaMax();
+                }else{
+                    pisci.addFood(cantRepartCarne,0);
+                    carne -= cantRepartCarne;
+                }
+                if(cantRepartVeget>100){
+                    pisci.addFood(0,pisci.getComidaMax());
+                    vegetal -= pisci.getComidaMax();
+                }else{
+                    pisci.addFood(0,cantRepartVeget);
+                    vegetal -= cantRepartVeget;
+                }
             }
-            if(cantRepartVeget>100){
-                pisci.addFood(0,pisci.getComidaMax());
-                vegetal -= pisci.getComidaMax();
-            }else{
-                pisci.addFood(0,cantRepartVeget);
-                vegetal -= cantRepartVeget;
-            }
-            
+            Simulador.setPiscis(piscis);
+        } catch (ArithmeticException e) {
+            ErrorWriter.writeInErrorLog("Error al repartir comida desde el almacén central.");
         }
-        Simulador.setPiscis(piscis);
-        return piscis;
     }
 
     /**
@@ -105,9 +113,14 @@ public class Almacen {
      * @return Información del almacén
      */
     public String toString(){
-        return "------------------ Almacén central ------------------"+
-        "\nCapacidad máxima: "+maxCapacidad+
-        "\nComida animal: "+carne+"/"+maxCapacidad+". ("+((int)(carne/maxCapacidad)*100)+" %)"+
-        "\nComida vegetal: "+vegetal+"/"+maxCapacidad+". ("+((int)(vegetal/maxCapacidad)*100)+" %)";
+        try {
+            return "------------------ Almacén central ------------------"+
+            "\nCapacidad máxima: "+maxCapacidad+
+            "\nComida animal: "+carne+"/"+maxCapacidad+". ("+((int)(carne/maxCapacidad)*100)+" %)"+
+            "\nComida vegetal: "+vegetal+"/"+maxCapacidad+". ("+((int)(vegetal/maxCapacidad)*100)+" %)";
+        } catch (ArithmeticException e) {
+            ErrorWriter.writeInErrorLog("Error al devolver información del almacén central");
+            return "";
+        }
     }
 }

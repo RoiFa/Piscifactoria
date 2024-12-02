@@ -17,6 +17,7 @@ public class Monedas {
         Monedas.cantidad = 0;
     }
 
+    /** @return La cantidad de dinero actual. */
     public static int getCantidad() {
         return cantidad;
     }
@@ -48,24 +49,22 @@ public class Monedas {
      * @return  Si se ha realizado la compra o no.
      */
     public static boolean comprar(int coste){
-        System.out.println("Esto tiene un valor de: "+coste+"       Dinero actual: "+cantidad);
+        System.out.println("Esto tiene un valor de: "+coste+"\tDinero actual: "+cantidad);
         if(coste>cantidad){
             System.out.println("No tiene dinero suficiente para costear esta compra");
             return false;
-        }else{
-            System.out.println("Quiere comprarlo?(1.Si/2.No)");
-            int opcion = Reader.readTheNumber();
-            while (opcion!=1&&opcion!=2) {
-                System.out.println("Quiere comprarlo?(1.Si/2.No)");
-                opcion = Reader.readTheNumber();
-            }
-            if(opcion==1){
-                gastar(coste);
-                return true;
-            }else{
-                return false;
-            }
         }
+        System.out.println("Quiere comprarlo?(1.Si/2.No)");
+        int opcion = Reader.readTheNumber();
+        while (opcion!=1&&opcion!=2) {
+            System.out.println("Quiere comprarlo?(1.Si/2.No)");
+            opcion = Reader.readTheNumber();
+        }
+        if(opcion==1){
+            gastar(coste);
+            return true;
+        }
+        return false;
     }
 
     /**
