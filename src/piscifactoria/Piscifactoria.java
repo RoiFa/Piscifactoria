@@ -187,8 +187,7 @@ public class Piscifactoria {
             pecesVendidos += datos[0];
             dineroGanado+=datos[3];
         }
-        System.out.println("Se han vendido "+pecesVendidos+" peces por "+dineroGanado);
-        return dineroGanado;
+        return pecesVendidos;
     }
 
     /**

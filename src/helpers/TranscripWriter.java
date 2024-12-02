@@ -41,9 +41,9 @@ public class TranscripWriter {
         }
     }
 
-    public static void transcriptStart(String transcriptLine ,Pez[] nomPeces ,String nomPisc) {
+    public static void transcriptStart(String nombrePartida ,Pez[] nomPeces ,String nomPisc) {
         try {
-            bw.append("Inicio de la simulación "+transcriptLine+"\n"+
+            bw.append("Inicio de la simulación "+nombrePartida+"\n"+
             "Dinero: "+Monedas.getCantidad());
             bw.append("Peces:\nRio:");
             for(int i=0;i<nomPeces.length;i++){
