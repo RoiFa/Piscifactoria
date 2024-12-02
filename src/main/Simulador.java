@@ -81,7 +81,7 @@ public class Simulador {
     /**
      * Muestra el texto para seleccionar una piscifactoría
      */
-    private static void menuPisc(){
+    public static void menuPisc(){
         
         int i = 1;
         System.out.println("Seleccione una piscifactoría:");
@@ -98,7 +98,7 @@ public class Simulador {
      * Permite seleccionar una piscifactoría
      * @return un entero con la opción seleccionada
      */
-    private static int selectPisc(){
+    public static int selectPisc(){
         int opcion = -1;
         while (opcion<0 || opcion>piscis.size()) {
             menuPisc();
