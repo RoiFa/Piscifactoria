@@ -202,7 +202,7 @@ public class GestorXml {
                         if(Simulador.almacen!=null){
                             Simulador.almacen = new Almacen();
                             System.out.println("Has canjeado exitosamente las partes de almacen por un almacen nuevo!");
-                            TranscripWriter.writeInTranscript("Recompensa almacen usada(ABCD)");
+                            TranscriptWriter.writeInTranscript("Recompensa almacen usada(ABCD)");
                             for(File file : files){
                                 if(file.getName()=="almacen_a.xml"&&!aChar){
                                     deplete(file);
@@ -233,7 +233,7 @@ public class GestorXml {
                         while (name=="") {
                             System.out.println("Que nombre quiere para la nueva piscifactoría?(mar)");
                             name = Reader.readTheLine();
-                            TranscripWriter.writeInTranscript("Recompensa Piscifactoría(Mar) usada(AB)");
+                            TranscriptWriter.writeInTranscript("Recompensa Piscifactoría(Mar) usada(AB)");
                         }
                         piscis.add(new Piscifactoria("mar", name));
                         for(File file : files){
@@ -255,7 +255,7 @@ public class GestorXml {
                         while (name=="") {
                             System.out.println("Que nombre quiere para la nueva piscifactoría?(rio)");
                             name = Reader.readTheLine();
-                            TranscripWriter.writeInTranscript("Recompensa Piscifactoría(Río) usada(AB)");
+                            TranscriptWriter.writeInTranscript("Recompensa Piscifactoría(Río) usada(AB)");
                         }
                         piscis.add(new Piscifactoria("rio", name));
                         for(File file : files){
@@ -276,22 +276,22 @@ public class GestorXml {
                         case "algas":
                             shareFood(Integer.parseInt(give.element("food").getText()), 0);
                             deplete(files[opcion]);
-                            TranscripWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
+                            TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "piens":
                             shareFood(0, Integer.parseInt(give.element("food").getText()));
                             deplete(files[opcion]);
-                            TranscripWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
+                            TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "comid":
                             shareFood(Integer.parseInt(give.element("food").getText()), Integer.parseInt(give.element("food").getText()));
                             deplete(files[opcion]);
-                            TranscripWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
+                            TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "moned":
                             Monedas.anadir(Integer.parseInt(give.element("coins").getText()));
                             deplete(files[opcion]);
-                            TranscripWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
+                            TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "tanqu":
                             ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
@@ -307,7 +307,7 @@ public class GestorXml {
                             }else{
                                 System.out.println("El tipo del tanque no coincide con la piscifactoría seleccionada(mar/rio)");
                             }
-                            TranscripWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
+                            TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         default:
                             break;

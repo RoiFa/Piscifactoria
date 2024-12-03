@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import helpers.ErrorWriter;
 import helpers.Reader;
-import helpers.TranscripWriter;
+import helpers.TranscriptWriter;
 import main.Simulador;
 import tanque.Tanque;
 
@@ -320,7 +320,7 @@ public class Piscifactoria {
     public void cleanTank(String pisciName){
         for(Tanque tanque : tanques){
             tanque.cleanTank();
-            TranscripWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+pisciName);
+            TranscriptWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+pisciName);
         }
     }
 

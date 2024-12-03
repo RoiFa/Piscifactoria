@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import monedas.Monedas;
 
-public class TranscripWriter {
+public class TranscriptWriter {
     
     /**Bufer del transcriptor */
     private static BufferedWriter bw;

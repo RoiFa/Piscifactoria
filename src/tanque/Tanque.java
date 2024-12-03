@@ -2,7 +2,7 @@ package tanque;
 import helpers.ErrorWriter;
 import helpers.RNG;
 import helpers.Reader;
-import helpers.TranscripWriter;
+import helpers.TranscriptWriter;
 import main.Almacen;
 import main.Simulador;
 import monedas.Monedas;
