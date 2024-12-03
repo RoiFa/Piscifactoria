@@ -75,7 +75,6 @@ public class TranscriptWriter {
         }
     }
 
-
     /**
      * Cierra el escritor de transcripciones
      */
