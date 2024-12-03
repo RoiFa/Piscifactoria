@@ -17,7 +17,6 @@ public class Reader {
      * @throws IOException
      */
     public static String readTheLine(){
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             return br.readLine();
         }catch(IOException e){
@@ -32,7 +31,6 @@ public class Reader {
      * @throws IOException
      */
     public static int readTheNumber(){
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int input=0;
         try {
             input = Integer.parseInt(br.readLine());
@@ -49,14 +47,13 @@ public class Reader {
      * @throws IOException
      */
     public static float readTheNumberF(){
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         float input=0;
         try {
             input = Float.parseFloat(br.readLine());
             return input;
         }catch(IOException e){
             ErrorWriter.writeInErrorLog("Error al pedirle un número decimal al usuario.");
-            return 0;
+            return -1;
         }
     }
 

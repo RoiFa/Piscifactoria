@@ -41,7 +41,7 @@ public class Koi extends Pez{
     }
 
     @Override
-    public Pejerrey reprod(boolean sexo) {
-        return new Pejerrey(sexo);
+    public Koi reprod(boolean sexo) {
+        return new Koi(sexo);
     }
 }

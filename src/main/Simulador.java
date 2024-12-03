@@ -206,6 +206,9 @@ public class Simulador {
         int vendidos = 0;
         int totalMar=0;
         int totalRio=0;
+        if(almacen!=null){
+            Almacen.repartirComida();
+        }
         for(Piscifactoria p : piscis){
             int[] datos = p.nextDay();
             vendidos += datos[0];
