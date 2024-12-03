@@ -137,7 +137,7 @@ public class Tanque {
                     peces[i].setFertil(true);
                 }
                 if(peces[i].isVivo()&&!peces[i].isMale()&&peces[i].isFertil()&&peces[i].isAdulto()&&hayMacho()){
-                    addFish(true,"");
+                    addFish(true);
                 }
                 cants = peces[i].grow(carne,vegetal);
                 carne -= cants[0];

@@ -69,8 +69,8 @@ public class Simulador {
 
         ErrorWriter.startErrorLog(nombre);
         LogWriter.startLog(nombre);
-        TranscriptorWriter.transcriptInit(nombre);
-        TranscriptorWriter.transcriptStart(nombre, nomPeces, nomPisc);
+        TranscripWriter.transcriptInit(nombre);
+        TranscripWriter.transcriptStart(nombre, nomPeces, nomPisc);
     }
 
     /**
@@ -206,6 +206,9 @@ public class Simulador {
         int ganancias=0;
         int totalMar=0;
         int totalRio=0;
+        if(almacen!=null){
+            Almacen.repartirComida();
+        }
         for(Piscifactoria p : piscis){
             ganancias += p.nextDay();
             if(p.getTipo()=="mar"){
@@ -284,7 +287,7 @@ public class Simulador {
     private static void addFish(){
         int opcion = selectPisc();
         int tankSelec = piscis.get(opcion).selectTank();
-        piscis.get(opcion).tanques.get(tankSelec).addFish(false,piscis.get(opcion).getNombre());
+        piscis.get(opcion).tanques.get(tankSelec).addFish(false);
     }
 
     /**
@@ -647,5 +650,10 @@ public class Simulador {
     /** @param piscis La nueva lista de piscifactorías. */
     public static void setPiscis(ArrayList<Piscifactoria> piscis) {
         Simulador.piscis = piscis;
+    }
+
+    /** @return El nombre de la partida*/
+    public static String getNombre() {
+        return nombre;
     }
 }
