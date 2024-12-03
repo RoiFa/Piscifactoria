@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import helpers.ErrorWriter;
 import helpers.Reader;
-import helpers.TranscripWriter;
+import helpers.TranscriptWriter;
 import main.Simulador;
 import tanque.Tanque;
 
@@ -62,7 +62,7 @@ public class Piscifactoria {
     public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
         this.nombre = nombre;
-        this.tanques.add(new Tanque(1, tipo));
+        this.tanques.add(new Tanque(1, tipo, nombre));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
         } else {
@@ -189,10 +189,10 @@ public class Piscifactoria {
     /**
      * Método que se encarga de hacer crecer y alimentar a todos los peces
      * 
-     * @return  La cantidad de dinero conseguido por vender peces.
+     * @return  El número de peces vendidos y a cantidad de dinero conseguido por venderlos.
      */
 
-    public int nextDay() {
+    public int[] nextDay() {
         int pecesVendidos = 0;
         int[] datos;
         int dineroGanado=0;
@@ -203,7 +203,7 @@ public class Piscifactoria {
             pecesVendidos += datos[0];
             dineroGanado+=datos[3];
         }
-        return pecesVendidos;
+        return new int[]{pecesVendidos, dineroGanado};
     }
 
     /**
@@ -317,10 +317,10 @@ public class Piscifactoria {
     /**
      * Elimina los peces muertos de los tanques de la piscifactoría
      */
-    public void cleanTank(String pisciName){
+    public void cleanTank(){
         for(Tanque tanque : tanques){
             tanque.cleanTank();
-            TranscripWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+pisciName);
+            TranscriptWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+this.nombre);
         }
     }
 
@@ -328,7 +328,7 @@ public class Piscifactoria {
      * Añade un nuevo tanque a la piscifactoría
      */
     public void addTank(){
-        this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo));
+        this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo, this.nombre));
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
     }
 

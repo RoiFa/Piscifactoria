@@ -8,9 +8,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import monedas.Monedas;
-import peces.Pez;
 
-public class TranscripWriter {
+public class TranscriptWriter {
     
     private static BufferedWriter bw;
 
@@ -41,13 +40,13 @@ public class TranscripWriter {
         }
     }
 
-    public static void transcriptStart(String nombrePartida ,Pez[] nomPeces ,String nomPisc) {
+    public static void transcriptStart(String nombrePartida ,String[] nomPeces ,String nomPisc) {
         try {
             bw.append("Inicio de la simulación "+nombrePartida+"\n"+
             "Dinero: "+Monedas.getCantidad());
             bw.append("Peces:\nRio:");
             for(int i=0;i<nomPeces.length;i++){
-                bw.append("-"+nomPeces[i].getNombre());
+                bw.append("-"+nomPeces[i] );
                 if(i==4){
                     bw.append("Mar:");
                 }else if(i==9){
