@@ -228,13 +228,13 @@ public class Tanque {
                 }else if(ocupacion()==0){
                     if(tipo.equals("mar")){
                         menuEspeciesMar();
-                        peces[0] = creadorEspecies(especiesMar[(Reader.readTheNumber()+1)],false);
+                        peces[0] = creadorEspecies(especiesMar[(Reader.readTheNumber()-1)],false);
                         if(peces[0]!=null){
                             tipoPez = peces[0].getNombre();
                         }
                     }else{
                         menuEspeciesRio();
-                        peces[0] = creadorEspecies(especiesRio[(Reader.readTheNumber()+1)],false);
+                        peces[0] = creadorEspecies(especiesRio[(Reader.readTheNumber()-1)],false);
                         if(peces[0]!=null){
                             tipoPez = peces[0].getNombre();
                         }
@@ -245,7 +245,7 @@ public class Tanque {
                         for(int i=0;i<especiesMar.length;i++){
                             if(especiesMar[i].getNombre()==this.tipoPez){
                                 if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspecies(especiesMar[(i+1)],false);
+                                    peces[findSpace()] = creadorEspecies(especiesMar[i],false);
                                 }
                             }
                         }
@@ -253,7 +253,7 @@ public class Tanque {
                         for(int i=0;i<especiesRio.length;i++){
                             if(especiesRio[i].getNombre()==this.tipoPez){
                                 if(peces.length!=ocupacion()){
-                                    peces[findSpace()] = creadorEspecies(especiesRio[(i+1)],false);
+                                    peces[findSpace()] = creadorEspecies(especiesRio[i],false);
                                 }
                             }
                         }
