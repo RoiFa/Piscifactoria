@@ -27,6 +27,10 @@ public class LogWriter {
      */
     public static void startLog(String companyName) {
         try {
+            File logFolder = new File("logs");
+            if (!logFolder.exists()) {
+                logFolder.mkdir();
+            }
             log = new File("logs/" + companyName + ".log");
             if (!log.exists()) {
                 try {
@@ -49,7 +53,7 @@ public class LogWriter {
     public static void writeInLog(String logLine) {
         try {
             timeStamp = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]").format(Calendar.getInstance().getTime());
-            bw.append(timeStamp + " " + logLine);
+            bw.append(timeStamp + " " + logLine + "\n");
             bw.flush();
         } catch (IOException e) {
             ErrorWriter.writeInErrorLog("Error al escribir una línea al log principal.");

@@ -27,6 +27,10 @@ public class ErrorWriter {
      */
     public static void startErrorLog(String companyName) {
         try {
+            File errFolder = new File("err");
+            if (!errFolder.exists()) {
+                errFolder.mkdir();
+            }
             errLog = new File("err/0_errors.log");
             if (!errLog.exists()) {
                 try {
@@ -51,7 +55,7 @@ public class ErrorWriter {
     public static void writeInErrorLog(String logLine) {
         try {
             timeStamp = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]").format(Calendar.getInstance().getTime());
-            bw.append(timeStamp + " " + logLine);
+            bw.append(timeStamp + " " + logLine + "\n");
             bw.flush();
         } catch (IOException e) {
             writeInErrorLog("Fallo al documentar un error.");
