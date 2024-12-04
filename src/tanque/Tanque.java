@@ -1,5 +1,6 @@
 package tanque;
 import helpers.ErrorWriter;
+import helpers.LogWriter;
 import helpers.RNG;
 import helpers.Reader;
 import helpers.TranscriptWriter;
@@ -329,6 +330,8 @@ public class Tanque {
                     added = pez.reprod();
                 }
                 TranscriptWriter.writeInTranscript(added.getNombre() + " (" + added.getSexo().substring(0,1) + ") comprado por " + added.getCoste() + " monedas. Añadido al tanque " + this.numTanque + " de la piscifactoría " + this.nombrePisci);
+                LogWriter.writeInLog(added.getNombre() + " (" + added.getSexo().substring(0,1) + ") comprado por " + added.getCoste() + " monedas. Añadido al tanque " + this.numTanque + " de la piscifactoría " + this.nombrePisci);
+
                 return added;
             }
         }
@@ -463,6 +466,8 @@ public class Tanque {
                 peces[i] = null;
             }
         }
+        TranscriptWriter.writeInTranscript("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
+        LogWriter.writeInLog("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
     }
 
     /**
@@ -474,6 +479,8 @@ public class Tanque {
                 peces[i] = null;
             }
         }
+        TranscriptWriter.writeInTranscript("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
+        LogWriter.writeInLog("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
         System.out.println("El tanque se ha vaciado por completo");
     }
 

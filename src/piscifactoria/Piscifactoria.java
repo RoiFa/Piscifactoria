@@ -3,6 +3,7 @@ package piscifactoria;
 import java.util.ArrayList;
 
 import helpers.ErrorWriter;
+import helpers.LogWriter;
 import helpers.Reader;
 import helpers.TranscriptWriter;
 import main.Simulador;
@@ -227,9 +228,9 @@ public class Piscifactoria {
                 ErrorWriter.writeInErrorLog("Error al intentar vender peces del tanque " + tank.getNumTanque() + " de la piscifactoría " + this.nombre);
             }
         }
+        TranscriptWriter.writeInTranscript("Vendidos "+pecesVendidos+" peces de la piscifactoría "+this.nombre+" de forma manual por "+dineroVendido+" monedas.");
+        LogWriter.writeInLog("Vendidos "+pecesVendidos+" peces de la piscifactoría "+this.nombre+" de forma manual por "+dineroVendido+" monedas.");
         return new int[]{dineroVendido,pecesVendidos};
-
-        
     }
 
     /**
@@ -320,7 +321,6 @@ public class Piscifactoria {
     public void cleanTank(){
         for(Tanque tanque : tanques){
             tanque.cleanTank();
-            TranscriptWriter.writeInTranscript("Limpiado el tanque "+tanque.getNumTanque()+" de la piscifactoría "+this.nombre);
         }
     }
 
