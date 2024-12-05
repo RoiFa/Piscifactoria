@@ -25,7 +25,7 @@ public class ErrorWriter {
      * 
      * @param companyName   El nombre de la compañía que nombrará también al fichero.
      */
-    public static void startErrorLog(String companyName) {
+    public static void startErrorLog() {
         try {
             errLog = new File("err/0_errors.log");
             if (!errLog.exists()) {
@@ -48,10 +48,10 @@ public class ErrorWriter {
      * 
      * @param logLine   Línea a escribir en el código.
      */
-    public static void writeInErrorLog(String logLine) {
+    public static void writeInErrorLog(String ErrLine) {
         try {
             timeStamp = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]").format(Calendar.getInstance().getTime());
-            bw.append(timeStamp + " " + logLine);
+            bw.append(timeStamp + " " + ErrLine);
             bw.flush();
         } catch (IOException e) {
             writeInErrorLog("Fallo al documentar un error.");

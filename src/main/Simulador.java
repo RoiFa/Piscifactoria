@@ -66,7 +66,7 @@ public class Simulador {
         piscis.get(0).addFood(25,25);
         Monedas.setCantidad(100);
 
-        ErrorWriter.startErrorLog(nombre);
+        ErrorWriter.startErrorLog();
         LogWriter.startLog(nombre);
         TranscriptWriter.transcriptInit(nombre);
         TranscriptWriter.transcriptStart(nombre, nomPeces, nomPisc);

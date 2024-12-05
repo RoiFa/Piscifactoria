@@ -19,6 +19,9 @@ import main.Simulador;
 import monedas.Monedas;
 import piscifactoria.Piscifactoria;
 
+/**
+ * Se encarga de la creacion, borrado, y uso de los xml de recompensas
+ */
 public class GestorXml {
 
     /** Almacena los numeros romanos */
