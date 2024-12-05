@@ -610,7 +610,7 @@ public class Simulador {
                         case 14:
                             System.out.println("Cerrando...");
                             LogWriter.closeLog();
-                            TranscriptWriter.close();
+                            TranscriptWriter.closer();
                             ErrorWriter.closeErrorLog();
                             System.out.println("Salida con éxito");
                             break;

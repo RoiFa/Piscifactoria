@@ -78,7 +78,7 @@ public class TranscriptWriter {
     /**
      * Cierra el escritor de transcripciones
      */
-    public void closer(){
+    public static void closer(){
         try {
             bw.close();
         } catch (Exception e) {
