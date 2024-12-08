@@ -22,12 +22,10 @@ public class ErrorWriter {
 
     /**
      * Inicializa el fichero, creándolo en caso de que no exista, y el writer.
-     * 
-     * @param companyName   El nombre de la compañía que nombrará también al fichero.
      */
     public static void startErrorLog() {
         try {
-            errLog = new File("err/0_errors.log");
+            errLog = new File("logs/0_errors.log");
             if (!errLog.exists()) {
                 try {
                     errLog.createNewFile();
