@@ -1,3 +1,4 @@
+
 package helpers;
 
 import java.io.BufferedWriter;
@@ -6,7 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import monedas.Monedas;
+
+import main.Simulador;
 
 public class TranscriptWriter {
     
@@ -58,7 +60,7 @@ public class TranscriptWriter {
     public static void transcriptStart(String nombrePartida ,String[] nomPeces ,String nomPisc) {
         try {
             bw.append("Inicio de la simulación "+nombrePartida+"\n"+
-            "Dinero: "+Monedas.getCantidad());
+            "Dinero: "+Simulador.instancia.monedas.getCantidad());
             bw.append("Peces:\nRio:");
             for(int i=0;i<nomPeces.length;i++){
                 bw.append("-"+nomPeces[i]);
