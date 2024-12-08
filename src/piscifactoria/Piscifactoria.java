@@ -1,27 +1,31 @@
 package piscifactoria;
-
 import java.util.ArrayList;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.PiscifactoriaAdapter;
 import helpers.ErrorWriter;
 import helpers.Reader;
 import helpers.TranscriptWriter;
 import main.Simulador;
 import tanque.Tanque;
 
-/**Clase que representa una la piscifactoria */
+/**Objeto representativo de la piscifactoria */
+@JsonAdapter(PiscifactoriaAdapter.class)
 public class Piscifactoria {
+    
     /** El nombre de la piscifactoría. */
     private String nombre;
     /** El tipo de piscifactoría (rio o mar) */
     private String tipo;
-    /** La lista de tanques en la piscifactoría */
-    public ArrayList<Tanque> tanques = new ArrayList<>();
     /** La comida máxima que puede ser almacenada en los almacenes */
     private int comidaMax;
     /** El almacén de comida animal */  
     private int comidaAnimal;
     /** El almacén de comida vegetal */
     private int comidaVegetal;
+    /** La lista de tanques en la piscifactoría */
+    public ArrayList<Tanque> tanques;
 
     /** @return El nombre de la piscifactoría. */
     public String getNombre() {
@@ -54,6 +58,51 @@ public class Piscifactoria {
     }
 
     /**
+     * @param nombre el nombre de la piscifactoría
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
+     * @param tipo el tipo de piscifactoría (rio o mar)
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @param comidaMax la capacidad para comida máxima
+     */
+    public void setComidaMax(int comidaMax) {
+        this.comidaMax = comidaMax;
+    }
+
+    /**
+     * @param comidaAnimal la cantidad de comida animal
+     */
+    public void setComidaAnimal(int comidaAnimal) {
+        this.comidaAnimal = comidaAnimal;
+    }
+
+    /**
+     * @param comidaVegetal la cantidad de comida vegetal
+     */
+    public void setComidaVegetal(int comidaVegetal) {
+        this.comidaVegetal = comidaVegetal;
+    }
+
+    /**
+     * @param tanques el array con los tanques
+     */
+    public void setTanques(ArrayList<Tanque> tanques) {
+        this.tanques = tanques;
+    }
+
+    /** Constructor para la carga de datos */
+    public Piscifactoria(){}
+
+    /**
      * El constructor de una piscifactoría.
      * 
      * @param tipo  El tipo de piscifactoría (rio o mar)
@@ -62,7 +111,8 @@ public class Piscifactoria {
     public Piscifactoria(String tipo,String nombre) {
         this.tipo = tipo;
         this.nombre = nombre;
-        this.tanques.add(new Tanque(1, tipo, nombre));
+        this.tanques = new ArrayList<>();
+        this.tanques.add(new Tanque(1, tipo,nombre));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
         } else {
@@ -99,7 +149,6 @@ public class Piscifactoria {
 
         return new int[]{sobraAnimal, sobraVegetal};
     }
-
 
     /**
      * Método que muestra el estado actual de la piscifactoría.
@@ -146,7 +195,6 @@ public class Piscifactoria {
             //TODO Borrar al terminar el testing:
             e.printStackTrace();
         }
-        
     }
 
     /**
@@ -173,41 +221,42 @@ public class Piscifactoria {
      * @param tanque    El tanque especificado
      */
     public void showCapacity(Tanque tanque) {
-        tanque.showCapacity(nombre);
+        tanque.showCapacity();
     }
 
     /**
-     * Método que muestra la cantidad comida actual de cada almacén en la piscifactoría.
+     * Método que muestre la cantidad comida actual de cada almacén en la piscifactoría.
      */
     public void showFood() {
         System.out.println(
-            "Depósito de comida animal al " + this.comidaAnimal+"/"+this.comidaMax + " de su capacidad.\n" +
-            "Depósito de comida vegetal al " + this.comidaVegetal+"/"+this.comidaMax+ " de su capacidad."
+            "Depósito de comida animal de la piscifactoría "+nombre+" al " + (this.comidaAnimal/this.comidaMax)*100 + "% de su capacidad. ["+this.comidaAnimal+"/"+this.comidaMax+"]\n" +
+            "Depósito de comida vegetal de la piscifactoría "+nombre+" al " + (this.comidaVegetal/this.comidaMax)*100 + "% de su capacidad.["+this.comidaVegetal+"/"+this.comidaMax+"]"
         );
     }
 
     /**
      * Método que se encarga de hacer crecer y alimentar a todos los peces
      * 
-     * @return  El número de peces vendidos y a cantidad de dinero conseguido por venderlos.
+     * @return  La cantidad de dinero conseguido por vender peces.
      */
-
     public int[] nextDay() {
         int pecesVendidos = 0;
+        int dineroVendido = 0;
         int[] datos;
-        int dineroGanado=0;
         for (Tanque tank : tanques) {
             datos = tank.nextDay(comidaAnimal,comidaVegetal);
-            comidaAnimal = datos[1];
-            comidaVegetal = datos[2];
+            comidaAnimal = datos[2];
+            comidaVegetal = datos[3];
             pecesVendidos += datos[0];
-            dineroGanado+=datos[3];
+            dineroVendido += datos[1];
+
         }
-        return new int[]{pecesVendidos, dineroGanado};
+        System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
+        return new int[]{pecesVendidos,dineroVendido};
     }
 
     /**
-     * Método que vende los peces adultos en cada tanque.
+     * Método que vende los peces óptimos en cada tanque.
      * 
      * @return  La cantidad de dinero ganado por vender a los peces
      */
@@ -215,21 +264,21 @@ public class Piscifactoria {
         int dineroVendido = 0;
         int pecesVendidos = 0;
         for (Tanque tank : tanques) {
-            try {
+            try{
                 for(int i=0;i<tank.peces.length;i++){
                     if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
                         dineroVendido += tank.peces[i].getMonedas();
-                        Simulador.estadisticas.registrarVenta(tank.getTipoPez(), tank.peces[i].getMonedas());
+                        pecesVendidos++;
+                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.peces[i].getMonedas());
                         tank.peces[i] = null;
                     }
                 }
-            } catch (NullPointerException e) {
+            } catch(NullPointerException e) {
                 ErrorWriter.writeInErrorLog("Error al intentar vender peces del tanque " + tank.getNumTanque() + " de la piscifactoría " + this.nombre);
             }
         }
+        System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
         return new int[]{dineroVendido,pecesVendidos};
-
-        
     }
 
     /**
@@ -306,11 +355,7 @@ public class Piscifactoria {
      */
     public int selectTank(){
         menuTank();
-        int opcion = Reader.readTheNumber();
-        while (opcion<1 || opcion>tanques.size()) {
-            System.out.println("Introduzca un número entero entre 1 y "+tanques.size());
-            opcion = Reader.readTheNumber();
-        }
+        int opcion = Reader.readTheNumber(1,tanques.size());
         return opcion-1;
     }
 
@@ -328,14 +373,10 @@ public class Piscifactoria {
      * Añade un nuevo tanque a la piscifactoría
      */
     public void addTank(){
-        this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo, this.nombre));
+        this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo,nombre));
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
     }
 
-    /**
-     * Devuelve información de la piscifactoría
-     * @return  La información de la piscifactoría
-     */
     @Override
     public String toString() {
         return "Piscifactoria de "+tipo+" con "+tanques.size()+" tanques";

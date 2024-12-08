@@ -1,11 +1,16 @@
+
 package peces;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.PezAdapter;
 import helpers.*;
 import propiedades.*;
 
 /** 
  * Clase padre de todos los peces.
  */
+@JsonAdapter(PezAdapter.class)
 public abstract class Pez {
 
     /** Nombre del pez */
@@ -80,8 +85,8 @@ public abstract class Pez {
     }
 
     /** @return El sexo del pez (Macho o Hembra). */
-    public String getSexo() {
-        return sexo ? "Macho" : "Hembra";
+    public boolean getSexo() {
+        return sexo;
     }
 
     /** @return Si el pez es macho. */
@@ -162,6 +167,11 @@ public abstract class Pez {
     /** @param alimentado Si el pez está alimentado o no. */
     public void setAlimentado(boolean alimentado) {
         this.alimentado = alimentado;
+    }
+
+    /** @param sexo El sexo a cambiar. */
+    public void setSexo(boolean sexo) {
+        this.sexo = sexo;
     }
 
     /** @param monedas La nueva cantidad de monedas que cuesta al venderlo. */
