@@ -16,12 +16,8 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import main.Almacen;
 import main.Simulador;
-import monedas.Monedas;
 import piscifactoria.Piscifactoria;
 
-/**
- * Se encarga de la creacion, borrado, y uso de los xml de recompensas
- */
 public class GestorXml {
 
     /** Almacena los numeros romanos */
@@ -142,7 +138,7 @@ public class GestorXml {
                     menu += (files.length+3)+pisciRio+charsRio[0]+charsRio[1]+charsRio[2]+charsRio[3]+"\n";
                 }
                 System.out.println(menu);
-                return Reader.readTheNumber();
+                return Reader.readTheNumber(1,0);
             }else{
                 System.out.println("No existen recompensas a reclamar");
                 return -1;
@@ -202,8 +198,8 @@ public class GestorXml {
                     Document reward = leible(ruta+files[opcion].getName());
                     Element root = reward.getRootElement();
                     if((files.length+1)==opcion&&(charsAlm[0].equals("A")&&charsAlm[1].equals("B")&&charsAlm[2].equals("C")&&charsAlm[3].equals("D"))){
-                        if(Simulador.almacen!=null){
-                            Simulador.almacen = new Almacen();
+                        if(Simulador.instancia.almacen!=null){
+                            Simulador.instancia.almacen = new Almacen();
                             System.out.println("Has canjeado exitosamente las partes de almacen por un almacen nuevo!");
                             TranscriptWriter.writeInTranscript("Recompensa almacen usada(ABCD)");
                             for(File file : files){
@@ -231,7 +227,7 @@ public class GestorXml {
                         System.out.println("No tienes suficientes partes de almacen para crear uno");
                     }
                     if((files.length+2)==opcion&&(charsMar[0].equals("A")&&charsMar[1].equals("B"))){
-                        ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+                        ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
                         String name="";
                         while (name=="") {
                             System.out.println("Que nombre quiere para la nueva piscifactoría?(mar)");
@@ -253,7 +249,7 @@ public class GestorXml {
                         System.out.println("No tienes suficientes partes de piscifactoria de Mar para crear una");
                     }
                     if((files.length+3)==opcion&&(charsRio[0].equals("A")&&charsRio[1].equals("B"))){
-                        ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+                        ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
                         String name="";
                         while (name=="") {
                             System.out.println("Que nombre quiere para la nueva piscifactoría?(rio)");
@@ -292,12 +288,12 @@ public class GestorXml {
                             TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "moned":
-                            Monedas.anadir(Integer.parseInt(give.element("coins").getText()));
+                            Simulador.instancia.monedas.anadir(Integer.parseInt(give.element("coins").getText()));
                             deplete(files[opcion]);
                             TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "tanqu":
-                            ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+                            ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
                             int pisci = Simulador.selectPisc();
                             if (give.element("building").attribute("code").getText().equals("3")&&piscis.get(pisci).getTipo().equals("rio")){
                                 piscis.get(pisci).addTank();
@@ -347,7 +343,7 @@ public class GestorXml {
      */
     public static void shareFood(int vegetal,int pienso){
         try {
-            ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+            ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
             int numPiscis = piscis.size();
             int cantRepartCarne = pienso/numPiscis;
             int cantRepartVeget = vegetal/numPiscis;
@@ -366,7 +362,7 @@ public class GestorXml {
                     pisci.addFood(0,cantRepartVeget);
                     vegetal -= cantRepartVeget;
                 }
-            Simulador.setPiscis(piscis);
+            Simulador.instancia.setPiscis(piscis);
             }
             
         } catch (Exception e) {
@@ -402,7 +398,7 @@ public class GestorXml {
                     doc = leible("src//rewards//algas_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Algas "+romanNum[lvl]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" cápsula de algas para alimentar peces filtradores y omnívoros");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
@@ -445,7 +441,7 @@ public class GestorXml {
                     doc = leible("src//rewards//pienso_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Pienso de peces "+romanNum[lvl]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
@@ -488,7 +484,7 @@ public class GestorXml {
                     doc = leible("src//rewards//comida_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Comida general "+romanNum[lvl]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" unidades de pienso multipropósito para todo tipo de peces.");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
@@ -530,7 +526,7 @@ public class GestorXml {
                     doc = leible("src//rewards//almacen_"+part+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Almacén central ["+part+"]");
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
                     root.addElement("rarity").addText("3");
                     Element give = root.addElement("give");
@@ -575,7 +571,7 @@ public class GestorXml {
                     doc = leible("src//rewards//monedas_"+lvl+"xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Monedas "+romanNum[(lvl-1)]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" monedas");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
@@ -619,7 +615,7 @@ public class GestorXml {
                     doc = leible("src//rewards//pisci_"+tipo.charAt(0)+"_"+part+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Piscifactoría de "+tipo+" ["+part+"]");
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText("Materiales para la construcción de una piscifactoría de "+tipo+". Con la parte A y B, puedes obtenerla de forma gratuita.");
                     root.addElement("rarity").addText(String.valueOf(rarity));
                     Element give = root.addElement("give");
@@ -664,7 +660,7 @@ public class GestorXml {
                     doc = leible("src//rewards//tanque_"+type.charAt(0)+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Tanque de "+type);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText("Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de "+type+".");
                     root.addElement("rarity").addText(String.valueOf(rarity));
                     Element give = root.addElement("give");
