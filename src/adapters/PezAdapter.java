@@ -41,6 +41,7 @@ public class PezAdapter implements JsonSerializer<Pez>,JsonDeserializer<Pez>{
         jsonObject.add("ciclo", new JsonPrimitive(src.getCiclo()));
         JsonObject extras = new JsonObject();
         extras.add("alimentado", new JsonPrimitive(src.isAlimentado()));
+        extras.add("nombre",new JsonPrimitive(src.getNombre()));
         jsonObject.add("extras", extras);
         return jsonObject;
     }

@@ -127,6 +127,10 @@ public class Simulador {
         if(!tr.exists()){
             tr.mkdir();
         }
+        File rw = new File("rewards");
+        if(!rw.exists()){
+            rw.mkdir();
+        }
         ErrorWriter.startErrorLog();
         int opcion = 0;
         String[] saves = Guardado.listarSaves();
@@ -142,6 +146,9 @@ public class Simulador {
         } 
         if(opcion>0){
             Guardado.load(saves[opcion-1]);
+            LogWriter.startLog(Simulador.instancia.nombre);
+            LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
+            TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
         } else{
             System.out.println("Introduzca el nombre de la nueva empresa a crear:");
             String nombre = Reader.readTheLine();
@@ -153,11 +160,11 @@ public class Simulador {
             Simulador.instancia.piscis.get(0).addFood(25,25);
             Simulador.instancia.monedas.setCantidad(100);
             Guardado.save();
+            LogWriter.startLog(Simulador.instancia.nombre);
+            LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
+            TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
+            TranscriptWriter.transcriptStart(Simulador.instancia.nombre, Simulador.instancia.implementados, Simulador.instancia.piscis.get(0).getNombre());
         }
-        
-        LogWriter.startLog(Simulador.instancia.nombre);
-        TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
-        TranscriptWriter.transcriptStart(Simulador.instancia.nombre, Simulador.instancia.implementados, Simulador.instancia.piscis.get(0).getNombre());
     }
 
     /**

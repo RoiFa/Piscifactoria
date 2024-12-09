@@ -44,7 +44,7 @@ public class TranscriptWriter {
      */
     public static void writeInTranscript(String transcriptLine) {
         try {
-            bw.append(transcriptLine);
+            bw.append(transcriptLine+"\n");
             bw.flush();
         } catch (IOException e) {
             ErrorWriter.writeInErrorLog("Error al agregar linea al documento de transcripcion");
@@ -63,14 +63,14 @@ public class TranscriptWriter {
             "Dinero: "+Simulador.instancia.monedas.getCantidad());
             bw.append("Peces:\nRio:");
             for(int i=0;i<nomPeces.length;i++){
-                bw.append("-"+nomPeces[i]);
+                bw.append("-"+nomPeces[i]+"\n");
                 if(i==4){
-                    bw.append("Mar:");
+                    bw.append("Mar:\n");
                 }else if(i==9){
-                    bw.append("Doble:");
+                    bw.append("Doble:\n");
                 }
             }
-            bw.append("------------------------------------------------\nPiscifactoría inicial: "+nomPisc);
+            bw.append("------------------------------------------------\nPiscifactoría inicial: "+nomPisc+"\n");
             bw.flush();
         } catch (IOException e) {
             ErrorWriter.writeInErrorLog("Error al agregar linea al documento de transcripcion");
