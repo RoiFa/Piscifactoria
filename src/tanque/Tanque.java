@@ -3,6 +3,7 @@ import com.google.gson.annotations.JsonAdapter;
 
 import adapters.TanqueAdapter;
 import helpers.ErrorWriter;
+import helpers.LogWriter;
 import helpers.RNG;
 import helpers.Reader;
 import helpers.TranscriptWriter;
@@ -275,12 +276,14 @@ public class Tanque {
                             peces[0] = creadorEspecies(especiesMar[(Reader.readTheNumber(1,7)-1)],false);
                             if(peces[0]!=null){
                                 tipoPez = peces[0].getNombre();
+                                LogWriter.writeInLog(peces[0].getNombre()+" ("+((peces[0].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
                             }
                         }else{
                             menuEspeciesRio();
                             peces[0] = creadorEspecies(especiesRio[(Reader.readTheNumber(1,7)-1)],false);
                             if(peces[0]!=null){
                                 tipoPez = peces[0].getNombre();
+                                LogWriter.writeInLog(peces[0].getNombre()+" ("+((peces[0].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
                             }
                         }
                     }else{
@@ -293,7 +296,9 @@ public class Tanque {
                                     for(int i=0;i<especiesMar.length;i++){
                                         if(especiesMar[i].getNombre().equals(this.tipoPez)){
                                             if(peces.length!=ocupacion()){
-                                                peces[findSpace()] = creadorEspecies(especiesMar[(i+1)],false);
+                                                int espacio = findSpace();
+                                                peces[espacio] = creadorEspecies(especiesMar[(i+1)],false);
+                                                LogWriter.writeInLog(peces[espacio].getNombre()+" ("+((peces[espacio].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
                                             }
                                         }
                                     }
@@ -301,7 +306,9 @@ public class Tanque {
                                     for(int i=0;i<especiesRio.length;i++){
                                         if(especiesRio[i].getNombre().equals(this.tipoPez)){
                                             if(peces.length!=ocupacion()){
-                                                peces[findSpace()] = creadorEspecies(especiesRio[(i+1)],false);
+                                                int espacio = findSpace();
+                                                peces[espacio] = creadorEspecies(especiesRio[(i+1)],false);
+                                                LogWriter.writeInLog(peces[espacio].getNombre()+" ("+((peces[espacio].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
                                             }
                                         }
                                     }
