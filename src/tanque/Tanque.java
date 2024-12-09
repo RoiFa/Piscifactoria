@@ -90,15 +90,13 @@ public class Tanque {
         "Ocupación: "+ocupacion()+"/"+maxSize+"("+(ocupacion()/maxSize)+"%)");
         try {
             if(ocupacion()!=0){
-                System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(vivos()/ocupacion())*100)+"%)"+
-                "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(alimentados()/ocupacion())*100)+"%)"+
-                "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(adultos()/ocupacion())*100)+"%)"+
+                System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(((double)vivos())/ocupacion())*100)+"%)"+
+                "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(((double)alimentados())/ocupacion())*100)+"%)"+
+                "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(((double)adultos())/ocupacion())*100)+"%)"+
                 "\n"+"Hembras / machos: "+machos()+"/"+hembras());
             }
         } catch (ArithmeticException e) {
-            //TODO Borrar el e.printStackTrace al teriminar el debugging.
             ErrorWriter.writeInErrorLog("Error al mostrar el estado actual del tanque.\n");
-            e.printStackTrace();
         }
     }
 
@@ -125,8 +123,6 @@ public class Tanque {
             System.out.println("Tanque "+numTanque+" de la piscifactoría "+nombrePiscifactoria+" al "+((int)(ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al mostrar la capacidad de un tanque.\n");
-            //TODO Borrar el e.printStackTrace al terminar el debugging.
-            e.printStackTrace();
         }
     }
 
@@ -261,8 +257,6 @@ public class Tanque {
                 }
             } catch (Exception e) {
                 ErrorWriter.writeInErrorLog("Error al intentar añadir un pez.");
-                //TODO Borrar e.printStackTrace al terminar el debugging.
-                e.printStackTrace();
             }
         }
         

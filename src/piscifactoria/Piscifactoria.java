@@ -128,24 +128,22 @@ public class Piscifactoria {
             System.out.println(
                 "========== " + this.nombre + " ==========\n" +
                 "Tanques: " + this.tanques.size() + "\n" +
-                "Ocupación: " +ocupTotal+"/"+maxTotal+"("+((int)(ocupTotal/maxTotal)*100)+"%)");
+                "Ocupación: " +ocupTotal+"/"+maxTotal+"("+(int)(((double)ocupTotal)/maxTotal*100)+"%)");
                 if(ocupTotal!=0){
-                    System.out.println("Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+((vivosTotal/ocupTotal)*100)+"%)");
+                    System.out.println("Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"("+(int)(((double)vivosTotal)/ocupTotal*100)+"%)");
                 }else{System.out.println("Peces vivos: "+ vivosTotal +"/"+ ocupTotal +"(0%)");}
                 if(alimTotal!=0&&vivosTotal!=0){
-                    System.out.println("Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+""+((alimTotal/vivosTotal)*100)+"%)");
+                    System.out.println("Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"("+""+(int)(((double)alimTotal)/vivosTotal*100)+"%)");
                 }else{System.out.println("Peces alimentados: "+ alimTotal +"/"+ vivosTotal +"(0%)");}
                 if(adultTotal!=0&&vivosTotal!=0){
-                    System.out.println("Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+((adultTotal/vivosTotal)*100)+"%)");
+                    System.out.println("Peces adultos: "+ adultTotal +"/"+ vivosTotal +"("+(int)(((double)adultTotal)/vivosTotal*100)+"%)");
                 }else{System.out.println("Peces adultos: "+ adultTotal +"/"+ vivosTotal +"(0%)");}
                 System.out.println("Hembras / Machos: "+hembrasTotal+"/"+machosTotal);
                 if(fertilesTotal!=0&&vivosTotal!=0){
-                    System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+((fertilesTotal/vivosTotal)*100)+"%)");
+                    System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+(int)(((double)fertilesTotal)/vivosTotal*100)+"%)");
                 }else{System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"(0%)");}
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al intentar mostrar información de la piscifactoría " + this.nombre);
-            //TODO Borrar al terminar el testing:
-            e.printStackTrace();
         }
         
     }

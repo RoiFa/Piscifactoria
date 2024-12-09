@@ -636,8 +636,6 @@ public class Simulador {
                     }
                 } catch (Exception e) {
                     ErrorWriter.writeInErrorLog("Error general en la simulación.");
-                    //TODO borrar cuando se termine el testeo.
-                    e.printStackTrace();
                 }
             }
         Reader.closer();

@@ -35,7 +35,10 @@ public class Reader {
         try {
             input = Integer.parseInt(br.readLine());
             return input;
-        }catch(IOException e){
+        } catch (NumberFormatException e) {
+            ErrorWriter.writeInErrorLog("Error al pedirle un número entero al usuario: Formato incorrecto.");
+            return -1;
+        } catch(IOException e){
             ErrorWriter.writeInErrorLog("Error al pedirle un número entero al usuario.");
             return -1;
         }
@@ -51,7 +54,10 @@ public class Reader {
         try {
             input = Float.parseFloat(br.readLine());
             return input;
-        }catch(IOException e){
+        } catch (NumberFormatException e) {
+            ErrorWriter.writeInErrorLog("Error al pedirle un número decimal al usuario: Formato incorrecto.");
+            return -1;
+        } catch(IOException e){
             ErrorWriter.writeInErrorLog("Error al pedirle un número decimal al usuario.");
             return -1;
         }
