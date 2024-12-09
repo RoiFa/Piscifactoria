@@ -147,6 +147,7 @@ public class Simulador {
         if(opcion>0){
             Guardado.load(saves[opcion-1]);
             LogWriter.startLog(Simulador.instancia.nombre);
+            LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
             LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
             TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
         } else{
@@ -161,6 +162,7 @@ public class Simulador {
             Simulador.instancia.monedas.setCantidad(100);
             Guardado.save();
             LogWriter.startLog(Simulador.instancia.nombre);
+            LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
             LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
             TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
             TranscriptWriter.transcriptStart(Simulador.instancia.nombre, Simulador.instancia.implementados, Simulador.instancia.piscis.get(0).getNombre());
