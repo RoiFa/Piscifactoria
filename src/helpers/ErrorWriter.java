@@ -49,7 +49,7 @@ public class ErrorWriter {
     public static void writeInErrorLog(String ErrLine) {
         try {
             timeStamp = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss]").format(Calendar.getInstance().getTime());
-            bw.append(timeStamp + " " + ErrLine);
+            bw.append(timeStamp + " " + ErrLine + "\n");
             bw.flush();
         } catch (IOException e) {
             writeInErrorLog("Fallo al documentar un error.");
