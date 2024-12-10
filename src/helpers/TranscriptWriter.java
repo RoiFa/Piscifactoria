@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import main.Simulador;
+import monedas.Monedas;
 
 public class TranscriptWriter {
     

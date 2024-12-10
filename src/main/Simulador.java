@@ -36,147 +36,142 @@ public class Simulador {
         AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
 
     /** El nombre de la entidad */
-    private String nombre;
-    /** El día actual */
-    private int dia;
-    /** Las monedas */
-    public Monedas monedas;
-    /** Recopila las estadisticas del programa */
-    public Estadisticas orca;
-    /** El almacén de comida */
-    public Almacen almacen;
-    /** Las piscifactorías que hay */
-    private ArrayList<Piscifactoria> piscis;
-
-    /**
-     * Constructor para la carga de datos
-     */
-    public Simulador(){}
-
-    /**
-     * 
-     * @param nombre el nombre de la empresa/partida
-     * @param dia el día actual
-     * @param monedas
-     * @param estadisticas
-     * @param almacen
-     * @param piscis
-     */
-    public Simulador(String nombre, int dia, Monedas monedas, Estadisticas estadisticas, Almacen almacen,
-            ArrayList<Piscifactoria> piscis) {
-        this.nombre = nombre;
-        this.dia = dia;
-        this.monedas = monedas;
-        this.orca = estadisticas;
-        this.almacen = almacen;
-        this.piscis = piscis;
-    }
-
+    private static String nombre;
+        /** El día actual */
+        private int dia;
+        /** Las monedas */
+        public Monedas monedas;
+        /** Recopila las estadisticas del programa */
+        public Estadisticas orca;
+        /** El almacén de comida */
+        public Almacen almacen;
+        /** Las piscifactorías que hay */
+        private static ArrayList<Piscifactoria> piscis;
     
-    /** @param nombre el nombre de la partida */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    /** @param dia el dia actual */
-    public void setDia(int dia) {
-        this.dia = dia;
-    }
-
-    /** @return el array con los peces implementados */
-    public String[] getImplementados() {
-        return implementados;
-    }
-
-    /** @return el dia actual */
-    public int getDia() {
-        return dia;
-    }
-
-    /**
-     * @return el array con las piscifactorías
-     */
-    public ArrayList<Piscifactoria> getPiscis() {
-        return piscis;
-    }
-
-    /**
-     * @param piscis el nuevo array con las piscifactorías modificadas
-     */
-    public void setPiscis(ArrayList<Piscifactoria> piscis) {
-        this.piscis = piscis;
-    }
-
-    /**
-     * @return el nombre de la partida/entidad
-     */
-    public String getNombre(){
-        return nombre;
-    }
-
-
-    /**
-     * Inicializa el sistema desde cero
-     */
-    private static void init(){
-        File log = new File("logs");
-        if(!log.exists()){
-            log.mkdir();
+        /**
+         * Constructor para la carga de datos
+         */
+        public Simulador(){}
+    
+        /**
+         * 
+         * @param nombre el nombre de la empresa/partida
+         * @param dia el día actual
+         * @param monedas
+         * @param estadisticas
+         * @param almacen
+         * @param piscis
+         */
+        public Simulador(String nombre, int dia, Monedas monedas, Estadisticas estadisticas, Almacen almacen,
+                ArrayList<Piscifactoria> piscis) {
+            this.nombre = nombre;
+            this.dia = dia;
+            this.monedas = monedas;
+            this.orca = estadisticas;
+            this.almacen = almacen;
+            this.piscis = piscis;
         }
-        File tr = new File("transcripts");
-        if(!tr.exists()){
-            tr.mkdir();
+    
+        
+        /** @param nombre el nombre de la partida */
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
         }
-        File rw = new File("rewards");
-        if(!rw.exists()){
-            rw.mkdir();
+    
+        /** @param dia el dia actual */
+        public void setDia(int dia) {
+            this.dia = dia;
         }
-        ErrorWriter.startErrorLog();
-        int opcion = 0;
-        String[] saves = Guardado.listarSaves();
-        if(saves.length>0){
-            System.out.println("¿Desea cargar una partida? (1. Si ; 2. No)");
-            int cargar = Reader.readTheNumber(1, 2);
-            if(cargar==1){
-                for(int i = 0;i<saves.length;i++){
-                    System.out.println((i+1)+". "+saves[i].substring(0, saves[i].indexOf(".")));
-                }
-                opcion = Reader.readTheNumber(1, saves.length);
+    
+        /** @return el array con los peces implementados */
+        public String[] getImplementados() {
+            return implementados;
+        }
+    
+        /** @return el dia actual */
+        public int getDia() {
+            return dia;
+        }
+    
+        /**
+         * @return el array con las piscifactorías
+         */
+        public ArrayList<Piscifactoria> getPiscis() {
+            return piscis;
+        }
+    
+        /**
+         * @param piscis el nuevo array con las piscifactorías modificadas
+         */
+        public void setPiscis(ArrayList<Piscifactoria> piscis) {
+            this.piscis = piscis;
+        }
+    
+        /**
+         * @return el nombre de la partida/entidad
+         */
+        public String getNombre(){
+            return nombre;
+        }
+    
+    
+        /**
+         * Inicializa el sistema desde cero
+         */
+        private static void init(){
+            File log = new File("logs");
+            if(!log.exists()){
+                log.mkdir();
             }
-        } 
-        if(opcion>0){
-            Guardado.load(saves[opcion-1]);
-            LogWriter.startLog(Simulador.instancia.nombre);
-            LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
-            LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
-            TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
-        } else{
-            System.out.println("Introduzca el nombre de la nueva empresa a crear:");
-            String nombre = Reader.readTheLine();
-            System.out.println("Introduzca el nombre de la primera piscifactoría (río)");
-            String nomPisc = Reader.readTheLine();
-            Simulador.instancia = new Simulador(nombre, 0, new Monedas(), null, new Almacen(), new ArrayList<>());
-            Simulador.instancia.orca = new Estadisticas(Simulador.instancia.implementados);
-            Simulador.instancia.piscis.add(new Piscifactoria("rio", nomPisc));
-            Simulador.instancia.piscis.get(0).addFood(25,25);
-            Simulador.instancia.monedas.setCantidad(100);
-            Guardado.save();
-            LogWriter.startLog(Simulador.instancia.nombre);
-            LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
-            LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
-            TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
-            TranscriptWriter.transcriptStart(Simulador.instancia.nombre, Simulador.instancia.implementados, Simulador.instancia.piscis.get(0).getNombre());
-        }
-        piscis.add(new Piscifactoria("rio",nomPisc));
-        piscis.get(0).addFood(25,25);
-        Monedas.setCantidad(100);
+            File tr = new File("transcripts");
+            if(!tr.exists()){
+                tr.mkdir();
+            }
+            File rw = new File("rewards");
+            if(!rw.exists()){
+                rw.mkdir();
+            }
+            ErrorWriter.startErrorLog();
+            int opcion = 0;
+            String[] saves = Guardado.listarSaves();
+            if(saves.length>0){
+                System.out.println("¿Desea cargar una partida? (1. Si ; 2. No)");
+                int cargar = Reader.readTheNumber(1, 2);
+                if(cargar==1){
+                    for(int i = 0;i<saves.length;i++){
+                        System.out.println((i+1)+". "+saves[i].substring(0, saves[i].indexOf(".")));
+                    }
+                    opcion = Reader.readTheNumber(1, saves.length);
+                }
+            } 
+            if(opcion>0){
+                Guardado.load(saves[opcion-1]);
+                LogWriter.startLog(Simulador.instancia.nombre);
+                LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
+                LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
+                TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
+            } else{
+                System.out.println("Introduzca el nombre de la nueva empresa a crear:");
+                String nombre = Reader.readTheLine();
+                System.out.println("Introduzca el nombre de la primera piscifactoría (río)");
+                String nomPisc = Reader.readTheLine();
+                Simulador.instancia = new Simulador(nombre, 0, new Monedas(), null, new Almacen(), new ArrayList<>());
+                Simulador.instancia.orca = new Estadisticas(Simulador.instancia.implementados);
+                Simulador.instancia.piscis.add(new Piscifactoria("rio", nomPisc));
+                Simulador.instancia.piscis.get(0).addFood(25,25);
+                Simulador.instancia.monedas.setCantidad(100);
+                Guardado.save();
+                LogWriter.startLog(Simulador.instancia.nombre);
+                LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
+                LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
+                TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
+                TranscriptWriter.transcriptStart(Simulador.instancia.nombre, Simulador.instancia.implementados, Simulador.instancia.piscis.get(0).getNombre());
+            }
 
         ErrorWriter.startErrorLog();
         LogWriter.startLog(nombre);
         LogWriter.writeInLog("Inicio de la simulación " + nombre);
-        LogWriter.writeInLog("Piscifactoría inicial: " + nomPisc);
         TranscriptWriter.transcriptInit(nombre);
-        TranscriptWriter.transcriptStart(nombre, nomPeces, nomPisc);
     }
 
     /**
@@ -307,7 +302,7 @@ public class Simulador {
      * peces vendidos por piscifactoría y despues en general
      */
     private static void nextDay(){
-        LogWriter.writeInLog("Fin del día " + (dias));
+        LogWriter.writeInLog("Fin del día " + (Simulador.instancia.dia));
         Simulador.instancia.dia++;
         int pecesVendidos = 0;
         int dineroVendido = 0;
@@ -397,6 +392,7 @@ public class Simulador {
                 }
             }else{
               System.out.println("Cantidad a añadir mayor de lo posible");
+            }
         }
     }
     
@@ -765,11 +761,6 @@ public class Simulador {
         }
         TranscriptWriter.writeInTranscript("Añadidos peces mediante la opción oculta a la piscifactoría "+piscis.get(opcion).getNombre());
         LogWriter.writeInLog("Añadidos peces mediante la opción oculta a la piscifactoría " + piscis.get(opcion).getNombre());
-    }
-
-    /** @return La lista de piscifactorías en la simulación */
-    public static ArrayList<Piscifactoria> getPiscis() {
-        return piscis;
     }
 
 }

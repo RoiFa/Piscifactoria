@@ -111,7 +111,7 @@ public class Tanque {
      * Constructor de la clase tanque
      * @param numTanque Numero del tanque
      * @param pez Nombre del pez alojado en este tanque
-     * @param nombrePiscifactoria Nombre de la piscifactoria a la que pertenece
+     * @param nomPiscifactoriafactoria Nombre de la piscifactoria a la que pertenece
      * @param tipo TIpo de tanque, mar o rio
      */
     public Tanque(int numTanque,String tipo,String nomPiscifactoria){
@@ -523,8 +523,8 @@ public class Tanque {
                 peces[i] = null;
             }
         }
-        TranscriptWriter.writeInTranscript("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
-        LogWriter.writeInLog("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
+        TranscriptWriter.writeInTranscript("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
+        LogWriter.writeInLog("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
     }
 
     /**
@@ -536,8 +536,8 @@ public class Tanque {
                 peces[i] = null;
             }
         }
-        TranscriptWriter.writeInTranscript("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
-        LogWriter.writeInLog("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
+        TranscriptWriter.writeInTranscript("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
+        LogWriter.writeInLog("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
         System.out.println("El tanque se ha vaciado por completo");
     }
 
