@@ -141,7 +141,6 @@ public class Tanque {
                 "\n"+"Hembras / machos: "+machos()+"/"+hembras());
             }
         } catch (ArithmeticException e) {
-            //TODO Borrar el e.printStackTrace al teriminar el debugging.
             ErrorWriter.writeInErrorLog("Error al mostrar el estado actual del tanque.\n");
             e.printStackTrace();
         }
@@ -170,7 +169,6 @@ public class Tanque {
             System.out.println("Tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria+" al "+((int)(ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al mostrar la capacidad de un tanque.\n");
-            //TODO Borrar el e.printStackTrace al terminar el debugging.
             e.printStackTrace();
         }
     }
@@ -289,7 +287,7 @@ public class Tanque {
                     }else{
                         int opcion = 0;
                         while (opcion!=2) {
-                            System.out.println("Quiere añadir un "+this.tipoPez+" mas al tanque?");
+                            System.out.println("Quiere añadir un "+this.tipoPez+" mas al tanque?(1.Si/2.No)");
                             opcion = Reader.readTheNumber(1, 2);
                             if(opcion==1){
                                 if(tipo=="mar"){
@@ -298,7 +296,6 @@ public class Tanque {
                                             if(peces.length!=ocupacion()){
                                                 int espacio = findSpace();
                                                 peces[espacio] = creadorEspecies(especiesMar[(i+1)],false);
-                                                LogWriter.writeInLog(peces[espacio].getNombre()+" ("+((peces[espacio].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
                                             }
                                         }
                                     }
@@ -308,14 +305,12 @@ public class Tanque {
                                             if(peces.length!=ocupacion()){
                                                 int espacio = findSpace();
                                                 peces[espacio] = creadorEspecies(especiesRio[(i+1)],false);
-                                                LogWriter.writeInLog(peces[espacio].getNombre()+" ("+((peces[espacio].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
                                             }
                                         }
                                     }
                                 }
                             }
                         }
-                        
                     }
                 } catch (Exception e) {
                     ErrorWriter.writeInErrorLog("Error al intentar añadir un pez.");
@@ -396,6 +391,7 @@ public class Tanque {
                     added = pez.reprod();
                 }
                 TranscriptWriter.writeInTranscript(added.getNombre() + " (" + ((added.getSexo())?"M":"F") + ") comprado por " + added.getCoste() + " monedas. Añadido al tanque " + this.numTanque + " de la piscifactoría " + this.nomPiscifactoria);
+                LogWriter.writeInLog(added.getNombre()+" ("+ (added.getSexo() ? "M" : "H") + ") comprado por " + added.getCoste() + " monedas. Añadido al tanque " + this.numTanque + " de la piscifactoría "+this.nomPiscifactoria);
                 return added;
             }
         }
