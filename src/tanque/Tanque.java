@@ -135,14 +135,13 @@ public class Tanque {
         "Ocupación: "+ocupacion()+"/"+maxSize+"("+(ocupacion()/maxSize)+"%)");
         try {
             if(ocupacion()!=0){
-                System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(vivos()/ocupacion())*100)+"%)"+
-                "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(alimentados()/ocupacion())*100)+"%)"+
-                "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(adultos()/ocupacion())*100)+"%)"+
+                System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(((double)vivos())/ocupacion())*100)+"%)"+
+                "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(((double)alimentados())/ocupacion())*100)+"%)"+
+                "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(((double)adultos())/ocupacion())*100)+"%)"+
                 "\n"+"Hembras / machos: "+machos()+"/"+hembras());
             }
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al mostrar el estado actual del tanque.\n");
-            e.printStackTrace();
         }
     }
 
@@ -169,7 +168,6 @@ public class Tanque {
             System.out.println("Tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria+" al "+((int)(ocupacion()/maxSize)*100)+"% de capacidad.["+ocupacion()+"/"+maxSize+"]");
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al mostrar la capacidad de un tanque.\n");
-            e.printStackTrace();
         }
     }
 
@@ -525,6 +523,8 @@ public class Tanque {
                 peces[i] = null;
             }
         }
+        TranscriptWriter.writeInTranscript("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
+        LogWriter.writeInLog("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
     }
 
     /**
@@ -536,6 +536,8 @@ public class Tanque {
                 peces[i] = null;
             }
         }
+        TranscriptWriter.writeInTranscript("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
+        LogWriter.writeInLog("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nombrePisci);
         System.out.println("El tanque se ha vaciado por completo");
     }
 

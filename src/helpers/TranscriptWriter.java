@@ -24,6 +24,10 @@ public class TranscriptWriter {
      */
     public static void transcriptInit(String companyName) {
         try {
+            File transcriptFolder = new File("transcripts");
+            if (!transcriptFolder.exists()) {
+                transcriptFolder.mkdir();
+            }
             transcript = new File("transcripts/" + companyName + ".transcript");
             if (!transcript.exists()) {
                 try {
@@ -44,7 +48,7 @@ public class TranscriptWriter {
      */
     public static void writeInTranscript(String transcriptLine) {
         try {
-            bw.append(transcriptLine+"\n");
+            bw.append(transcriptLine + "\n");
             bw.flush();
         } catch (IOException e) {
             ErrorWriter.writeInErrorLog("Error al agregar linea al documento de transcripcion");
@@ -60,17 +64,17 @@ public class TranscriptWriter {
     public static void transcriptStart(String nombrePartida ,String[] nomPeces ,String nomPisc) {
         try {
             bw.append("Inicio de la simulación "+nombrePartida+"\n"+
-            "Dinero: "+Simulador.instancia.monedas.getCantidad());
-            bw.append("Peces:\nRio:");
+            "Dinero: "+Monedas.getCantidad() + "\n");
+            bw.append("Peces:\nRio:\n");
             for(int i=0;i<nomPeces.length;i++){
-                bw.append("-"+nomPeces[i]+"\n");
+                bw.append("-"+nomPeces[i] + "\n");
                 if(i==4){
                     bw.append("Mar:\n");
                 }else if(i==9){
                     bw.append("Doble:\n");
                 }
             }
-            bw.append("------------------------------------------------\nPiscifactoría inicial: "+nomPisc+"\n");
+            bw.append("------------------------------------------------\nPiscifactoría inicial: "+nomPisc + "\n");
             bw.flush();
         } catch (IOException e) {
             ErrorWriter.writeInErrorLog("Error al agregar linea al documento de transcripcion");

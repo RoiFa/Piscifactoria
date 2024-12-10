@@ -27,6 +27,10 @@ public class LogWriter {
      */
     public static void startLog(String companyName) {
         try {
+            File logFolder = new File("logs");
+            if (!logFolder.exists()) {
+                logFolder.mkdir();
+            }
             log = new File("logs/" + companyName + ".log");
             if (!log.exists()) {
                 try {

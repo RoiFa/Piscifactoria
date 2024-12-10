@@ -25,7 +25,11 @@ public class ErrorWriter {
      */
     public static void startErrorLog() {
         try {
-            errLog = new File("logs/0_errors.log");
+            File errFolder = new File("err");
+            if (!errFolder.exists()) {
+                errFolder.mkdir();
+            }
+            errLog = new File("err/0_errors.log");
             if (!errLog.exists()) {
                 try {
                     errLog.createNewFile();
