@@ -314,8 +314,6 @@ public class Tanque {
                     }
                 } catch (Exception e) {
                     ErrorWriter.writeInErrorLog("Error al intentar añadir un pez.");
-                    //TODO Borrar e.printStackTrace al terminar el debugging.
-                    e.printStackTrace();
                 }
             }
     }
