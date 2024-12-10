@@ -16,7 +16,6 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import main.Almacen;
 import main.Simulador;
-import monedas.Monedas;
 import piscifactoria.Piscifactoria;
 
 public class GestorXml {
@@ -79,7 +78,7 @@ public class GestorXml {
      */
     public static int listRewards(){
         try {
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             String menu="";
             String almacen="",pisciMar="",pisciRio="";
@@ -139,7 +138,7 @@ public class GestorXml {
                     menu += (files.length+3)+pisciRio+charsRio[0]+charsRio[1]+charsRio[2]+charsRio[3]+"\n";
                 }
                 System.out.println(menu);
-                return Reader.readTheNumber();
+                return Reader.readTheNumber(1,0);
             }else{
                 System.out.println("No existen recompensas a reclamar");
                 return -1;
@@ -157,7 +156,7 @@ public class GestorXml {
      */
     public static int selectReward(int option){
         try {
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
@@ -190,7 +189,7 @@ public class GestorXml {
         int opcion = selectReward(listRewards());
         try {
             if(opcion!=-1){
-                String ruta = "src//rewards//";
+                String ruta = "rewards";
                 Path path = Paths.get(ruta);
                 if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                     File folder = new File(ruta);
@@ -199,8 +198,8 @@ public class GestorXml {
                     Document reward = leible(ruta+files[opcion].getName());
                     Element root = reward.getRootElement();
                     if((files.length+1)==opcion&&(charsAlm[0].equals("A")&&charsAlm[1].equals("B")&&charsAlm[2].equals("C")&&charsAlm[3].equals("D"))){
-                        if(Simulador.almacen!=null){
-                            Simulador.almacen = new Almacen();
+                        if(Simulador.instancia.almacen!=null){
+                            Simulador.instancia.almacen = new Almacen();
                             System.out.println("Has canjeado exitosamente las partes de almacen por un almacen nuevo!");
                             TranscriptWriter.writeInTranscript("Recompensa almacen usada(ABCD)");
                             for(File file : files){
@@ -228,7 +227,7 @@ public class GestorXml {
                         System.out.println("No tienes suficientes partes de almacen para crear uno");
                     }
                     if((files.length+2)==opcion&&(charsMar[0].equals("A")&&charsMar[1].equals("B"))){
-                        ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+                        ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
                         String name="";
                         while (name=="") {
                             System.out.println("Que nombre quiere para la nueva piscifactoría?(mar)");
@@ -250,7 +249,7 @@ public class GestorXml {
                         System.out.println("No tienes suficientes partes de piscifactoria de Mar para crear una");
                     }
                     if((files.length+3)==opcion&&(charsRio[0].equals("A")&&charsRio[1].equals("B"))){
-                        ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+                        ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
                         String name="";
                         while (name=="") {
                             System.out.println("Que nombre quiere para la nueva piscifactoría?(rio)");
@@ -289,12 +288,12 @@ public class GestorXml {
                             TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "moned":
-                            Monedas.anadir(Integer.parseInt(give.element("coins").getText()));
+                            Simulador.instancia.monedas.anadir(Integer.parseInt(give.element("coins").getText()));
                             deplete(files[opcion]);
                             TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         case "tanqu":
-                            ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+                            ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
                             int pisci = Simulador.selectPisc();
                             if (give.element("building").attribute("code").getText().equals("3")&&piscis.get(pisci).getTipo().equals("rio")){
                                 piscis.get(pisci).addTank();
@@ -325,7 +324,7 @@ public class GestorXml {
      */
     public static void deplete(File file){
         try {
-            Document reward = leible("src//rewards//"+file.getName());
+            Document reward = leible("rewards/"+file.getName());
             Element root = reward.getRootElement();
             if(Integer.parseInt(root.element("quantity").getText())>=2){
                 root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())-1));
@@ -344,7 +343,7 @@ public class GestorXml {
      */
     public static void shareFood(int vegetal,int pienso){
         try {
-            ArrayList<Piscifactoria> piscis = Simulador.getPiscis();
+            ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
             int numPiscis = piscis.size();
             int cantRepartCarne = pienso/numPiscis;
             int cantRepartVeget = vegetal/numPiscis;
@@ -363,7 +362,7 @@ public class GestorXml {
                     pisci.addFood(0,cantRepartVeget);
                     vegetal -= cantRepartVeget;
                 }
-            Simulador.setPiscis(piscis);
+            Simulador.instancia.setPiscis(piscis);
             }
             
         } catch (Exception e) {
@@ -380,32 +379,32 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("algas_"+lvl+".xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//algas_"+lvl+".xml");
+                        save(doc, "rewards/algas_"+lvl+".xml");
                         done=true;
                     }
                 }
                 if(!done){
                     int res = (lvl-1)>=3 ? ((lvl-1)*300)+((lvl-1)==4 ? 800 : 100) : ((lvl-1)*100+(lvl==3 ? 300 : 100));
-                    doc = leible("src//rewards//algas_"+lvl+".xml");
+                    doc = leible("rewards/algas_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Algas "+romanNum[lvl]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" cápsula de algas para alimentar peces filtradores y omnívoros");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
                     give.addElement("food").addAttribute("type","algae").addText(String.valueOf(res));
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//algas_"+lvl+".xml");
+                    save(doc, "rewards/algas_"+lvl+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }
@@ -423,32 +422,32 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("pienso_"+lvl+".xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//pienso_"+lvl+".xml");
+                        save(doc, "rewards/pienso_"+lvl+".xml");
                         done=true;
                     }
                 }
                 if(!done){
                     int res = (lvl-1)>=3 ? ((lvl-1)*300)+((lvl-1)==4 ? 800 : 100) : ((lvl-1)*100+(lvl==3 ? 300 : 100));
-                    doc = leible("src//rewards//pienso_"+lvl+".xml");
+                    doc = leible("rewards/pienso_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Pienso de peces "+romanNum[lvl]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" unidades de pienso hecho a partir de peces, moluscos y otros seres marinos para alimentar a peces carnívoros y omnívoros.");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
                     give.addElement("food").addAttribute("type","animal").addText(String.valueOf(res));
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//pienso_"+lvl+".xml");
+                    save(doc, "rewards/pienso_"+lvl+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }
@@ -466,32 +465,32 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("comida_"+lvl+".xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//comida_"+lvl+".xml");
+                        save(doc, "rewards/comida_"+lvl+".xml");
                         done=true;
                     }
                 }
                 if(!done){
                     int res = (lvl-1)>=2 ? ((lvl-1)>=3 ? (((lvl-1)*150)+(lvl==5 ? 400 : 50)) : ((lvl-1)*100)+50) : ((lvl-1)*50)+50;
-                    doc = leible("src//rewards//comida_"+lvl+".xml");
+                    doc = leible("rewards/comida_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Comida general "+romanNum[lvl]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" unidades de pienso multipropósito para todo tipo de peces.");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
                     give.addElement("food").addAttribute("type","general").addText(String.valueOf(res));
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//comida_"+lvl+".xml");
+                    save(doc, "rewards/comida_"+lvl+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }   
@@ -509,25 +508,25 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("almacen_"+part+".xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//almacen_"+part+".xml");
+                        save(doc, "rewards/almacen_"+part+".xml");
                         done=true;
                     }
                 }
                 if(!done){
-                    doc = leible("src//rewards//almacen_"+part+".xml");
+                    doc = leible("rewards/almacen_"+part+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Almacén central ["+part+"]");
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText("Materiales para la construcción de un almacén central. Con la parte A, B, C y D, puedes obtenerlo de forma gratuita.");
                     root.addElement("rarity").addText("3");
                     Element give = root.addElement("give");
@@ -535,7 +534,7 @@ public class GestorXml {
                     give.addElement("part").addText(part);
                     give.addElement("total").addText("ABCD");
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//almacen_"+part+".xml");
+                    save(doc, "rewards/almacen_"+part+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }            
@@ -553,32 +552,32 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("monedas_"+lvl+"xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//monedas_"+lvl+"xml");
+                        save(doc, "rewards/monedas_"+lvl+"xml");
                         done=true;
                     }
                 }
                 if(!done){
                     int res = ((lvl-1)*200)+((lvl==5) ? 200 : ((lvl==4) ? 150 : 100));
-                    doc = leible("src//rewards//monedas_"+lvl+"xml");
+                    doc = leible("rewards/monedas_"+lvl+"xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Monedas "+romanNum[(lvl-1)]);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText(res+" monedas");
                     root.addElement("rarity").addText(String.valueOf(lvl-1));
                     Element give = root.addElement("give");
                     give.addElement("coins").addText(String.valueOf(res));
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//monedas_"+lvl+"xml");
+                    save(doc, "rewards/monedas_"+lvl+"xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }            
@@ -598,25 +597,25 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("pisci_"+tipo.charAt(0)+"_"+part+".xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//pisci_"+tipo.charAt(0)+"_"+part+".xml");
+                        save(doc, "rewards/pisci_"+tipo.charAt(0)+"_"+part+".xml");
                         done=true;
                     }
                 }
                 if(!done){
-                    doc = leible("src//rewards//pisci_"+tipo.charAt(0)+"_"+part+".xml");
+                    doc = leible("rewards/pisci_"+tipo.charAt(0)+"_"+part+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Piscifactoría de "+tipo+" ["+part+"]");
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText("Materiales para la construcción de una piscifactoría de "+tipo+". Con la parte A y B, puedes obtenerla de forma gratuita.");
                     root.addElement("rarity").addText(String.valueOf(rarity));
                     Element give = root.addElement("give");
@@ -624,7 +623,7 @@ public class GestorXml {
                     give.addElement("part").addText(part);
                     give.addElement("total").addText("AB");
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//pisci_"+tipo.charAt(0)+"_"+part+".xml");
+                    save(doc, "rewards/pisci_"+tipo.charAt(0)+"_"+part+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }            
@@ -643,25 +642,25 @@ public class GestorXml {
             Document doc=null;
             Element root=null;
             boolean done=false;
-            String ruta = "src//rewards//";
+            String ruta = "rewards";
             Path path = Paths.get(ruta);
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
                     if(file.getName().equals("tanque_"+type.charAt(0)+".xml")&&!done){
-                        doc = leible("src//rewards//"+file.getName());
+                        doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
                         root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "src//rewards//tanque_"+type.charAt(0)+".xml");
+                        save(doc, "rewards/tanque_"+type.charAt(0)+".xml");
                         done=true;
                     }
                 }
                 if(!done){
-                    doc = leible("src//rewards//tanque_"+type.charAt(0)+".xml");
+                    doc = leible("rewards/tanque_"+type.charAt(0)+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Tanque de "+type);
-                    root.addElement("origin").addText(Simulador.getNombre());
+                    root.addElement("origin").addText(Simulador.instancia.getNombre());
                     root.addElement("desc").addText("Materiales para la construcción, de forma gratuita, de un tanque de una piscifactoría de "+type+".");
                     root.addElement("rarity").addText(String.valueOf(rarity));
                     Element give = root.addElement("give");
@@ -669,7 +668,7 @@ public class GestorXml {
                     give.addElement("part").addText("A");
                     give.addElement("total").addText("A");
                     root.addElement("quantity").addText("1");
-                    save(doc, "src//rewards//tanque_"+type.charAt(0)+".xml");
+                    save(doc, "rewards/tanque_"+type.charAt(0)+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }

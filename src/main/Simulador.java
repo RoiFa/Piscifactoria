@@ -1,7 +1,13 @@
 package main;
+
+import java.io.File;
 import java.util.ArrayList;
+
+import com.google.gson.annotations.JsonAdapter;
+
 import estadisticas.Estadisticas;
 import helpers.ErrorWriter;
+import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
 import helpers.TranscriptWriter;
@@ -13,60 +19,159 @@ import peces.rio.*;
 import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
+import adapters.SimuladorAdapter;
 
-/**
- * Clase encargada de la lógica del simulador de la piscifactoría.
- */
+@JsonAdapter(SimuladorAdapter.class)
 public class Simulador {
+
+    /** El estado del sistema */
+    public static Simulador instancia;
     
-    /** Los días que han pasado */
-    private static int dias=0;
-    /** Las piscifactorías que hay */
-    private static ArrayList<Piscifactoria> piscis= new ArrayList<>();
+    /** El array con los nombres de los peces implementados */
+    private final String[] implementados = new String[]{AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
+        AlmacenPropiedades.BAGRE_CANAL.getNombre(),AlmacenPropiedades.BESUGO.getNombre(),
+        AlmacenPropiedades.CARPA.getNombre(),AlmacenPropiedades.COBIA.getNombre(),
+        AlmacenPropiedades.DORADA.getNombre(),AlmacenPropiedades.KOI.getNombre(),
+        AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.RODABALLO.getNombre(),
+        AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+
+    /** El nombre de la entidad */
+    private String nombre;
+    /** El día actual */
+    private int dia;
     /** Las monedas */
-    public static Monedas monedas = new Monedas();
+    public Monedas monedas;
+    /** Recopila las estadisticas del programa */
+    public Estadisticas orca;
     /** El almacén de comida */
-    public static Almacen almacen = null;
-    /**Recopila las estadisticas del programa */
-    public static Estadisticas estadisticas;
-    /**Nombre de la empresa */
-    public static String nombre;
+    public Almacen almacen;
+    /** Las piscifactorías que hay */
+    private ArrayList<Piscifactoria> piscis;
+
+    /**
+     * Constructor para la carga de datos
+     */
+    public Simulador(){}
+
+    /**
+     * 
+     * @param nombre el nombre de la empresa/partida
+     * @param dia el día actual
+     * @param monedas
+     * @param estadisticas
+     * @param almacen
+     * @param piscis
+     */
+    public Simulador(String nombre, int dia, Monedas monedas, Estadisticas estadisticas, Almacen almacen,
+            ArrayList<Piscifactoria> piscis) {
+        this.nombre = nombre;
+        this.dia = dia;
+        this.monedas = monedas;
+        this.orca = estadisticas;
+        this.almacen = almacen;
+        this.piscis = piscis;
+    }
+
+    
+    /** @param nombre el nombre de la partida */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /** @param dia el dia actual */
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    /** @return el array con los peces implementados */
+    public String[] getImplementados() {
+        return implementados;
+    }
+
+    /** @return el dia actual */
+    public int getDia() {
+        return dia;
+    }
+
+    /**
+     * @return el array con las piscifactorías
+     */
+    public ArrayList<Piscifactoria> getPiscis() {
+        return piscis;
+    }
+
+    /**
+     * @param piscis el nuevo array con las piscifactorías modificadas
+     */
+    public void setPiscis(ArrayList<Piscifactoria> piscis) {
+        this.piscis = piscis;
+    }
+
+    /**
+     * @return el nombre de la partida/entidad
+     */
+    public String getNombre(){
+        return nombre;
+    }
+
 
     /**
      * Inicializa el sistema desde cero
      */
     private static void init(){
-        String[] nomPeces = {AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),
-            AlmacenPropiedades.BAGRE_CANAL.getNombre(),AlmacenPropiedades.BESUGO.getNombre(),
-            AlmacenPropiedades.CARPA.getNombre(),AlmacenPropiedades.COBIA.getNombre(),
-            AlmacenPropiedades.DORADA.getNombre(),AlmacenPropiedades.KOI.getNombre(),
-            AlmacenPropiedades.PEJERREY.getNombre(),AlmacenPropiedades.RODABALLO.getNombre(),
-            AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
-            estadisticas = new Estadisticas(nomPeces);
-
-        System.out.println("Nombra a tu nueva empresa:");
-        nombre = Reader.readTheLine();
-        while (nombre.isBlank()) {
-            System.out.println("Ese nombre no es válido. Inténtelo de nuevo:");
-            nombre = Reader.readTheLine();
+        File log = new File("logs");
+        if(!log.exists()){
+            log.mkdir();
         }
-        
-        System.out.println("Nombra a tu primera piscifactoría de río:");
-        String nomPisc = Reader.readTheLine();
-        while (nomPisc.isBlank()) {
-            System.out.println("Ese nombre no es válido. Inténtelo de nuevo:");
-            nomPisc = Reader.readTheLine();
+        File tr = new File("transcripts");
+        if(!tr.exists()){
+            tr.mkdir();
         }
-
-        while (nomPisc.equals("")) {
-            System.out.println("Introduzca un nombre valido");
-            nomPisc = Reader.readTheLine();
+        File rw = new File("rewards");
+        if(!rw.exists()){
+            rw.mkdir();
+        }
+        ErrorWriter.startErrorLog();
+        int opcion = 0;
+        String[] saves = Guardado.listarSaves();
+        if(saves.length>0){
+            System.out.println("¿Desea cargar una partida? (1. Si ; 2. No)");
+            int cargar = Reader.readTheNumber(1, 2);
+            if(cargar==1){
+                for(int i = 0;i<saves.length;i++){
+                    System.out.println((i+1)+". "+saves[i].substring(0, saves[i].indexOf(".")));
+                }
+                opcion = Reader.readTheNumber(1, saves.length);
+            }
+        } 
+        if(opcion>0){
+            Guardado.load(saves[opcion-1]);
+            LogWriter.startLog(Simulador.instancia.nombre);
+            LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
+            LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
+            TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
+        } else{
+            System.out.println("Introduzca el nombre de la nueva empresa a crear:");
+            String nombre = Reader.readTheLine();
+            System.out.println("Introduzca el nombre de la primera piscifactoría (río)");
+            String nomPisc = Reader.readTheLine();
+            Simulador.instancia = new Simulador(nombre, 0, new Monedas(), null, new Almacen(), new ArrayList<>());
+            Simulador.instancia.orca = new Estadisticas(Simulador.instancia.implementados);
+            Simulador.instancia.piscis.add(new Piscifactoria("rio", nomPisc));
+            Simulador.instancia.piscis.get(0).addFood(25,25);
+            Simulador.instancia.monedas.setCantidad(100);
+            Guardado.save();
+            LogWriter.startLog(Simulador.instancia.nombre);
+            LogWriter.writeInLog("Inicio de la simulación: "+Simulador.instancia.nombre);
+            LogWriter.writeInLog("Piscifactoría inicial: "+Simulador.instancia.nombre);
+            TranscriptWriter.transcriptInit(Simulador.instancia.nombre);
+            TranscriptWriter.transcriptStart(Simulador.instancia.nombre, Simulador.instancia.implementados, Simulador.instancia.piscis.get(0).getNombre());
         }
         piscis.add(new Piscifactoria("rio",nomPisc));
         piscis.get(0).addFood(25,25);
         Monedas.setCantidad(100);
 
-        ErrorWriter.startErrorLog(nombre);
+        ErrorWriter.startErrorLog();
         LogWriter.startLog(nombre);
         LogWriter.writeInLog("Inicio de la simulación " + nombre);
         LogWriter.writeInLog("Piscifactoría inicial: " + nomPisc);
@@ -97,13 +202,13 @@ public class Simulador {
     /**
      * Muestra el texto para seleccionar una piscifactoría
      */
-    public static void menuPisc(){
+    private static void menuPisc(){
         
         int i = 1;
         System.out.println("Seleccione una piscifactoría:");
         System.out.println("-------------------------- Piscifactorías --------------------------");
         System.out.println("[Peces vivos / Peces totales / Espacio total]");
-        for(Piscifactoria p : piscis){
+        for(Piscifactoria p : Simulador.instancia.piscis){
             System.out.println(i+".- "+p.getNombre()+" ["+p.getTotalAlive()+"/"+p.getNum()+"/"+p.getTotal()+"]");
             i++;
         }
@@ -115,11 +220,8 @@ public class Simulador {
      * @return un entero con la opción seleccionada
      */
     public static int selectPisc(){
-        int opcion = -1;
-        while (opcion<0 || opcion>piscis.size()) {
-            menuPisc();
-            opcion = Reader.readTheNumber();
-        }
+        menuPisc();
+        int opcion = Reader.readTheNumber(0,Simulador.instancia.piscis.size());
         if(opcion==0){
             System.out.println("Operación cancelada");
         }
@@ -128,51 +230,49 @@ public class Simulador {
 
     /**
      * Muestra el estado de las piscifactorías, su comida disponible, 
-     * el día actual, las monedas disponibles y la información del
-     * almacén si se dispone de el
+     * el día actual y las monedas disponibles y la info del almacén si se dispone de el
      */
     private static void showGeneralStatus(){
-        for(Piscifactoria p : piscis){
+        for(Piscifactoria p : Simulador.instancia.piscis){
             p.showStatus();
             p.showFood();
             System.out.println();
         }
-        System.out.println("Día actual: "+dias);
-        System.out.println("Monedas disponibles: "+Monedas.getCantidad());
+        System.out.println("Día actual: "+Simulador.instancia.dia);
+        System.out.println("Monedas disponibles: "+Simulador.instancia.monedas.getCantidad());
         System.out.println();
-        if(almacen!=null){
-            almacen.toString();
+        if(Simulador.instancia.almacen.getDisponible()){
+            Simulador.instancia.almacen.toString();
         }
     }
 
     /**
-     * Muestra el estado de los tanques de una piscifactoría seleccionada
+     * Permite seleccionar una piscifactoría y mostrar el estado de sus tanques
      */
     private static void showSpecificStatus(){
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            piscis.get(piscifactoria).showTankStatus();
+            Simulador.instancia.piscis.get(piscifactoria).showTankStatus();
         }
     }
 
     /**
-     * Muestra la información de los peces de un tanque específico de una
-     * piscifactoría seleccionada.
+     * Permite seleccionar un tanque y muestra la información de sus peces
      */
     private static void showTankStatus(){
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            int tank = piscis.get(piscifactoria).selectTank();
-            piscis.get(piscifactoria).tanques.get(tank).showFishStatus();
+            int tank = Simulador.instancia.piscis.get(piscifactoria).selectTank();
+            Simulador.instancia.piscis.get(piscifactoria).tanques.get(tank).showFishStatus();
         }
     }
 
     /**
-     * Muestra el nombre, el número de peces comprados, nacidos y vendidos 
-     * y el dinero que se ha ganado durante la simulación
+     * Muestra el nombre, el número de comprados y nacidos, el número de vendidos 
+     * y el dinero que se ha ganado con los peces del sistema
      */
     private static void showStats(){
-        estadisticas.mostrar();
+        Simulador.instancia.orca.mostrar();
     }
 
     /**
@@ -189,41 +289,45 @@ public class Simulador {
         System.out.println("1. Abadejo\n2. Arenque del Atlántico\n3. Bagre de Canal\n4. Besugo\n5. Carpa"+
         "\n6. Cobia\n7. Dorada\n8. Koi\n9. Pejerrey\n10. Rodaballo\n11. Salmon Chinook\n12. Tilapia del Nilo\n13. Volver al menú"
         );
-        System.out.println("Introduzca un entero entre 1 y 13");
-        pez = escogeOpciones(1,13);
-        if(pez!=13){
-            peces[pez-1].toString();
-        } else {
-            System.out.println("Volviendo...");
+        while (pez<1 || pez>13) {
+            System.out.println("Introduzca un entero entre 1 y 13");
+            pez = Reader.readTheNumber(1,13);
         }
+        if(pez==0){
+            System.out.println("Vuelta con éxito");
+        } else if(pez!=-1){
+            System.out.println(peces[(pez-1)].toString());
+        }
+    
+        
     }
 
     /**
-     * Avanza un día haciendo crecer a todos los peces de todos los tanques
-     * de todas las piscifactorías
+     * Avanza un día haciendo la lógica necesaria y muestra un mensaje con los
+     * peces vendidos por piscifactoría y despues en general
      */
     private static void nextDay(){
         LogWriter.writeInLog("Fin del día " + (dias));
-        dias++;
-        int ganancias=0;
-        int vendidos = 0;
+        Simulador.instancia.dia++;
+        int pecesVendidos = 0;
+        int dineroVendido = 0;
         int totalMar=0;
         int totalRio=0;
-        if(almacen!=null){
-            Almacen.repartirComida();
+        if(Simulador.instancia.almacen.getDisponible()){
+            Simulador.instancia.almacen.repartirComida();
         }
-        for(Piscifactoria p : piscis){
-            int[] datos = p.nextDay();
-            vendidos += datos[0];
-            ganancias += datos[1];
+        for(Piscifactoria p : Simulador.instancia.piscis){
+            int[] venta = p.nextDay();
+            pecesVendidos+=venta[0];
+            dineroVendido+=venta[1];
             if(p.getTipo()=="mar"){
                 totalMar += p.getTotalAlive();
             }else{
                 totalRio += p.getTotalAlive();
             }
         }
-        TranscriptWriter.writeInTranscript("Fin del día "+(dias)+".\nPeces actuales: "+totalRio+" de río, "+totalMar+" de mar.\n"+ganancias+" monedas ganadas por un total de "+Monedas.getCantidad()+".\n------------------------------\n>>>Inicio del día "+dias+".");
-        System.out.println("Se han vendido un total de " + vendidos + " peces.\nSe han generado " + ganancias + " monedas gracias a eso.");
+        System.out.println(pecesVendidos+" peces vendidos por un total de "+dineroVendido+" monedas");
+        TranscriptWriter.writeInTranscript("Fin del día "+(Simulador.instancia.dia-1)+".\nPeces actuales: "+totalRio+" de río, "+totalMar+" de mar.\n"+dineroVendido+" monedas ganadas por un total de "+Simulador.instancia.monedas.getCantidad()+".\n------------------------------\n>>>Inicio del día "+Simulador.instancia.dia+".");
     }
 
     /**
@@ -232,19 +336,19 @@ public class Simulador {
      */
     private static void addFood(){
         System.out.println("Introduzca el tipo de comida:\n1.animal\n2.vegetal");
-        int tipoComida = escogeOpciones(1, 2);
+        int tipoComida = Reader.readTheNumber(1, 2);
         System.out.println("Introduzca la cantidad a añadir:\n1.- 5\n2.- 10\n3.- 25\n4.- llenar\nEl coste es 1 moneda por unidad y 5 monedas de descuento cada 25 unidades");
-        int opcion = escogeOpciones(1, 4);
+        int opcion = Reader.readTheNumber(1, 4);
 
         int espacio;
         int add = 0;
-        if(almacen==null){
+        if(!Simulador.instancia.almacen.getDisponible()){
             int piscifactoria = selectPisc();
             if(piscifactoria !=-1){
                 if(tipoComida==1){
-                    espacio = piscis.get(piscifactoria).getComidaMax()-piscis.get(piscifactoria).getComidaAnimal();
+                    espacio = Simulador.instancia.piscis.get(piscifactoria).getComidaMax()-Simulador.instancia.piscis.get(piscifactoria).getComidaAnimal();
                 }else{
-                    espacio = piscis.get(piscifactoria).getComidaMax()-piscis.get(piscifactoria).getComidaVegetal();
+                    espacio = Simulador.instancia.piscis.get(piscifactoria).getComidaMax()-Simulador.instancia.piscis.get(piscifactoria).getComidaVegetal();
                 }
                 switch (opcion) {
                     case 1: add = 5; break;
@@ -252,28 +356,28 @@ public class Simulador {
                     case 3: add = 25; break;
                     case 4: add = espacio; break;
                 }
+                if(add>espacio){
+                    add = espacio;
+                }
                 int coste = add - (5*(int)(add/25));
                 if(add<=espacio){
-                    if(Monedas.comprar(coste)){
+                    if(Simulador.instancia.monedas.comprar(coste)){
                         if (tipoComida == 1) {
-                            piscis.get(piscifactoria).addFood(add, 0);
+                           Simulador.instancia.piscis.get(piscifactoria).addFood(add, 0);
                         } else {
-                            piscis.get(piscifactoria).addFood(0, add);
+                           Simulador.instancia.piscis.get(piscifactoria).addFood(0, add);
                         }
-                        TranscriptWriter.writeInTranscript(add + " de comida de tipo " + (tipoComida == 1 ? "animal" : "vegetal") + " por " + coste + " monedas. Se almacena en la piscifactoría " + piscis.get(piscifactoria).getNombre() + ".");
+                        TranscriptWriter.writeInTranscript(add + " de comida de tipo " + (tipoComida == 1 ? "animal" : "vegetal") + " por " + coste + " monedas. Se almacena en la piscifactoría " + Simulador.instancia.piscis.get(piscifactoria).getNombre() + ".");
                         LogWriter.writeInLog(add + " de comida de tipo " + (tipoComida == 1 ? "animal" : "vegetal") + " por " + coste + " monedas. Se almacena en la piscifactoría " + piscis.get(piscifactoria).getNombre() + ".");
-
-                    }
-                } else {
-                    System.out.println("Cantidad a añadir mayor de lo posible");
-                }
+                     }
+                 }
             }
         } else{
 
             if(tipoComida==1){
-                espacio = Almacen.getMaxCapacidad()-Almacen.getCarne();
+                espacio = Simulador.instancia.almacen.getMaxCapacidad()-Simulador.instancia.almacen.getCarne();
             }else{
-                espacio = Almacen.getMaxCapacidad()-Almacen.getVegetal();
+                espacio = Simulador.instancia.almacen.getMaxCapacidad()-Simulador.instancia.almacen.getVegetal();
             }
             switch (opcion) {
                 case 1: add = 5; break;
@@ -281,41 +385,47 @@ public class Simulador {
                 case 3: add = 25; break;
                 case 4: add = espacio; break;
             }
+            if(add>espacio){
+                add = espacio;
+            }
             int coste = add - (5*(int)(add/25));
             if(add<=espacio){
-                if(Monedas.comprar(coste)){
-                    almacen.addFood(add, tipoComida == 1);
+                if(Simulador.instancia.monedas.comprar(coste)){
+                    Simulador.instancia.almacen.addFood(add, tipoComida == 1);
                     TranscriptWriter.writeInTranscript(add + " de comida de tipo " + (tipoComida == 1 ? "animal" : "vegetal") + " por " + coste + " monedas. Se almacena en el almacén central.");
                     LogWriter.writeInLog(add + " de comida de tipo " + (tipoComida == 1 ? "animal" : "vegetal") + " por " + coste + " monedas. Se almacena en el almacén central.");
-
                 }
-            } else {
-                System.out.println("Cantidad a añadir mayor de lo posible");
-            }
+            }else{
+              System.out.println("Cantidad a añadir mayor de lo posible");
         }
     }
+    
 
-    /**
-     * Añade un pez a un tanque de una piscifactoría seleccionada
-     */
+        
+
+
     private static void addFish(){
         int opcion = selectPisc();
-        int tankSelec = piscis.get(opcion).selectTank();
-        piscis.get(opcion).tanques.get(tankSelec).addFish(false);
+        if(opcion!=-1){
+            int tankSelec = Simulador.instancia.piscis.get(opcion).selectTank();
+            Simulador.instancia.piscis.get(opcion).tanques.get(tankSelec).addFish(false);
+        }
     }
 
     /**
      * Vende todos los peces adultos vivos de una piscifactoría
-     * a la mitad de dinero normal
+     * a la mitad de dinero de lo normal
      */
     private static void sell(){
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            int[] datosVentas = piscis.get(piscifactoria).sellFish();
-            Monedas.setCantidad(datosVentas[0]+Monedas.getCantidad());
+            int[] datosVentas=Simulador.instancia.piscis.get(piscifactoria).sellFish();
+            Simulador.instancia.monedas.anadir(datosVentas[0]);
+            TranscriptWriter.writeInTranscript("Vendidos "+datosVentas[1]+" peces de la piscifactoría "+Simulador.instancia.piscis.get(piscifactoria).getNombre()+" de forma manual por "+datosVentas[0]+" monedas.");
             System.out.println("Se han conseguido "+datosVentas[0]+" monedas por la venta de peces adultos");
         }
     }
+
 
     /**
      * Elimina todos los peces de un tanque de una piscifactoría
@@ -324,11 +434,13 @@ public class Simulador {
     private static void emptyTank(){
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            int option = piscis.get(piscifactoria).selectTank();
-            Tanque tanque = piscis.get(piscifactoria).tanques.get(option);
-            tanque.emptyTank();
+            int option = Simulador.instancia.piscis.get(piscifactoria).selectTank();
+            Simulador.instancia.piscis.get(piscifactoria).tanques.get(option).emptyTank();
+            Tanque tanque = Simulador.instancia.piscis.get(piscifactoria).tanques.get(option);
+            TranscriptWriter.writeInTranscript("Vaciando el tanque "+tanque.getNumTanque()+" de la piscifactoría "+tanque.getNomPiscifactoria());
         }
     }
+
 
     /**
      * Elimina los peces muertos de una piscifactoría seleccionada
@@ -336,21 +448,22 @@ public class Simulador {
     private static void cleanTank(){
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            piscis.get(piscifactoria).cleanTank();
+            Simulador.instancia.piscis.get(piscifactoria).cleanTank();
         }
     }
     
+
     /**
      * Permite hacer mejoras o comprar nuevas estructuras
      */
     private static void upgrade(){
         
         int opcion = 0;
-        while (opcion != 3) {
+        while (opcion<1 || opcion>3) {
             System.out.println("1. Comprar edificios");
             System.out.println("2. Mejorar edificios");
             System.out.println("3. Cancelar");
-            opcion = escogeOpciones(1,3);
+            opcion = Reader.readTheNumber(1, 3);
 
             switch (opcion) {
                 case 1:
@@ -364,32 +477,36 @@ public class Simulador {
                     break;
             }
         }
+
     }
 
     /**
      * Se encarga de la opción comprar del método upgrade
+     * 
+     * @return  Si se ha realizado la operación correctamente (0) o no (1)
      */
 
     private static void comprar(){
 
         int opcion = 0;
 
-        while (opcion != 3) {
+        while (opcion<1 || opcion>3) {
             System.out.println("1. Piscifactoría");
-            System.out.println("2. Almacén central");
+            System.out.println("2. Almacén central: 2000 monedas. Disponible: "+Simulador.instancia.monedas.getCantidad()+" monedas");
             System.out.println("3. Volver");
 
-            opcion = escogeOpciones(1, 3);
+            opcion = Reader.readTheNumber(1,3);
 
             switch (opcion) {
                 case 1:
                     comparPisc();
                     break;
                 case 2:
-                    if(almacen==null){
-                        if(Monedas.comprar(2000)){
-                            almacen = new Almacen();
-                            System.out.println("Monedas restantes: "+Monedas.getCantidad());
+                    if(!Simulador.instancia.almacen.getDisponible()){
+                        if(Simulador.instancia.monedas.comprar(2000)){
+                            Simulador.instancia.monedas.gastar(2000);
+                            Simulador.instancia.almacen.setDisponible(true);
+                            System.out.println("Monedas restantes: "+Simulador.instancia.monedas.getCantidad());
                             TranscriptWriter.writeInTranscript("Comprado el almacén central.");
                             LogWriter.writeInLog("Comprado el almacén central.");
                         }
@@ -406,98 +523,98 @@ public class Simulador {
 
     /**
      * Método que se encarga de la lógica de comprar piscifactorías.
+     * 
+     * @return  Si se ha realizado la operación correctamente (0) o no (1)
      */
     private static void comparPisc() {
         System.out.println("Elige el tipo de piscifactoría a comprar:\n" +
-            "1.- Río\n" +
-            "2.- Mar\n" +
-            "3.- Volver"
-            );
-        int buyPisc = escogeOpciones(1,3);
+        "1.- Río\n" +
+        "2.- Mar\n" +
+        "3.- Volver"
+        );
+        int buyPisc = Reader.readTheNumber(1, 3);
 
-        while (buyPisc != 3) {
+        if (buyPisc != 3) {
             int numPisc = 0;
-            for (Piscifactoria p : piscis) {
+            for (Piscifactoria p : Simulador.instancia.piscis) {
                 if (p.getTipo().equals(buyPisc == 1 ? "rio" : "mar")) {
                     numPisc++;
                 }
             }
             int coste= buyPisc == 1 ? 500 + 500 * numPisc : 2000 + 2000 * numPisc;
-            if (Monedas.comprar(coste)) {
+            if(Simulador.instancia.monedas.comprar(coste)) {
                 System.out.println("Introduzca el nombre de la nueva piscifactoría");
                 String nombre = Reader.readTheLine();
-                while (nombre.equals("")) {
-                    System.out.println("Nombre no válido. Vuelva a introducir un nombre");
-                    nombre = Reader.readTheLine();
-                }
-                piscis.add(new Piscifactoria(buyPisc == 1 ? "rio" : "mar",nombre));
+                Simulador.instancia.piscis.add(new Piscifactoria(buyPisc == 1 ? "rio" : "mar",nombre));
                 TranscriptWriter.writeInTranscript("Comprada la piscifactoría de " + (buyPisc == 1 ? "rio" : "mar") + " por " + coste + " monedas.");
                 LogWriter.writeInLog("Comprada la piscifactoría de " + (buyPisc == 1 ? "rio" : "mar") + " por " + coste + " monedas.");
 
             }
         }
-        System.out.println("Volviendo...");
     }
 
     /**
      * Se encarga de la opción mejorar del método upgrade
      */
     private static void mejorar(){
+
         int opcion = 0;
-        while (opcion != 3) {
+
+        while (opcion<1 || opcion>3) {
             System.out.println("1. Piscifactoria");
             System.out.println("2. Almacén central");
             System.out.println("3. Volver");
 
-            int subOpcion = escogeOpciones(1, 3);
+            int subOpcion = Reader.readTheNumber(1, 3);
 
             switch (subOpcion) {
                 case 1:
-                    int mejora = 0;
-                    while (mejora != 3) {
-                        System.out.println("1. Comprar tanque");
-                        System.out.println("2. Aumentar almacén de comida");
-                        System.out.println("3. Cancelar");
+                    System.out.println("1. Comprar tanque");
+                    System.out.println("2. Aumentar almacén de comida");
+                    System.out.println("3. Volver");
 
-                        mejora = escogeOpciones(1,3);
-                        switch (mejora) {
-                            case 1:
-                                upgradePisc();
-                                break;
-                            case 2:
-                                upgradeAlmacen();
-                                break;
-                            case 3:
-                                System.out.println("Cancelando...");
-                                break;
-                        }
+                    int mejora = Reader.readTheNumber(1,3);
+
+                    switch (mejora) {
+                        case 1:
+                            upgradePisc();
+                            break;
+                        case 2:
+                            upgradeAlmacen();
+                            break;
+                        case 3:
+                            System.out.println("Cancelando...");
+                            break;
                     }
                     break;
                 case 2:
+
                     upgradeCentral();
+
                     break;
+
                 case 3:
-                    System.out.println("Volviendo...");
-                    break;
+                System.out.println("Volviendo...");
             }
         }
     }
 
     /**
      * Métdo encargado de la lógica de mejorar una piscifactoría.
+     * 
+     * @return  Si se ha completado (0) o no (1)
      */
 
     private static void upgradePisc() {
         int piscifactoria = selectPisc();
         if (piscifactoria != -1) {
-            int numTanques = piscis.get(piscifactoria).getTanques().size();
+            int numTanques = Simulador.instancia.piscis.get(piscifactoria).tanques.size();
             if (numTanques < 10) {
-                int costeTanque = piscis.get(piscifactoria).getTipo().equals("rio") ? 150 + 150 * numTanques : 600 + 600 * numTanques;
-                if(Monedas.comprar(costeTanque)){
-                    piscis.get(piscifactoria).addTank();
-                    TranscriptWriter.writeInTranscript("Comprado un tanque número " + piscis.get(piscifactoria).getTanques().getLast().getNumTanque() + " de la piscifactoría " + piscis.get(piscifactoria).getNombre());
-                    LogWriter.writeInLog("Comprado un tanque para la piscifactoría " + piscis.get(piscifactoria).getNombre());
-
+                int costeTanque = Simulador.instancia.piscis.get(piscifactoria).getTipo().equals("rio") ? 150 + 150 * numTanques : 600 + 600 * numTanques;
+                if(Simulador.instancia.monedas.comprar(costeTanque)){
+                        Simulador.instancia.piscis.get(piscifactoria).addTank();
+                        TranscriptWriter.writeInTranscript("Comprado un tanque número " + Simulador.instancia.piscis.get(piscifactoria).getTanques().getLast().getNumTanque() + " de la piscifactoría " + Simulador.instancia.piscis.get(piscifactoria).getNombre());
+                        LogWriter.writeInLog("Comprado un tanque para la piscifactoría " + piscis.get(piscifactoria).getNombre());  
                 }
             } else {
                 System.out.println("Ya no se admiten más tanques en la piscifactoría");
@@ -506,15 +623,17 @@ public class Simulador {
     }
 
     /**
-     * Métdo encargado de la lógica de mejorar un almacén de una piscifactoría.
+     * Métdo encargado de la lógica de mejorar un almacén de una piscifactoría. 
+     * 
+     * @return  Si se ha completado (0) o no (1)
      */
     private static void upgradeAlmacen() {
         int piscifactoria = selectPisc();
         if(piscifactoria!=-1){
-            int coste = piscis.get(piscifactoria).getTipo().equals("rio") ? 50 : 200;
-            if (Monedas.comprar(coste)) {
-                piscis.get(piscifactoria).upgradeFood();
-                TranscriptWriter.writeInTranscript("Mejorada la piscifactoría " + piscis.get(piscifactoria).getNombre() + " aumentando su capacidad de comida hasta un total de " + piscis.get(piscifactoria).getComidaMax() + " por " + coste + " monedas.");
+            int coste = Simulador.instancia.piscis.get(piscifactoria).getTipo().equals("rio") ? 50 : 200;
+            if (Simulador.instancia.monedas.comprar(coste)) {
+                Simulador.instancia.piscis.get(piscifactoria).upgradeFood();
+                TranscriptWriter.writeInTranscript("Mejorada la piscifactoría " + Simulador.instancia.piscis.get(piscifactoria).getNombre() + " aumentando su capacidad de comida hasta un total de " + Simulador.instancia.piscis.get(piscifactoria).getComidaMax() + " por " + coste + " monedas.");
                 LogWriter.writeInLog("Mejorada la piscifactoría " + piscis.get(piscifactoria).getNombre() + " aumentando su capacidad de comida hasta un total de " + piscis.get(piscifactoria).getComidaMax() + " por " + coste + " monedas.");
             }
         }
@@ -522,11 +641,13 @@ public class Simulador {
 
     /**
      * Método encargado de la lógica de mejorar el almacén central.
+     * 
+     * @return  Si se ha completado (0) o no (1)
      */
     private static void upgradeCentral() {
-        if(almacen!=null){
-            if(Monedas.comprar(200)){
-                almacen.upgrade();
+        if(Simulador.instancia.almacen.getDisponible()){
+            if(Simulador.instancia.monedas.comprar(200)){
+                Simulador.instancia.almacen.upgrade();
             }
         } else{
             System.out.println("No se dispone de almacén central");
@@ -536,132 +657,110 @@ public class Simulador {
     /**
      * Permite pasar entre 1 y 5 días de golpe con sus consecuencias
      */
+
     private static void forwardDays(){
         System.out.println("Indique entre 1 y 5 cuántos días desea pasar");
-        int numDias = escogeOpciones(1, 5);
+        int numDias = Reader.readTheNumber(1,5);
         for(int i = 0;i<numDias;i++){
             nextDay();
         }
     }
 
     /**
-     * Permite escoger un número entre un mínimo y un máximo pasado
-     * 
-     * @param min   El número mínimo a seleccionar
-     * @param max   El número máximo a seleccionar
-     * @return  El número escogido.
-     */
-    private static int escogeOpciones(int min, int max) {
-        System.out.println("Escoge una opción entre " + min + " y " + max);
-        int opcion = Reader.readTheNumber();
-        while (opcion<min || opcion>max) {
-            System.out.println("Por favor introduzca una opción válida (entre " + min + " y " + max + ")" );
-            opcion = Reader.readTheNumber();
-        }
-        return opcion;
-    }
-
-    /**
-     * Inicializa la simulación. Después, muestra el menú y pide al usuario
-     * una opción en bucle hasta que el usuario decida acabar el programa.
-     * 
+     * Realiza toda la lógica
      * @param args
      */
     public static void main(String[] args) {
         init();
         int op = 0;
+        try{
             showGeneralStatus();
             while (op!=14) {
-                try {
-                    menu();
-                    op = Reader.readTheNumber();
+                menu();
+                op = Reader.readTheNumber(1,0);
 
-                    switch (op) {
-                        case 1:
-                            showGeneralStatus();
-                            break;
-                        case 2:
-                            showSpecificStatus();
-                            break;
-                        case 3:
-                            showTankStatus();
-                            break;
-                        case 4:
-                            showStats();
-                            break;
-                        case 5:
-                            showIctio();
-                            break;
-                        case 6:
-                            nextDay();
-                            showGeneralStatus();
-                            break;
-                        case 7:
-                            addFood();
-                            break;
-                        case 8:
-                            addFish();
-                            break;
-                        case 9:
-                            sell();
-                            break;
-                        case 10:
-                            cleanTank();
-                            break;
-                        case 11:
-                            emptyTank();
-                            break;
-                        case 12:
-                            upgrade();
-                            break;
-                        case 13:
-                            forwardDays();
-                            showGeneralStatus();
-                            break;
-                        case 14:
-                            System.out.println("Cerrando...");
-                            LogWriter.closeLog();
-                            TranscriptWriter.closer();
-                            ErrorWriter.closeErrorLog();
-                            System.out.println("Salida con éxito");
-                            break;
-                        case 98:
-                            cheat98();
-                            break;
-                        case 99:
-                            cheat99();
-                            break;
-                        default:
-                            break;
-                    }
-                } catch (Exception e) {
-                    ErrorWriter.writeInErrorLog("Error general en la simulación.");
+                switch (op) {
+                    case 1:
+                        showGeneralStatus();
+                        break;
+                    case 2:
+                        showSpecificStatus();
+                        break;
+                    case 3:
+                        showTankStatus();
+                        break;
+                    case 4:
+                        showStats();
+                        break;
+                    case 5:
+                        showIctio();
+                        break;
+                    case 6:
+                        nextDay();
+                        Guardado.save();
+                        showGeneralStatus();
+                        break;
+                    case 7:
+                        addFood();
+                        break;
+                    case 8:
+                        addFish();
+                        break;
+                    case 9:
+                        sell();
+                        break;
+                    case 10:
+                        cleanTank();
+                        break;
+                    case 11:
+                        emptyTank();
+                        break;
+                    case 12:
+                        upgrade();
+                        break;
+                    case 13:
+                        forwardDays();
+                        break;
+                    case 14:
+                        System.out.println("Cerrando...");
+                        Guardado.save();
+                        System.out.println("Salida con éxito");
+                        break;
+                    case 98:
+                        cheat98();
+                        break;
+                    case 99:
+                        cheat99();
+                        break;
+                    default:
+                        break;
                 }
             }
-        Reader.closer();
+
+        }catch(Exception e){
+            ErrorWriter.writeInErrorLog("Error general en la simulación.");            
+        } finally{
+            Reader.closer();
+            Guardado.close();
+            LogWriter.closeLog();
+            ErrorWriter.closeErrorLog();
+        }
     }
 
-    /**
-     * Método oculto que añade 1000 monedas.
-     */
     public static void cheat99(){
-        Monedas.anadir(1000);
-        TranscriptWriter.writeInTranscript("Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, "+Monedas.getCantidad());
+        Simulador.instancia.monedas.anadir(1000);
+        TranscriptWriter.writeInTranscript("Añadidas 1000 monedas mediante la opción oculta. Monedas actuales, "+Simulador.instancia.monedas.getCantidad());
         LogWriter.writeInLog("Añadidas monedas mediante la opción oculta.");
     }
 
-    /**
-     * Método oculto que añade 4 tanques con 1 pez aleatorio cada uno
-     * a una piscifactoría seleccionada
-     */
     public static void cheat98(){
         int opcion = selectPisc();
-        piscis.get(opcion).addTank();
-        piscis.get(opcion).addTank();
-        piscis.get(opcion).addTank();
-        piscis.get(opcion).addTank();
-        for(int i=piscis.get(opcion).tanques.size(),j=0;j<4;i--){
-            piscis.get(opcion).tanques.get(i-1).randomFish();
+        Simulador.instancia.piscis.get(opcion).addTank();
+        Simulador.instancia.piscis.get(opcion).addTank();
+        Simulador.instancia.piscis.get(opcion).addTank();
+        Simulador.instancia.piscis.get(opcion).addTank();
+        for(int i=Simulador.instancia.piscis.get(opcion).tanques.size(),j=0;j<4;i--){
+            Simulador.instancia.piscis.get(opcion).tanques.get(i-1).randomFish();
             j++;
         }
         TranscriptWriter.writeInTranscript("Añadidos peces mediante la opción oculta a la piscifactoría "+piscis.get(opcion).getNombre());
@@ -673,13 +772,4 @@ public class Simulador {
         return piscis;
     }
 
-    /** @param piscis La nueva lista de piscifactorías. */
-    public static void setPiscis(ArrayList<Piscifactoria> piscis) {
-        Simulador.piscis = piscis;
-    }
-
-    /** @return El nombre de la empresa */
-    public static String getNombre() {
-        return nombre;
-    }
 }
