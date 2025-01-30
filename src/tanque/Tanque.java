@@ -111,7 +111,7 @@ public class Tanque {
      * Constructor de la clase tanque
      * @param numTanque Numero del tanque
      * @param pez Nombre del pez alojado en este tanque
-     * @param nombrePiscifactoria Nombre de la piscifactoria a la que pertenece
+     * @param nomPiscifactoriafactoria Nombre de la piscifactoria a la que pertenece
      * @param tipo TIpo de tanque, mar o rio
      */
     public Tanque(int numTanque,String tipo,String nomPiscifactoria){

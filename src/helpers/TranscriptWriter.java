@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import main.Simulador;
+import monedas.Monedas;
 
 public class TranscriptWriter {
     
@@ -64,7 +65,7 @@ public class TranscriptWriter {
     public static void transcriptStart(String nombrePartida ,String[] nomPeces ,String nomPisc) {
         try {
             bw.append("Inicio de la simulación "+nombrePartida+"\n"+
-            "Dinero: "+Simulador.instancia.monedas.getCantidad() + "\n");
+            "Dinero: "+Monedas.getCantidad() + "\n");
             bw.append("Peces:\nRio:\n");
             for(int i=0;i<nomPeces.length;i++){
                 bw.append("-"+nomPeces[i] + "\n");
