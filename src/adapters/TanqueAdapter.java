@@ -27,7 +27,7 @@ public class TanqueAdapter implements JsonSerializer<Tanque>,JsonDeserializer<Ta
         datos.add("maduros", new JsonPrimitive(src.adultos()));
         datos.add("fertiles", new JsonPrimitive(src.fertiles()));
         jsonObject.add("datos", datos);
-        jsonObject.add("peces", context.serialize(src.peces));
+        jsonObject.add("peces", context.serialize(src.getPeces()));
         return jsonObject;
     }
 

@@ -602,6 +602,7 @@ public class Simulador {
      */
 
     private static void upgradePisc() {
+        //TODO opcion para comprar tanque de cria (500 monedas, 3 por piscifactoria)
         int piscifactoria = selectPisc();
         if (piscifactoria != -1) {
             int numTanques = instancia.piscis.get(piscifactoria).tanques.size();

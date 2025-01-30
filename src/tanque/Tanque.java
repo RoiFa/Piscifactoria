@@ -20,17 +20,17 @@ import peces.doble.*;
 public class Tanque {
     
     /** Identifica si el tanque es de agua salada o dulce */
-    private String tipo;
+    protected String tipo;
     /** Indica el número del tanque */
-    private int numTanque;
+    protected int numTanque;
     /** Lista de peces que avitan este tanque */
-    public Pez[] peces;
+    protected Pez[] peces;
     /** Capacidad maxima del tanque */
-    private int maxSize;
+    protected int maxSize;
     /** El nombre de la piscifactoría */
-    private String nomPiscifactoria;
+    protected String nomPiscifactoria;
     /** El tipo de pez que admite */
-    private String tipoPez;
+    protected String tipoPez;
 
     /** @return El tipo de tanque (mar o río) */
     public String getTipo() {
