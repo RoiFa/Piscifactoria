@@ -1,4 +1,5 @@
 bin/
+err/
 .vscode/
 logs/
 saves/
