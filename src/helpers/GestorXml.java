@@ -676,4 +676,44 @@ public class GestorXml {
             ErrorWriter.writeInErrorLog("Error al crear una recompensa de tanque");
         }
     }
+
+    public static void randomReward(){
+        int typeR = 0;
+        int subType = 0;
+        int lvl = 0;
+        typeR = RNG.RandomInt(100);
+        subType = RNG.RandomInt(100);
+
+        if(typeR<=50){
+            if(subType<=60){
+                lvl=1;
+            }else if(subType<=90){
+                lvl=2;
+            }else{
+                lvl=3;
+            }
+            switch (RNG.RandomInt(3)) {
+                case 0: rewardAlga(lvl); break;
+                case 1: rewardPienso(lvl); break;
+                case 2: rewardGeneral(lvl); break;
+                default:
+                    break;
+            }
+        }else if(typeR<=90){
+            if(subType<=60){
+                lvl=1;
+            }else if(subType<=90){
+                lvl=2;
+            }else{
+                lvl=3;
+            }
+            rewardCoins(lvl);
+        }else{
+            if(RNG.RandomInt(10)<6){
+                rewardTanq("rio");
+            }else{
+                rewardTanq("mar");
+            }
+        }
+    }
 }
