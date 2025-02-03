@@ -26,7 +26,15 @@ public class TilapiaDelNilo extends Pez{
     }
 
     @Override
-    protected int[] comer(int a, int v) {
+    protected int[] comer(int a, int v, boolean enCria) {
+        if (enCria) {
+            if (v < 2) {
+                setAlimentado(false);
+                return new int[]{0,0};
+            }
+            setAlimentado(true);
+            return new int[]{0,2};
+        } 
         if (RNG.RandomBoolean()) {
             setAlimentado(true);
             return new int[]{0,0};

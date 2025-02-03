@@ -206,17 +206,26 @@ public abstract class Pez {
      * @param comidaVegetal La comida vegetal que hay en el almacén
      * @return La cantidad de comida que come de cada tipo
      */
-    public int[] grow(int comidaAnimal, int comidaVegetal) { 
+    public int[] grow(int comidaAnimal, int comidaVegetal, boolean enCria) { 
         if (vivo) {
-            int[] comido = comer(comidaAnimal, comidaVegetal);
-            setEdad(edad+1);
-            if (this.edad == this.madurez) {
-                this.fertil = true;
+            int[] comido = comer(comidaAnimal, comidaVegetal, enCria);
+            if (enCria) {
+                if (this.alimentado) {
+                    setEdad(edad+1);
+                    if (this.edad == this.madurez) {
+                        this.fertil = true;
+                    }
+                }
+            } else {
+                setEdad(edad+1);
+                if (this.edad == this.madurez) {
+                    this.fertil = true;
+                }
+                if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5)) {
+                    setVivo(false);
+                }
+                return comido;
             }
-            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5)) {
-                setVivo(false);
-            }
-            return comido;
         }
         return new int[] {0, 0};
     }
@@ -224,11 +233,12 @@ public abstract class Pez {
     /**
      * Método abstracto que indica cuánta comida y de qué tipo consume cada pez.
      * 
-     * @param a  La comida animal que hay en el almacén
+     * @param a La comida animal que hay en el almacén
      * @param v La comida vegetal que hay en el almacén
-     * @return La cantidad de comida que come de cada tipo.
+     * @param enCria    Si el pez esta en un tanque de cria.
+     * @return  La cantidad de comida que come de cada tipo.
      */
-    protected abstract int[] comer(int a, int v);
+    protected abstract int[] comer(int a, int v, boolean enCria);
 
     /**
      * Método abstracto que devuelve un nuevo pez de su misma clase con sexo aleatorio.
