@@ -86,4 +86,23 @@ static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             ErrorWriter.writeInErrorLog("Error al intentar cerrar el helper de Reader");
         }
     }
+
+    /**
+     * Genera un menu con las opciones pertenecientes a este
+     * @param options Lineas de opcion en el menu a crear
+     * @return Devuelve la opcion escogida
+     */
+    public static int menuGenerator(String[] options){
+        try {
+            System.out.println(options[0]);
+        for (int i = 1; i<options.length; i++){
+            System.out.println(i+".-"+options[i]);
+        }
+        System.out.println("0.-Cancelar\n-----------------------");
+        return readTheNumber(0, options.length);
+        } catch (Exception e) {
+            ErrorWriter.writeInErrorLog("Error al generar un menu");
+            return 0;
+        }
+    }
 }
