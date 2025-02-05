@@ -6,6 +6,7 @@ import com.google.gson.annotations.JsonAdapter;
 import adapters.PiscifactoriaAdapter;
 import helpers.ErrorWriter;
 import helpers.LogWriter;
+import helpers.PremadeLogs;
 import helpers.Reader;
 import helpers.TranscriptWriter;
 import main.Simulador;
@@ -276,8 +277,7 @@ public class Piscifactoria {
                 ErrorWriter.writeInErrorLog("Error al intentar vender peces del tanque " + tank.getNumTanque() + " de la piscifactoría " + this.nombre);
             }
         }
-        TranscriptWriter.writeInTranscript("Vendidos "+pecesVendidos+" peces de la piscifactoría "+this.nombre+" de forma manual por "+dineroVendido+" monedas.");
-        LogWriter.writeInLog("Vendidos "+pecesVendidos+" peces de la piscifactoría "+this.nombre+" de forma manual por "+dineroVendido+" monedas.");
+        PremadeLogs.sellFish(pecesVendidos,this.nombre,dineroVendido);
         System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
         return new int[]{dineroVendido,pecesVendidos};
     }
