@@ -134,6 +134,7 @@ public class Simulador {
                 rw.mkdir();
             }
             ErrorWriter.startErrorLog();
+            //TODO DAOPedidos.prepareStatements(conn);
             int opcion = 0;
             String[] saves = Guardado.listarSaves();
             if(saves.length>0){
@@ -630,15 +631,18 @@ public class Simulador {
         }
     }
 
+    /**
+     * Submenú para mostrar los datos almacenados en la base de datos.
+     */
     private static void showData() {
         int op = -1;
         while (op != 0) {
             op = Reader.menuGenerator(new String[]{
-                "Mostrar datos de todos los clientes",
+                "Mostrar todos los clientes",
                 "Mostrar datos de un cliente",
-                "Mostrar datos de todos los peces",
+                "Mostrar todos los peces",
                 "Mostrar datos de un pez",
-                "Mostrar datos de todos los pedidos",
+                "Mostrar todos los pedidos",
                 "Mostrar datos de un pedido",
                 "Mostrar todos los pedidos de un cliente",
                 "Mostrar todos los pedidos donde se pidiesen un pez"});
