@@ -111,7 +111,7 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los clientes.
      */
-    public void getAllInfoFromClients() {
+    public static void getAllInfoFromClients() {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "Nombre", "NIF", "Teléfono"});
         if (orderBy != 0) {
@@ -131,7 +131,7 @@ public class DAOPedidos {
      * @param clientID  El ID del cliente.
      * @return  La información del cliente.
      */
-    public void getAllInfoFromClient(int clientID) {
+    public static void getAllInfoFromClient(int clientID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "Nombre", "NIF", "Teléfono"});
         if (orderBy != 0) {
@@ -151,7 +151,7 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los peces.
      */
-    public void getAllInfoFromPeces() {
+    public static void getAllInfoFromPeces() {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "Nombre común", "Nombre científico"});
         if (orderBy != 0) {
@@ -171,7 +171,7 @@ public class DAOPedidos {
      * @param pezID El ID del pez.
      * @return  La información del pez.
      */
-    public void getAllInfoFromPez(int pezID) {
+    public static void getAllInfoFromPez(int pezID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "Nombre común", "Nombre científico"});
         if (orderBy != 0) {
@@ -191,7 +191,7 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los pedidos.
      */
-    public void getAllInfoFromPedidos() {
+    public static void getAllInfoFromPedidos() {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {
@@ -211,7 +211,7 @@ public class DAOPedidos {
      * @param pedidoID  El ID del pedido.
      * @return  La información del pedido.
      */
-    public void getAllInfoFromPedido(int pedidoID) {
+    public static void getAllInfoFromPedido(int pedidoID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {
@@ -232,7 +232,7 @@ public class DAOPedidos {
      * @param clienteID  El ID del cliente.
      * @return  La información del pedido.
      */
-    public void getAllInfoFromClientePedidos(int clienteID) {
+    public static void getAllInfoFromClientePedidos(int clienteID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {

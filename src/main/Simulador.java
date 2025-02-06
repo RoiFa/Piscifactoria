@@ -21,6 +21,7 @@ import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
 import adapters.SimuladorAdapter;
+import dao.DAOPedidos;
 
 @JsonAdapter(SimuladorAdapter.class)
 public class Simulador {
@@ -182,7 +183,8 @@ public class Simulador {
         "10. Limpiar tanques\n"+
         "11. Vaciar tanque\n"+
         "12. Mejorar\n"+
-        "13. Pasar varios días");
+        "13. Pasar varios días\n"+
+        "14. Mostrar datos");
         
     }
 
@@ -620,12 +622,62 @@ public class Simulador {
     /**
      * Permite pasar entre 1 y 5 días de golpe con sus consecuencias
      */
-
     private static void forwardDays(){
         System.out.println("Indique entre 1 y 5 cuántos días desea pasar");
         int numDias = Reader.readTheNumber(1,5);
         for(int i = 0;i<numDias;i++){
             nextDay();
+        }
+    }
+
+    private static void showData() {
+        int op = -1;
+        while (op != 0) {
+            op = Reader.menuGenerator(new String[]{
+                "Mostrar datos de todos los clientes",
+                "Mostrar datos de un cliente",
+                "Mostrar datos de todos los peces",
+                "Mostrar datos de un pez",
+                "Mostrar datos de todos los pedidos",
+                "Mostrar datos de un pedido",
+                "Mostrar todos los pedidos de un cliente",
+                "Mostrar todos los pedidos donde se pidiesen un pez"});
+
+            switch (op) {
+                case 0:
+                    break;
+                case 1:
+                    DAOPedidos.getAllInfoFromClients();
+                    break;
+                case 2:
+                    System.out.println("Introduce el ID del cliente:");
+                    DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000));
+                    break;
+                case 3:
+                    DAOPedidos.getAllInfoFromPeces();
+                    break;
+                case 4:
+                    System.out.println("Introduce el ID del pez:");
+                    DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000));
+                    break;
+                case 5:
+                    DAOPedidos.getAllInfoFromPedidos();
+                    break;
+                case 6:
+                    System.out.println("Introduce el ID del pedido:");
+                    DAOPedidos.getAllInfoFromPedido(Reader.readTheNumber(1, 1000));
+                    break;
+                case 7:
+                    System.out.println("Introduce el ID del cliente:");
+                    DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000));
+                    break;
+                case 8:
+                    System.out.println("Introduce el ID del pez:");
+                    DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000));
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -683,6 +735,9 @@ public class Simulador {
                         break;
                     case 13:
                         forwardDays();
+                        break;
+                    case 14:
+                        showData();
                         break;
                     case 0:
                         System.out.println("Cerrando...");
