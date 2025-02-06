@@ -26,7 +26,15 @@ public class SalmonChinook extends Pez{
     }
 
     @Override
-    protected int[] comer(int a, int v) {
+    protected int[] comer(int a, int v, boolean enCria) {
+        if (enCria) {
+            if (a < 2) {
+                setAlimentado(false);
+                return new int[]{0,0};
+            }
+            setAlimentado(true);
+            return new int[]{2,0};
+        }
         if (a == 0) {
             setAlimentado(false);
             return new int[]{0,0};

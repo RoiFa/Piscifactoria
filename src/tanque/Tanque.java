@@ -23,17 +23,17 @@ import peces.doble.*;
 public class Tanque {
     
     /** Identifica si el tanque es de agua salada o dulce */
-    private String tipo;
+    protected String tipo;
     /** Indica el número del tanque */
-    private int numTanque;
+    protected int numTanque;
     /** Lista de peces que avitan este tanque */
     public ArrayList<Pez> peces = new ArrayList<Pez>();
     /** Capacidad maxima del tanque */
-    private int maxSize;
+    protected int maxSize;
     /** El nombre de la piscifactoría */
-    private String nomPiscifactoria;
+    protected String nomPiscifactoria;
     /** El tipo de pez que admite */
-    private String tipoPez;
+    protected String tipoPez;
 
     /** @return El tipo de tanque (mar o río) */
     public String getTipo() {
@@ -192,7 +192,7 @@ public class Tanque {
                 if(!peces.get(i).isMale()&&peces.get(i).isFertil()&&peces.get(i).isAdulto()&&hayMacho()){
                     addFish(true);
                 }
-                cants = peces.get(i).grow(carne,vegetal);
+                cants = peces.get(i).grow(carne,vegetal,false);
                 carne -= cants[0];
                 vegetal -= cants[1];
                 if (peces.get(i).getEdad() >= peces.get(i).getOptimo()) {
@@ -215,7 +215,7 @@ public class Tanque {
     }
 
     /**
-     * Comprueba si hay un macho en el tanque
+     * Comprueba si hay un macho fertil en el tanque
      * @return true o false dependiendo de si hay o no un macho
      */
     public boolean hayMacho(){
@@ -251,19 +251,15 @@ public class Tanque {
                     }else{
                         for(int i=0;i<especiesRio.length;i++){
                             if(especiesRio[i].getNombre().equals(this.tipoPez)){
-                                for(int k=0;k<peces.get(0).getHuevos();k++){
+                                if(maxSize!=ocupacion()){
                                     for(int j=0;j<especiesMar[i].getHuevos();j++){
-                                        if(maxSize!=ocupacion()){
-                                            peces.add(creadorEspecies(especiesRio[(i+1)],true));
-                                            Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
-                                        }
+                                        peces.add(creadorEspecies(especiesRio[(i+1)],true));
+                                        Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
                                     }
                                 }
                             }
                         }
                     }
-                } catch (Exception e) {
-                    ErrorWriter.writeInErrorLog("Error en la reproducción de peces.");
                 }
             }else{
                 try {
@@ -316,10 +312,11 @@ public class Tanque {
                             }
                         }
                     }
-                } catch (Exception e) {
-                    ErrorWriter.writeInErrorLog("Error al intentar añadir un pez.");
                 }
+            } catch (Exception e) {
+                ErrorWriter.writeInErrorLog("Error al intentar añadir un pez.");
             }
+        }
     }
 
     public String buscaNombre(){
@@ -358,7 +355,7 @@ public class Tanque {
     /**
      * Hace la logica para la creacion de un pez.
      * 
-     * @param opcion Posicion en el switch del pez a querer crear
+     * @param pez Tipo de pez a comprar
      * @param enReproduccion Informa si es a causa de reproduccion o por compra
      * @return Devuelve el nuevo pez
      */
