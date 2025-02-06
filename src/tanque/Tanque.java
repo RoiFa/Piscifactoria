@@ -296,7 +296,7 @@ public class Tanque {
                                 for(int i=0;i<especiesMar.length;i++){
                                     if(especiesMar[i].getNombre().equals(this.tipoPez)){
                                         if(maxSize!=ocupacion()){
-                                            peces.add(creadorEspecies(especiesMar[(i+1)],false));
+                                            peces.add(creadorEspecies(especiesMar[(i)],false));
                                         }
                                     }
                                 }
@@ -304,7 +304,7 @@ public class Tanque {
                                 for(int i=0;i<especiesRio.length;i++){
                                     if(especiesRio[i].getNombre().equals(this.tipoPez)){
                                         if(maxSize!=ocupacion()){
-                                            peces.add(creadorEspecies(especiesRio[(i+1)],false));
+                                            peces.add(creadorEspecies(especiesRio[(i)],false));
                                         }
                                     }
                                 }
@@ -312,6 +312,7 @@ public class Tanque {
                         }
                     }
                 }
+            
             } catch (Exception e) {
                 ErrorWriter.writeInErrorLog("Error al intentar añadir un pez.");
             }
