@@ -31,11 +31,18 @@ public class Langostinos {
     public static void replenish(){
         boolean replenished=false;
         for(int i=0;i<langs.size()&&replenished;i++){
+            if(i==0){
+                replenished=false;
+            }
             if (langs.get(i).getComida()!=150) {
                 if(Simulador.instancia.almacen.getVegetal()>49){
                     Simulador.instancia.almacen.setVegetal(Simulador.instancia.almacen.getVegetal()-50);
                     langs.get(i).addFood();
+                    replenished = true;
                 }
+            }
+            if(replenished&&i==langs.size()){
+                i=-1;
             }
         }
     }
