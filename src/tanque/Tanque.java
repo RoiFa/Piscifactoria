@@ -505,6 +505,7 @@ public class Tanque {
         for(int i = 0;i<maxSize;i++){
             if(peces.get(i)!=null && !peces.get(i).isVivo()){
                 peces.remove(i);
+                Simulador.instancia.granjaLang.setMuertos(Simulador.instancia.granjaLang.getMuertos()+1);
             }
         }
         PremadeLogs.tankCleaning("Limpiado",this.numTanque,this.nomPiscifactoria);

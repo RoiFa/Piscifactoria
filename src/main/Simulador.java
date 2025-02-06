@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import com.google.gson.annotations.JsonAdapter;
 
 import estadisticas.Estadisticas;
+import granjas.Fitoplacton;
+import granjas.Langostinos;
 import helpers.ErrorWriter;
 import helpers.GestorXml;
 import helpers.Guardado;
@@ -47,6 +49,10 @@ public class Simulador {
         public Estadisticas orca;
         /** El almacén de comida */
         public Almacen almacen;
+
+        public Langostinos granjaLang;
+
+        public Fitoplacton granjaFito;
         /** Las piscifactorías que hay */
         private ArrayList<Piscifactoria> piscis;
     
@@ -65,12 +71,14 @@ public class Simulador {
          * @param piscis
          */
         public Simulador(String nombre, int dia, Monedas monedas, Estadisticas estadisticas, Almacen almacen,
-                ArrayList<Piscifactoria> piscis) {
+                        Langostinos granjaLang, Fitoplacton granjaFito, ArrayList<Piscifactoria> piscis) {
             this.nombre = nombre;
             this.dia = dia;
             this.monedas = monedas;
             this.orca = estadisticas;
             this.almacen = almacen;
+            this.granjaLang = granjaLang;
+            this.granjaFito = granjaFito;
             this.piscis = piscis;
         }
     
@@ -155,7 +163,7 @@ public class Simulador {
                 String nombre = Reader.readTheLine();
                 System.out.println("Introduzca el nombre de la primera piscifactoría (río)");
                 String nomPisc = Reader.readTheLine();
-                instancia = new Simulador(nombre, 0, new Monedas(), null, new Almacen(), new ArrayList<>());
+                instancia = new Simulador(nombre, 0, new Monedas(), null, new Almacen(),new Langostinos(), new Fitoplacton(), new ArrayList<>());
                 instancia.orca = new Estadisticas(instancia.implementados);
                 instancia.piscis.add(new Piscifactoria("rio", nomPisc));
                 instancia.piscis.get(0).addFood(25,25);
@@ -574,7 +582,6 @@ public class Simulador {
      */
 
     private static void upgradePisc() {
-        //TODO opcion para comprar tanque de cria (500 monedas, 3 por piscifactoria)
         int piscifactoria = selectPisc();
         if (piscifactoria != -1) {
             int numTanques = instancia.piscis.get(piscifactoria).tanques.size();
