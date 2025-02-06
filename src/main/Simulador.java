@@ -183,7 +183,9 @@ public class Simulador {
         "10. Limpiar tanques\n"+
         "11. Vaciar tanque\n"+
         "12. Mejorar\n"+
-        "13. Pasar varios días");
+        "13. Pasar varios días\n"+
+        "14. Mostrar datos\n"+
+        "15. Reclamar Recompensa");
         
     }
 
@@ -685,13 +687,16 @@ public class Simulador {
                     case 13:
                         forwardDays();
                         break;
+                    case 14:
+                        showData();
+                        break;
+                    case 15:
+                        GestorXml.claimReward();
+                        break;
                     case 0:
                         System.out.println("Cerrando...");
                         Guardado.save();
                         System.out.println("Salida con éxito");
-                        break;
-                    case 96:
-                        GestorXml.claimReward();
                         break;
                     case 97:
                         GestorXml.randomReward();
