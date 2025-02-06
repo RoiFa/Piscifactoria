@@ -11,7 +11,6 @@ import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
-import helpers.TranscriptWriter;
 import helpers.PremadeLogs;
 import monedas.Monedas;
 import peces.Pez;
@@ -22,6 +21,7 @@ import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
 import adapters.SimuladorAdapter;
+import dao.DAOPedidos;
 
 @JsonAdapter(SimuladorAdapter.class)
 public class Simulador {
@@ -38,7 +38,7 @@ public class Simulador {
         AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
 
     /** El nombre de la entidad */
-    private static String nombre;
+    private String nombre;
         /** El día actual */
         private int dia;
         /** Las monedas */
@@ -48,7 +48,7 @@ public class Simulador {
         /** El almacén de comida */
         public Almacen almacen;
         /** Las piscifactorías que hay */
-        private static ArrayList<Piscifactoria> piscis;
+        private ArrayList<Piscifactoria> piscis;
     
         /**
          * Constructor para la carga de datos
@@ -134,6 +134,7 @@ public class Simulador {
                 rw.mkdir();
             }
             ErrorWriter.startErrorLog();
+            //TODO DAOPedidos.prepareStatements(conn);
             int opcion = 0;
             String[] saves = Guardado.listarSaves();
             if(saves.length>0){
@@ -623,12 +624,65 @@ public class Simulador {
     /**
      * Permite pasar entre 1 y 5 días de golpe con sus consecuencias
      */
-
     private static void forwardDays(){
         System.out.println("Indique entre 1 y 5 cuántos días desea pasar");
         int numDias = Reader.readTheNumber(1,5);
         for(int i = 0;i<numDias;i++){
             nextDay();
+        }
+    }
+
+    /**
+     * Submenú para mostrar los datos almacenados en la base de datos.
+     */
+    private static void showData() {
+        int op = -1;
+        while (op != 0) {
+            op = Reader.menuGenerator(new String[]{
+                "Mostrar todos los clientes",
+                "Mostrar datos de un cliente",
+                "Mostrar todos los peces",
+                "Mostrar datos de un pez",
+                "Mostrar todos los pedidos",
+                "Mostrar datos de un pedido",
+                "Mostrar todos los pedidos de un cliente",
+                "Mostrar todos los pedidos donde se pidiesen un pez"});
+
+            switch (op) {
+                case 0:
+                    break;
+                case 1:
+                    DAOPedidos.getAllInfoFromClients();
+                    break;
+                case 2:
+                    System.out.println("Introduce el ID del cliente:");
+                    DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000));
+                    break;
+                case 3:
+                    DAOPedidos.getAllInfoFromPeces();
+                    break;
+                case 4:
+                    System.out.println("Introduce el ID del pez:");
+                    DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000));
+                    break;
+                case 5:
+                    DAOPedidos.getAllInfoFromPedidos();
+                    break;
+                case 6:
+                    System.out.println("Introduce el ID del pedido:");
+                    DAOPedidos.getAllInfoFromPedido(Reader.readTheNumber(1, 1000));
+                    break;
+                case 7:
+                    System.out.println("Introduce el ID del cliente:");
+                    DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000));
+                    break;
+                case 8:
+                    System.out.println("Introduce el ID del pez:");
+                    DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000));
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -739,7 +793,7 @@ public class Simulador {
             instancia.piscis.get(opcion).tanques.get(i-1).randomFish();
             j++;
         }
-        PremadeLogs.secretFish(piscis.get(opcion).getNombre());
+        PremadeLogs.secretFish(instancia.piscis.get(opcion).getNombre());
     }
 
 }

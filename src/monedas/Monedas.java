@@ -12,21 +12,21 @@ import helpers.Reader;
 public class Monedas {
 
     /** Las cantidad de monedas disponibles */
-    private static int cantidad;
+    private int cantidad;
     
-        /**
-         * Constructor básico para el sistema de monedas
-         */
-        public Monedas() {
-            cantidad = 0;
-        }
-    
-        public static int getCantidad() {
-            return cantidad;
+    /**
+     * Constructor básico para el sistema de monedas
+     */
+    public Monedas() {
+        cantidad = 0;
     }
 
-    public static void setCantidad(int cantidad) {
-        Monedas.cantidad = cantidad;
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     /**

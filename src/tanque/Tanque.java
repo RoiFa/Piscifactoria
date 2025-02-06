@@ -258,8 +258,8 @@ public class Tanque {
                         }
                     }
                 }
-            }catch (Exception e) {
-                ErrorWriter.writeInErrorLog("Error al reproducirse el pez.");
+            } catch (Exception e) {
+                ErrorWriter.writeInErrorLog("Error en la reproducción de peces.");
             }
         }else{
             try {
