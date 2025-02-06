@@ -5,9 +5,8 @@ import com.google.gson.annotations.JsonAdapter;
 
 import adapters.PiscifactoriaAdapter;
 import helpers.ErrorWriter;
-import helpers.LogWriter;
+import helpers.PremadeLogs;
 import helpers.Reader;
-import helpers.TranscriptWriter;
 import main.Simulador;
 import tanque.Tanque;
 
@@ -264,20 +263,19 @@ public class Piscifactoria {
         int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             try{
-                for(int i=0;i<tank.peces.length;i++){
-                    if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
-                        dineroVendido += tank.peces[i].getMonedas();
+                for(int i=0;i<tank.peces.size();i++){
+                    if (tank.peces.get(i)!=null&&tank.peces.get(i).isAdulto() && tank.peces.get(i).isVivo()) {
+                        dineroVendido += tank.peces.get(i).getMonedas();
                         pecesVendidos++;
-                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.peces[i].getMonedas());
-                        tank.peces[i] = null;
+                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.peces.get(i).getMonedas());
+                        tank.peces.remove(i);
                     }
                 }
             } catch(NullPointerException e) {
                 ErrorWriter.writeInErrorLog("Error al intentar vender peces del tanque " + tank.getNumTanque() + " de la piscifactoría " + this.nombre);
             }
         }
-        TranscriptWriter.writeInTranscript("Vendidos "+pecesVendidos+" peces de la piscifactoría "+this.nombre+" de forma manual por "+dineroVendido+" monedas.");
-        LogWriter.writeInLog("Vendidos "+pecesVendidos+" peces de la piscifactoría "+this.nombre+" de forma manual por "+dineroVendido+" monedas.");
+        PremadeLogs.sellFish(pecesVendidos,this.nombre,dineroVendido);
         System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
         return new int[]{dineroVendido,pecesVendidos};
     }

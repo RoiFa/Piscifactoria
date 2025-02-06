@@ -87,7 +87,7 @@ public class GestorXml {
                 File[] files = folder.listFiles();
                 Arrays.sort(files);
                 for(int i=0,j=0;i<files.length;i++,j++){
-                    Document reward = leible(ruta+files[i].getName());
+                    Document reward = leible(ruta+"/"+files[i].getName());
                     Element root = reward.getRootElement();
                     switch (root.element("name").getText()) {
                         case "almacen_a.xml","almacen_b.xml","almacen_c.xml","almacen_d.xml":
@@ -124,7 +124,7 @@ public class GestorXml {
                             break;
                     
                         default:
-                            menu += (j+1)+". "+root.element("name").getText()+root.element("quantity").getText()+"\n";
+                            menu += (j+1)+". "+root.element("name").getText()+" Nº:"+root.element("quantity").getText()+"\n";
                             break;
                     }
                 }
@@ -145,6 +145,7 @@ public class GestorXml {
             }
         } catch (Exception e) {
             ErrorWriter.writeInErrorLog("Error al listar las recompensas");
+            e.printStackTrace();
             return -1;
         }
     }
@@ -172,6 +173,7 @@ public class GestorXml {
                     if(j==option){
                         return i;
                     }
+                    j++;
                 }
             }
             return -1;                
@@ -223,7 +225,7 @@ public class GestorXml {
                         }else{
                             System.out.println("Ya posees un almacen");
                         }
-                    }else{
+                    }else if((files.length+1)==opcion){
                         System.out.println("No tienes suficientes partes de almacen para crear uno");
                     }
                     if((files.length+2)==opcion&&(charsMar[0].equals("A")&&charsMar[1].equals("B"))){
@@ -245,7 +247,7 @@ public class GestorXml {
                                 bChar=true;
                             }
                         }
-                    }else{
+                    }else if((files.length+2)==opcion){
                         System.out.println("No tienes suficientes partes de piscifactoria de Mar para crear una");
                     }
                     if((files.length+3)==opcion&&(charsRio[0].equals("A")&&charsRio[1].equals("B"))){
@@ -267,7 +269,7 @@ public class GestorXml {
                                 bChar=true;
                             }
                         }
-                    }else{
+                    }else if((files.length+2)==opcion){
                         System.out.println("No tienes suficientes partes de piscifactoria de Rio para crear una");
                     }
                     Element give = root.element("give");
@@ -309,6 +311,7 @@ public class GestorXml {
                             TranscriptWriter.writeInTranscript("Recompensa "+root.element("name").getText()+" usada");
                             break;
                         default:
+                        System.out.println(root.element("name").getText().substring(0, 5));
                             break;
                     }
                 }
@@ -388,7 +391,7 @@ public class GestorXml {
                     if(file.getName().equals("algas_"+lvl+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
                         save(doc, "rewards/algas_"+lvl+".xml");
                         done=true;
                     }
@@ -431,7 +434,7 @@ public class GestorXml {
                     if(file.getName().equals("pienso_"+lvl+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
                         save(doc, "rewards/pienso_"+lvl+".xml");
                         done=true;
                     }
@@ -474,7 +477,7 @@ public class GestorXml {
                     if(file.getName().equals("comida_"+lvl+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
                         save(doc, "rewards/comida_"+lvl+".xml");
                         done=true;
                     }
@@ -517,7 +520,7 @@ public class GestorXml {
                     if(file.getName().equals("almacen_"+part+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
                         save(doc, "rewards/almacen_"+part+".xml");
                         done=true;
                     }
@@ -558,17 +561,17 @@ public class GestorXml {
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 for(File file : files) {
-                    if(file.getName().equals("monedas_"+lvl+"xml")&&!done){
+                    if(file.getName().equals("monedas_"+lvl+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
-                        save(doc, "rewards/monedas_"+lvl+"xml");
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
+                        save(doc, "rewards/monedas_"+lvl+".xml");
                         done=true;
                     }
                 }
                 if(!done){
                     int res = ((lvl-1)*200)+((lvl==5) ? 200 : ((lvl==4) ? 150 : 100));
-                    doc = leible("rewards/monedas_"+lvl+"xml");
+                    doc = leible("rewards/monedas_"+lvl+".xml");
                     root = doc.addElement("reward");
                     root.addElement("name").addText("Monedas "+romanNum[(lvl-1)]);
                     root.addElement("origin").addText(Simulador.instancia.getNombre());
@@ -577,7 +580,7 @@ public class GestorXml {
                     Element give = root.addElement("give");
                     give.addElement("coins").addText(String.valueOf(res));
                     root.addElement("quantity").addText("1");
-                    save(doc, "rewards/monedas_"+lvl+"xml");
+                    save(doc, "rewards/monedas_"+lvl+".xml");
                 }
                 LogWriter.writeInLog("Recompensa "+root.element("name").getText()+" creada");
             }            
@@ -606,7 +609,7 @@ public class GestorXml {
                     if(file.getName().equals("pisci_"+tipo.charAt(0)+"_"+part+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
                         save(doc, "rewards/pisci_"+tipo.charAt(0)+"_"+part+".xml");
                         done=true;
                     }
@@ -651,7 +654,7 @@ public class GestorXml {
                     if(file.getName().equals("tanque_"+type.charAt(0)+".xml")&&!done){
                         doc = leible("rewards/"+file.getName());
                         root = doc.getRootElement();
-                        root.element("quantity").setText(""+Integer.parseInt(root.element("quantity").getText())+1);
+                        root.element("quantity").setText(""+(Integer.parseInt(root.element("quantity").getText())+1));
                         save(doc, "rewards/tanque_"+type.charAt(0)+".xml");
                         done=true;
                     }

@@ -1,6 +1,7 @@
 package adapters;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -11,6 +12,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 
 import peces.Pez;
 import tanque.Tanque;
@@ -37,8 +39,9 @@ public class TanqueAdapter implements JsonSerializer<Tanque>,JsonDeserializer<Ta
         JsonObject jsonObject = json.getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonArray("peces");
         Tanque t = new Tanque();
-        t.setPeces(context.deserialize(jsonArray, Pez[].class));
-        t.setMaxSize(t.getPeces().length);
+        Type tipo = new TypeToken<ArrayList<Pez>>(){}.getType();
+        t.setPeces(context.deserialize(jsonArray, tipo));
+        t.setMaxSize(t.getPeces().size());
         t.setTipoPez(jsonObject.get("pez").getAsString());
         return t;
     }
