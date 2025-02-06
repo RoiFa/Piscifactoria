@@ -11,7 +11,6 @@ import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
-import helpers.TranscriptWriter;
 import helpers.PremadeLogs;
 import monedas.Monedas;
 import peces.Pez;
@@ -38,7 +37,7 @@ public class Simulador {
         AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
 
     /** El nombre de la entidad */
-    private static String nombre;
+    private String nombre;
         /** El día actual */
         private int dia;
         /** Las monedas */
@@ -48,7 +47,7 @@ public class Simulador {
         /** El almacén de comida */
         public Almacen almacen;
         /** Las piscifactorías que hay */
-        private static ArrayList<Piscifactoria> piscis;
+        private ArrayList<Piscifactoria> piscis;
     
         /**
          * Constructor para la carga de datos
@@ -734,7 +733,7 @@ public class Simulador {
             instancia.piscis.get(opcion).tanques.get(i-1).randomFish();
             j++;
         }
-        PremadeLogs.secretFish(piscis.get(opcion).getNombre());
+        PremadeLogs.secretFish(instancia.piscis.get(opcion).getNombre());
     }
 
 }
