@@ -27,7 +27,7 @@ public class Tanque {
     /** Indica el número del tanque */
     private int numTanque;
     /** Lista de peces que avitan este tanque */
-    public ArrayList<Pez> peces;
+    public ArrayList<Pez> peces = new ArrayList<Pez>();
     /** Capacidad maxima del tanque */
     private int maxSize;
     /** El nombre de la piscifactoría */

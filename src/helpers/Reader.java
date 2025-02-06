@@ -35,7 +35,7 @@ static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
      */
     public static int readTheNumber(int min, int max){
         boolean check = false;
-        int input = 0;
+        int input = -1;
         while (!check) {
             try {
                 input=Integer.parseInt(br.readLine());

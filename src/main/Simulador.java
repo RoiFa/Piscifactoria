@@ -7,6 +7,7 @@ import com.google.gson.annotations.JsonAdapter;
 
 import estadisticas.Estadisticas;
 import helpers.ErrorWriter;
+import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
@@ -169,21 +170,20 @@ public class Simulador {
      * Muestra el texto con las diferentes opciones a realizar 
      */
     private static void menu(){
-        Reader.menuGenerator(new String[]{
-        "Menu principal:",
-        "1. Estado general",
-        "2. Estado piscifactoría",
-        "3. Estado tanques",
-        "4. Informes",
-        "5. Ictiopedia",
-        "6. Pasar día",
-        "7. Comprar comida",
-        "8. Comprar peces",
-        "9. Vender peces",
-        "10. Limpiar tanques",
-        "11. Vaciar tanque",
-        "12. Mejorar",
-        "13. Pasar varios días"});
+        System.out.println("Menu principal:\n"+
+        "1. Estado general\n"+
+        "2. Estado piscifactoría\n"+
+        "3. Estado tanques\n"+
+        "4. Informes\n"+
+        "5. Ictiopedia\n"+
+        "6. Pasar día\n"+
+        "7. Comprar comida\n"+
+        "8. Comprar peces\n"+
+        "9. Vender peces\n"+
+        "10. Limpiar tanques\n"+
+        "11. Vaciar tanque\n"+
+        "12. Mejorar\n"+
+        "13. Pasar varios días");
         
     }
 
@@ -635,10 +635,10 @@ public class Simulador {
      */
     public static void main(String[] args) {
         init();
-        int op = 0;
+        int op = -1;
         try{
             showGeneralStatus();
-            while (op!=14) {
+            while (op!=0) {
                 menu();
                 op = Reader.readTheNumber(0,100);
 
@@ -688,6 +688,13 @@ public class Simulador {
                         System.out.println("Cerrando...");
                         Guardado.save();
                         System.out.println("Salida con éxito");
+                        break;
+                    case 96:
+                        GestorXml.claimReward();
+                        break;
+                    case 97:
+                        GestorXml.randomReward();
+                        System.out.println("Se agrego una recompensa aleatoria");
                         break;
                     case 98:
                         cheat98();
