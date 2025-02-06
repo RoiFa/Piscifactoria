@@ -52,8 +52,8 @@ public class PremadeLogs {
     
     }
 
-    public static void secretMoney(){
-        TranscriptWriter.writeInTranscript("Añadidas 1000 monedas mediante la opción oculta. Monedas actuales: "+Simulador.instancia.monedas.getCantidad());
+    public static void secretMoney(int money){
+        TranscriptWriter.writeInTranscript("Añadidas 1000 monedas mediante la opción oculta. Monedas actuales: "+money);
         LogWriter.writeInLog("Añadidas monedas mediante la opción oculta.");
     }
 
@@ -65,6 +65,11 @@ public class PremadeLogs {
     public static void sellFish(int pecesVendidos,String nombre, int dineroVendido){
         TranscriptWriter.writeInTranscript("Vendidos "+pecesVendidos+" peces de la piscifactoría "+nombre+" de forma manual por "+dineroVendido+" monedas.");
         LogWriter.writeInLog("Vendidos "+pecesVendidos+" peces de la piscifactoría "+nombre+" de forma manual por "+dineroVendido+" monedas.");
+    }
+
+    public static void manualSellFish(int ventas,String pisci,int ventas2){
+        TranscriptWriter.writeInTranscript("Vendidos "+ventas+" peces de la piscifactoría "+pisci+" de forma manual por "+ventas2+" monedas.");
+
     }
 
     public static void addedFish(String fishName,String sex,int numTanque,String nomPiscifactoria){
@@ -79,5 +84,9 @@ public class PremadeLogs {
     public static void tankCleaning(String action,int numTanque,String nomPiscifactoria){
         TranscriptWriter.writeInTranscript(action+" el tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
         LogWriter.writeInLog(action+" el tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
+    }
+
+    public static void nextDay(int dia,int totalRio,int totalMar,int dineroVendido,int monedas){
+        TranscriptWriter.writeInTranscript("Fin del día "+(dia-1)+".\nPeces actuales: "+totalRio+" de río, "+totalMar+" de mar.\n"+dineroVendido+" monedas ganadas por un total de "+monedas+".\n------------------------------\n>>>Inicio del día "+dia+".");
     }
 }

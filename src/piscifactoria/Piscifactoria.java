@@ -5,10 +5,8 @@ import com.google.gson.annotations.JsonAdapter;
 
 import adapters.PiscifactoriaAdapter;
 import helpers.ErrorWriter;
-import helpers.LogWriter;
 import helpers.PremadeLogs;
 import helpers.Reader;
-import helpers.TranscriptWriter;
 import main.Simulador;
 import tanque.Tanque;
 
@@ -265,12 +263,12 @@ public class Piscifactoria {
         int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             try{
-                for(int i=0;i<tank.peces.length;i++){
-                    if (tank.peces[i]!=null&&tank.peces[i].isAdulto() && tank.peces[i].isVivo()) {
-                        dineroVendido += tank.peces[i].getMonedas();
+                for(int i=0;i<tank.peces.size();i++){
+                    if (tank.peces.get(i)!=null&&tank.peces.get(i).isAdulto() && tank.peces.get(i).isVivo()) {
+                        dineroVendido += tank.peces.get(i).getMonedas();
                         pecesVendidos++;
-                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.peces[i].getMonedas());
-                        tank.peces[i] = null;
+                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.peces.get(i).getMonedas());
+                        tank.peces.remove(i);
                     }
                 }
             } catch(NullPointerException e) {

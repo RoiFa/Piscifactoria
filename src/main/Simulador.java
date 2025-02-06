@@ -2,7 +2,6 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.LogManager;
 
 import com.google.gson.annotations.JsonAdapter;
 
@@ -309,7 +308,7 @@ public class Simulador {
             }
         }
         System.out.println(pecesVendidos+" peces vendidos por un total de "+dineroVendido+" monedas");
-        TranscriptWriter.writeInTranscript("Fin del día "+(instancia.dia-1)+".\nPeces actuales: "+totalRio+" de río, "+totalMar+" de mar.\n"+dineroVendido+" monedas ganadas por un total de "+instancia.monedas.getCantidad()+".\n------------------------------\n>>>Inicio del día "+instancia.dia+".");
+        PremadeLogs.nextDay(instancia.dia,totalRio,totalMar,dineroVendido,instancia.monedas.getCantidad());
     }
 
     /**
@@ -402,8 +401,8 @@ public class Simulador {
         if(piscifactoria!=-1){
             int[] datosVentas=instancia.piscis.get(piscifactoria).sellFish();
             instancia.monedas.anadir(datosVentas[0]);
-            TranscriptWriter.writeInTranscript("Vendidos "+datosVentas[1]+" peces de la piscifactoría "+instancia.piscis.get(piscifactoria).getNombre()+" de forma manual por "+datosVentas[0]+" monedas.");
             System.out.println("Se han conseguido "+datosVentas[0]+" monedas por la venta de peces adultos");
+            PremadeLogs.manualSellFish(datosVentas[1],instancia.piscis.get(piscifactoria).getNombre(),datosVentas[0]);
         }
     }
 
@@ -418,7 +417,7 @@ public class Simulador {
             int option = instancia.piscis.get(piscifactoria).selectTank();
             instancia.piscis.get(piscifactoria).tanques.get(option).emptyTank();
             Tanque tanque = instancia.piscis.get(piscifactoria).tanques.get(option);
-            TranscriptWriter.writeInTranscript("Vaciando el tanque "+tanque.getNumTanque()+" de la piscifactoría "+tanque.getNomPiscifactoria());
+            PremadeLogs.tankCleaning("Vaciando", tanque.getNumTanque(), tanque.getNomPiscifactoria());
         }
     }
 
@@ -714,7 +713,7 @@ public class Simulador {
 
     public static void cheat99(){
         instancia.monedas.anadir(1000);
-        PremadeLogs.secretMoney();
+        PremadeLogs.secretMoney(Simulador.instancia.monedas.getCantidad());
     }
 
     public static void cheat98(){

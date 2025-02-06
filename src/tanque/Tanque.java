@@ -530,25 +530,25 @@ public class Tanque {
         if(tipo.equals("mar")){
             switch (RNG.RandomInt(7)) {
                 case 0:
-                    peces.get(0) = new Abadejo();
+                peces.add(new Abadejo());
                     break;
                 case 1:
-                peces.get(0) = new ArenqueDelAtlantico();
+                peces.add(new ArenqueDelAtlantico());
                     break;
                 case 2:
-                peces.get(0) = new Besugo();
+                peces.add(new Besugo());
                     break;
                 case 3:
-                peces.get(0) = new Cobia();
+                peces.add(new Cobia());
                     break;
                 case 4:
-                peces.get(0) = new Rodaballo();
+                peces.add(new Rodaballo());
                     break;
                 case 5:
-                peces.get(0) = new BagreDeCanal();
+                peces.add(new BagreDeCanal());
                     break;
                 case 6:
-                peces.get(0) = new Dorada();
+                peces.add(new Dorada());
                     break;
             
                 default:
@@ -558,25 +558,25 @@ public class Tanque {
         }else{
             switch (RNG.RandomInt(7)) {
                 case 0:
-                    peces.get(0) = new Carpa();
+                peces.add(new Carpa());
                     break;
                 case 1:
-                peces.get(0) = new Koi();
+                peces.add(new Koi());
                     break;
                 case 2:
-                peces.get(0) = new Pejerrey();
+                peces.add(new Pejerrey());
                     break;
                 case 3:
-                peces.get(0) = new SalmonChinook();
+                peces.add(new SalmonChinook());
                     break;
                 case 4:
-                peces.get(0) = new TilapiaDelNilo();
+                peces.add(new TilapiaDelNilo());
                     break;
                 case 5:
-                peces.get(0) = new BagreDeCanal();
+                peces.add(new BagreDeCanal());
                     break;
                 case 6:
-                peces.get(0) = new Dorada();
+                peces.add(new Dorada());
                     break;
             
                 default:
