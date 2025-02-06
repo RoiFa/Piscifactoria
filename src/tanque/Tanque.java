@@ -1,4 +1,6 @@
 package tanque;
+import java.util.ArrayList;
+
 import com.google.gson.annotations.JsonAdapter;
 
 import adapters.TanqueAdapter;
@@ -7,6 +9,7 @@ import helpers.LogWriter;
 import helpers.RNG;
 import helpers.Reader;
 import helpers.TranscriptWriter;
+import helpers.PremadeLogs;
 import main.Simulador;
 import peces.*;
 import peces.mar.*;
@@ -24,7 +27,7 @@ public class Tanque {
     /** Indica el número del tanque */
     protected int numTanque;
     /** Lista de peces que avitan este tanque */
-    protected Pez[] peces;
+    public ArrayList<Pez> peces = new ArrayList<Pez>();
     /** Capacidad maxima del tanque */
     protected int maxSize;
     /** El nombre de la piscifactoría */
@@ -53,7 +56,7 @@ public class Tanque {
     }
 
     /** @return La lista de peces en el tanque. */
-    public Pez[] getPeces() {
+    public ArrayList<Pez> getPeces() {
         return peces;
     }
 
@@ -79,7 +82,7 @@ public class Tanque {
     /**
      * @param peces el array con los peces
      */
-    public void setPeces(Pez[] peces) {
+    public void setPeces(ArrayList<Pez> peces) {
         this.peces = peces;
     }
 
@@ -118,11 +121,11 @@ public class Tanque {
         this.numTanque=numTanque;
         this.tipo=tipo;
         if(tipo.equals("rio")){
-            this.peces=new Pez[25];
+            this.maxSize=25;
         } else{
-            this.peces=new Pez[100];
+            this.maxSize=100;
         }
-        this.maxSize=this.peces.length;
+        
         this.nomPiscifactoria=nomPiscifactoria;
         this.tipoPez = "";
     }
@@ -150,9 +153,9 @@ public class Tanque {
      */
     public void showFishStatus(){
         if(ocupacion()!=0){
-            for(int i=0;i<peces.length;i++){
-                if(peces[i]!=null){
-                    peces[i].showStatus();
+            for(int i=0;i<peces.size();i++){
+                if(peces.get(i)!=null){
+                    peces.get(i).showStatus();
                 }
             }
         }else{
@@ -181,26 +184,26 @@ public class Tanque {
         int pecesVendidos=0;
         int dineroVendido=0;
         int[] cants;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isVivo()){
-                if(!peces[i].isFertil()&&(peces[i].getEdad()-peces[i].getMadurez())%peces[i].getCiclo()==0&&peces[i].isAdulto()){
-                    peces[i].setFertil(true);
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&peces.get(i).isVivo()){
+                if(!peces.get(i).isFertil()&&(peces.get(i).getEdad()-peces.get(i).getMadurez())%peces.get(i).getCiclo()==0&&peces.get(i).isAdulto()){
+                    peces.get(i).setFertil(true);
                 }
-                if(!peces[i].isMale()&&peces[i].isFertil()&&peces[i].isAdulto()&&hayMacho()){
+                if(!peces.get(i).isMale()&&peces.get(i).isFertil()&&peces.get(i).isAdulto()&&hayMacho()){
                     addFish(true);
                 }
-                cants = peces[i].grow(carne,vegetal, false);
+                cants = peces.get(i).grow(carne,vegetal,false);
                 carne -= cants[0];
                 vegetal -= cants[1];
-                if (peces[i].getEdad() >= peces[i].getOptimo()) {
-                    if ((peces[i] instanceof Koi) && RNG.RandomInt(10) == 1) {
-                        peces[i].setMonedas(peces[i].getMonedas()+5);
+                if (peces.get(i).getEdad() >= peces.get(i).getOptimo()) {
+                    if ((peces.get(i) instanceof Koi) && RNG.RandomInt(10) == 1) {
+                        peces.get(i).setMonedas(peces.get(i).getMonedas()+5);
                     } else {
                         pecesVendidos++;
-                        dineroVendido+=peces[i].getMonedas();
-                        Simulador.instancia.monedas.anadir(peces[i].getMonedas());
-                        Simulador.instancia.orca.registrarVenta(peces[i].getNombre(), peces[i].getMonedas());
-                        peces[i] = null;
+                        dineroVendido+=peces.get(i).getMonedas();
+                        Simulador.instancia.monedas.anadir(peces.get(i).getMonedas());
+                        Simulador.instancia.orca.registrarVenta(peces.get(i).getNombre(), peces.get(i).getMonedas());
+                        peces.remove(i);
                     }
                 }
             }
@@ -216,9 +219,11 @@ public class Tanque {
      * @return true o false dependiendo de si hay o no un macho
      */
     public boolean hayMacho(){
-        for(int i=0;i<peces.length;i++) {
-            if(peces[i]!=null&&peces[i].isMale()&&peces[i].isFertil()&&peces[i].isVivo()){
-                return true;
+        for(int i=0;i<peces.size();i++) {
+            if(peces.get(i)!=null){
+                if(peces.get(i).isMale()&&peces.get(i).isFertil()&&peces.get(i).isVivo()){
+                    return true;
+                }
             }
         }
         return false;
@@ -230,68 +235,78 @@ public class Tanque {
     public void addFish(boolean enReproduccion){
         Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
         Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
-        if(enReproduccion){
-            try {
-                if(tipo.equals("mar")){
-                    for(int i=0;i<especiesMar.length;i++){
-                        if(especiesMar[i].getNombre().equals(this.tipoPez) && peces.length!=ocupacion()){
-                            for(int j=0;j<especiesMar[i].getHuevos();j++){
-                                peces[findSpace()] = creadorEspecies(especiesMar[(i+1)],true);
-                                Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
+            if(enReproduccion){
+                try {
+                    if(tipo.equals("mar")){
+                        for(int i=0;i<especiesMar.length;i++){
+                            if(especiesMar[i].getNombre().equals(this.tipoPez)){
+                                if(maxSize!=ocupacion()){
+                                    for(int k=0;k<especiesMar[i].getHuevos();k++){
+                                        peces.add(creadorEspecies(especiesMar[(i+1)],true));
+                                        Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
+                                    }
+                                }
                             }
                         }
-                    }
-                }else{
-                    for(int i=0;i<especiesRio.length;i++){
-                        if(especiesRio[i].getNombre().equals(this.tipoPez) && peces.length != ocupacion()){
-                            for(int j=0;j<especiesRio[i].getHuevos();j++){
-                                peces[findSpace()] = creadorEspecies(especiesRio[(i+1)],true);
-                                Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
+                    }else{
+                        for(int i=0;i<especiesRio.length;i++){
+                            if(especiesRio[i].getNombre().equals(this.tipoPez)){
+                                if(maxSize!=ocupacion()){
+                                    for(int j=0;j<especiesMar[i].getHuevos();j++){
+                                        peces.add(creadorEspecies(especiesRio[(i+1)],true));
+                                        Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            } catch (Exception e) {
-                ErrorWriter.writeInErrorLog("Error en la reproducción de peces.");
-            }
-        }else{
-            try {
-                if(ocupacion()==maxSize){
-                    System.out.println("No hay espacio suficiente en este tanque");
-                }else if(ocupacion()==0){
-                    if(tipo.equals("mar")){
-                        menuEspeciesMar();
-                        peces[0] = creadorEspecies(especiesMar[(Reader.readTheNumber(1,7)-1)],false);
-                        if(peces[0]!=null){
-                            tipoPez = peces[0].getNombre();
-                            LogWriter.writeInLog(peces[0].getNombre()+" ("+((peces[0].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
+            }else{
+                try {
+                    if(ocupacion()==maxSize){
+                        System.out.println("No hay espacio suficiente en este tanque");
+                    }else if(ocupacion()==0){
+                        if(tipo.equals("mar")){
+                            int opt = Reader.menuGenerator(new String[]{"Seleccione una de estas especies a añadir:","Rodaballo","Besugo","Arenque del Atlántico","Abadejo","Cobia","Dorada","Bagre de canal"});
+                            if (opt!=0) {
+                                peces.add(creadorEspecies(especiesMar[(opt-1)],false));
+                                if(peces.get(0)!=null){
+                                    tipoPez = peces.get(0).getNombre();
+                                    PremadeLogs.addedFish(peces.get(0).getNombre(),((peces.get(0).getSexo())?"M":"F"),numTanque,nomPiscifactoria);
+                                }
+                            }
+                            
+                        }else{
+                            int opt = Reader.menuGenerator(new String[]{"Seleccione una de estas especies a añadir:","Carpa","Koi","Salmón chinook","Tilapia del Nilo","Pejerrey","Dorada","Bagre de canal"});
+                            if (opt!=0) {
+                                peces.add(creadorEspecies(especiesRio[(opt-1)],false));
+                                if(peces.get(0)!=null){
+                                    tipoPez = peces.get(0).getNombre();
+                                    PremadeLogs.addedFish(peces.get(0).getNombre(),((peces.get(0).getSexo())?"M":"F"),numTanque,nomPiscifactoria);
+                                }
+                            }
                         }
                     }else{
-                        menuEspeciesRio();
-                        peces[0] = creadorEspecies(especiesRio[(Reader.readTheNumber(1,7)-1)],false);
-                        if(peces[0]!=null){
-                            tipoPez = peces[0].getNombre();
-                            LogWriter.writeInLog(peces[0].getNombre()+" ("+((peces[0].getSexo())?"M":"F")+") comprado. Añadido al tanque "+numTanque+" de la piscifactoría "+nomPiscifactoria);
-                        }
-                    }
-                }else{
-                    int opcion = 0;
-                    while (opcion!=2) {
-                        System.out.println("Quiere añadir un "+this.tipoPez+" mas al tanque?(1.Si/2.No)");
-                        opcion = Reader.readTheNumber(1, 2);
-                        if(opcion==1){
-                            if(tipo=="mar"){
-                                for(int i=0;i<especiesMar.length;i++){
-                                    if(especiesMar[i].getNombre().equals(this.tipoPez) && peces.length!=ocupacion()){
-                                        int espacio = findSpace();
-                                        peces[espacio] = creadorEspecies(especiesMar[(i+1)],false);
+                        int opcion = 0;
+                        while (opcion!=2) {
+                            System.out.println("Quiere añadir un "+this.tipoPez+" mas al tanque?(1.Si/2.No)");
+                            opcion = Reader.readTheNumber(1, 2);
+                            if(opcion==1){
+                                if(tipo=="mar"){
+                                    for(int i=0;i<especiesMar.length;i++){
+                                        if(especiesMar[i].getNombre().equals(this.tipoPez)){
+                                            if(maxSize!=ocupacion()){
+                                                peces.add(creadorEspecies(especiesMar[(i+1)],false));
+                                            }
+                                        }
                                     }
-                                }
-                            }else{
-                                for(int i=0;i<especiesRio.length;i++){
-                                    if(especiesRio[i].getNombre().equals(this.tipoPez) && peces.length!=ocupacion()){
-                                        int espacio = findSpace();
-                                        peces[espacio] = creadorEspecies(especiesRio[(i+1)],false);
+                                }else{
+                                    for(int i=0;i<especiesRio.length;i++){
+                                        if(especiesRio[i].getNombre().equals(this.tipoPez)){
+                                            if(maxSize!=ocupacion()){
+                                                peces.add(creadorEspecies(especiesRio[(i+1)],false));
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -305,9 +320,9 @@ public class Tanque {
     }
 
     public String buscaNombre(){
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null){
-                return peces[i].getNombre();
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null){
+                return peces.get(i).getNombre();
             }
         }
         return "";
@@ -315,29 +330,11 @@ public class Tanque {
 
     /**Menu de texto para peces de Rio */
     public void menuEspeciesRio(){
-        System.out.println("Seleccione una de estas especies a añadir:");
-        System.out.println(
-        "1.-Carpa\n" +
-        "2.-Koi\n" +
-        "3.-Salmón chinook\n" +
-        "4.-Tilapia del Nilo\n" +
-        "5.-Pejerrey \n" +
-        "6.-Dorada\n" +
-        "7.-Bagre de canal\n" +
-        "0.-Cancelar");
+        
     }
     
     /**Menu de texto para peces de Mar */
     public void menuEspeciesMar(){
-        System.out.println(
-        "1.-Rodaballo\n" +
-        "2.-Besugo\n" +
-        "3.-Arenque del Atlántico\n" +
-        "4.-Abadejo\n" +
-        "5.-Cobia\n" +
-        "6.-Dorada\n" +
-        "7.-Bagre de canal\n" +
-        "0.-Cancelar");
     }
 
     /**
@@ -346,8 +343,8 @@ public class Tanque {
      */
     public int findSpace(){
         int result=-1;
-        for(int i=0;i<peces.length||result==-1;i++){
-            if(peces[i]==null){
+        for(int i=0;i<peces.size()||result==-1;i++){
+            if(peces.get(i)==null){
                 result=i;
                 break;
             }
@@ -374,8 +371,7 @@ public class Tanque {
                 } else {
                     added = pez.reprod();
                 }
-                TranscriptWriter.writeInTranscript(added.getNombre() + " (" + ((added.getSexo())?"M":"F") + ") comprado por " + added.getCoste() + " monedas. Añadido al tanque " + this.numTanque + " de la piscifactoría " + this.nomPiscifactoria);
-                LogWriter.writeInLog(added.getNombre()+" ("+ (added.getSexo() ? "M" : "H") + ") comprado por " + added.getCoste() + " monedas. Añadido al tanque " + this.numTanque + " de la piscifactoría "+this.nomPiscifactoria);
+                PremadeLogs.buyFish(added.getNombre(),((added.getSexo())?"M":"F"),added.getCoste(),this.numTanque,this.nomPiscifactoria);
                 return added;
             }
         }
@@ -389,9 +385,9 @@ public class Tanque {
     public boolean predominan(){
         int m=0;
         int w=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null){
-                if(peces[i].isMale()&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null){
+                if(peces.get(i).isMale()&&peces.get(i).isVivo()){
                     m++;
                 }else{
                     w++;
@@ -411,8 +407,8 @@ public class Tanque {
      */
     public int ocupacion(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null){
                 count++;
             }
         }
@@ -425,8 +421,8 @@ public class Tanque {
      */
     public int vivos(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&peces.get(i).isVivo()){
                 count++;
             }
         }
@@ -439,8 +435,8 @@ public class Tanque {
      */
     public int alimentados(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isAlimentado()&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&peces.get(i).isAlimentado()&&peces.get(i).isVivo()){
                 count++;
             }
         }
@@ -453,8 +449,8 @@ public class Tanque {
      */
     public int adultos(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isAdulto()&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&peces.get(i).isAdulto()&&peces.get(i).isVivo()){
                 count++;
             }
         }
@@ -467,8 +463,8 @@ public class Tanque {
      */
     public int hembras(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&!peces[i].getSexo()&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&!peces.get(i).getSexo()&&peces.get(i).isVivo()){
                 count++;
             }
         }
@@ -481,8 +477,8 @@ public class Tanque {
      */
     public int machos(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].getSexo()&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&peces.get(i).getSexo()&&peces.get(i).isVivo()){
                 count++;
             }
         }
@@ -495,8 +491,8 @@ public class Tanque {
      */
     public int fertiles(){
         int count=0;
-        for(int i=0;i<peces.length;i++){
-            if(peces[i]!=null&&peces[i].isFertil()&&peces[i].isVivo()){
+        for(int i=0;i<peces.size();i++){
+            if(peces.get(i)!=null&&peces.get(i).isFertil()&&peces.get(i).isVivo()){
                 count++;
             }
         }
@@ -507,12 +503,11 @@ public class Tanque {
      */
     public void cleanTank(){
         for(int i = 0;i<maxSize;i++){
-            if(peces[i]!=null && !peces[i].isVivo()){
-                peces[i] = null;
+            if(peces.get(i)!=null && !peces.get(i).isVivo()){
+                peces.remove(i);
             }
         }
-        TranscriptWriter.writeInTranscript("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
-        LogWriter.writeInLog("Limpiado el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
+        PremadeLogs.tankCleaning("Limpiado",this.numTanque,this.nomPiscifactoria);
     }
 
     /**
@@ -520,12 +515,11 @@ public class Tanque {
      */
     public void emptyTank(){
         for(int i = 0;i<maxSize;i++){
-            if(peces[i]!=null){
-                peces[i] = null;
+            if(peces.get(i)!=null){
+                peces.remove(i);
             }
         }
-        TranscriptWriter.writeInTranscript("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
-        LogWriter.writeInLog("Vaciando el tanque "+this.numTanque+" de la piscifactoría "+this.nomPiscifactoria);
+        PremadeLogs.tankCleaning("Vaciado",this.numTanque,this.nomPiscifactoria);
         System.out.println("El tanque se ha vaciado por completo");
     }
 
@@ -533,25 +527,25 @@ public class Tanque {
         if(tipo.equals("mar")){
             switch (RNG.RandomInt(7)) {
                 case 0:
-                    peces[0] = new Abadejo();
+                peces.add(new Abadejo());
                     break;
                 case 1:
-                peces[0] = new ArenqueDelAtlantico();
+                peces.add(new ArenqueDelAtlantico());
                     break;
                 case 2:
-                peces[0] = new Besugo();
+                peces.add(new Besugo());
                     break;
                 case 3:
-                peces[0] = new Cobia();
+                peces.add(new Cobia());
                     break;
                 case 4:
-                peces[0] = new Rodaballo();
+                peces.add(new Rodaballo());
                     break;
                 case 5:
-                peces[0] = new BagreDeCanal();
+                peces.add(new BagreDeCanal());
                     break;
                 case 6:
-                peces[0] = new Dorada();
+                peces.add(new Dorada());
                     break;
             
                 default:
@@ -561,33 +555,33 @@ public class Tanque {
         }else{
             switch (RNG.RandomInt(7)) {
                 case 0:
-                    peces[0] = new Carpa();
+                peces.add(new Carpa());
                     break;
                 case 1:
-                peces[0] = new Koi();
+                peces.add(new Koi());
                     break;
                 case 2:
-                peces[0] = new Pejerrey();
+                peces.add(new Pejerrey());
                     break;
                 case 3:
-                peces[0] = new SalmonChinook();
+                peces.add(new SalmonChinook());
                     break;
                 case 4:
-                peces[0] = new TilapiaDelNilo();
+                peces.add(new TilapiaDelNilo());
                     break;
                 case 5:
-                peces[0] = new BagreDeCanal();
+                peces.add(new BagreDeCanal());
                     break;
                 case 6:
-                peces[0] = new Dorada();
+                peces.add(new Dorada());
                     break;
             
                 default:
                     break;
             }
         }
-        if(peces[0]!=null){
-            tipoPez = peces[0].getNombre();
+        if(peces.get(0)!=null){
+            tipoPez = peces.get(0).getNombre();
         }      
     }
 
@@ -595,6 +589,6 @@ public class Tanque {
 
     @Override
     public String toString() {
-        return "Tanque de : "+tipo+" con "+peces.length+" peces de la especie "+this.tipoPez;
+        return "Tanque de : "+tipo+" con "+peces.size()+" peces de la especie "+this.tipoPez;
     }
 }
