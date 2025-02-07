@@ -14,6 +14,9 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+
+import granjas.Fitoplacton;
+import granjas.Langostinos;
 import main.Almacen;
 import main.Simulador;
 import piscifactoria.Piscifactoria;
@@ -25,6 +28,12 @@ public class GestorXml {
 
     /** Almacena las partes existentes de recompensas de almacen */
     private static String[] charsAlm = new String[]{"X","X","X","X"};
+
+    /** Almacena las partes existentes de recompensas de almacen */
+    private static String[] charsLang = new String[]{"X","X","X","X"};
+
+    /** Almacena las partes existentes de recompensas de almacen */
+    private static String[] charsFito = new String[]{"X","X","X","X"};
 
     /** Almacena las partes existentes de recompensas de Mar */
     private static String[] charsMar = new String[]{"X","X"};
@@ -81,7 +90,7 @@ public class GestorXml {
             String ruta = "rewards";
             Path path = Paths.get(ruta);
             String menu="";
-            String almacen="",pisciMar="",pisciRio="";
+            String almacen="",pisciMar="",pisciRio="",fito="",lang="";
             if(Files.exists(path, LinkOption.NOFOLLOW_LINKS)){
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
@@ -99,6 +108,30 @@ public class GestorXml {
                                 case 'B':charsAlm[1] = "B";break;
                                 case 'C':charsAlm[2] = "C";break;
                                 case 'D':charsAlm[3] = "D";break;
+                            }
+                            j--;
+                            break;
+                        case "fitoplacton_a.xml","fitoplacton_b.xml","fitoplacton_c.xml","fitoplacton_d.xml":
+                            if(fito.equals("")){
+                                fito = "Partes de la granja de Fitoplacton \n";
+                            }
+                            switch (Character.toUpperCase(root.element("name").getText().charAt(8))) {
+                                case 'A':charsFito[0] = "A";break;
+                                case 'B':charsFito[1] = "B";break;
+                                case 'C':charsFito[2] = "C";break;
+                                case 'D':charsFito[3] = "D";break;
+                            }
+                            j--;
+                            break;
+                        case "langostinos_a.xml","langostinos_b.xml","langostinos_c.xml","langostinos_d.xml":
+                            if(lang.equals("")){
+                                lang = "Partes de la granja de langostinos \n";
+                            }
+                            switch (Character.toUpperCase(root.element("name").getText().charAt(8))) {
+                                case 'A':charsLang[0] = "A";break;
+                                case 'B':charsLang[1] = "B";break;
+                                case 'C':charsLang[2] = "C";break;
+                                case 'D':charsLang[3] = "D";break;
                             }
                             j--;
                             break;
@@ -137,6 +170,12 @@ public class GestorXml {
                 if(!pisciRio.equals("")){
                     menu += (files.length+3)+pisciRio+charsRio[0]+charsRio[1]+charsRio[2]+charsRio[3]+"\n";
                 }
+                if(!fito.equals("")){
+                    menu += (files.length+4)+fito+charsFito[0]+charsFito[1]+charsFito[2]+charsFito[3]+"\n";
+                }
+                if(!lang.equals("")){
+                    menu += (files.length+5)+lang+charsLang[0]+charsLang[1]+charsLang[2]+charsLang[3]+"\n";
+                }
                 System.out.println(menu);
                 return Reader.readTheNumber(1,0);
             }else{
@@ -163,11 +202,11 @@ public class GestorXml {
                 File folder = new File(ruta);
                 File[] files = folder.listFiles();
                 Arrays.sort(files);
-                if((files.length+1)==option||(files.length+2)==option||(files.length+3)==option){
+                if((files.length+1)==option||(files.length+2)==option||(files.length+3)==option||(files.length+4)==option||(files.length+5)==option){
                     return option;
                 }
                 for(int i=0,j=0;i<files.length;i++){
-                    if(files[i].getName().substring(0, 4).equals("pisci")||files[i].getName().substring(0, 4).equals("almac")){
+                    if(files[i].getName().substring(0, 4).equals("pisc")||files[i].getName().substring(0, 4).equals("alma")||files[i].getName().substring(0, 4).equals("fito")||files[i].getName().substring(0, 4).equals("lang")){
                         j--;
                     }
                     if(j==option){
@@ -186,8 +225,7 @@ public class GestorXml {
     /**
      * Canjea la recompensa seleccionada y la otorga al jugador
      */
-    public static void claimReward(){
-        boolean aChar=false,bChar=false,cChar=false,dChar=false;
+    public static int claimReward(){
         int opcion = selectReward(listRewards());
         try {
             if(opcion!=-1){
@@ -200,33 +238,100 @@ public class GestorXml {
                     Document reward = leible(ruta+"/"+files[opcion-1].getName());
                     Element root = reward.getRootElement();
                     if((files.length+1)==opcion&&(charsAlm[0].equals("A")&&charsAlm[1].equals("B")&&charsAlm[2].equals("C")&&charsAlm[3].equals("D"))){
-                        if(Simulador.instancia.almacen!=null){
+                        if(Simulador.instancia.almacen==null){
                             Simulador.instancia.almacen = new Almacen();
                             System.out.println("Has canjeado exitosamente las partes de almacen por un almacen nuevo!");
                             TranscriptWriter.writeInTranscript("Recompensa almacen usada(ABCD)");
                             for(File file : files){
-                                if(file.getName()=="almacen_a.xml"&&!aChar){
+                                if(file.getName()=="almacen_a.xml"){
                                     deplete(file);
-                                    aChar=true;
+                                    
                                 }
-                                if(file.getName()=="almacen_b.xml"&&!bChar){
+                                if(file.getName()=="almacen_b.xml"){
                                     deplete(file);
-                                    bChar=true;
+                                    
                                 }
-                                if(file.getName()=="almacen_c.xml"&&!cChar){
+                                if(file.getName()=="almacen_c.xml"){
                                     deplete(file);
-                                    cChar=true;
+                                    
                                 }
-                                if(file.getName()=="almacen_d.xml"&&!dChar){
+                                if(file.getName()=="almacen_d.xml"){
                                     deplete(file);
-                                    dChar=true;
+                                    
                                 }
                             }
+                            return 0;
                         }else{
                             System.out.println("Ya posees un almacen");
+                            return 0;
                         }
                     }else if((files.length+1)==opcion){
                         System.out.println("No tienes suficientes partes de almacen para crear uno");
+                        return 0;
+                    }
+                    if((files.length+4)==opcion&&(charsFito[0].equals("A")&&charsFito[1].equals("B")&&charsFito[2].equals("C")&&charsFito[3].equals("D"))){
+                        if(Simulador.instancia.granjaFito==null){
+                            Simulador.instancia.granjaFito = new Fitoplacton();
+                            System.out.println("Has canjeado exitosamente las partes de la granja de Fitoplacton!");
+                            TranscriptWriter.writeInTranscript("Recompensa Fitoclacton usada(ABCD)");
+                            for(File file : files){
+                                if(file.getName()=="fitoplacton_a.xml"){
+                                    deplete(file);
+                                    
+                                }
+                                if(file.getName()=="fitoplacton_b.xml"){
+                                    deplete(file);
+                                    
+                                }
+                                if(file.getName()=="fitoplacton_c.xml"){
+                                    deplete(file);
+                                    
+                                }
+                                if(file.getName()=="fitoplacton_d.xml"){
+                                    deplete(file);
+                                    
+                                }
+                            }
+                            return 0;
+                        }else{
+                            System.out.println("Ya posees una granja de fitoplacton");
+                            return 0;
+                        }
+                    }else if((files.length+1)==opcion){
+                        System.out.println("No tienes suficientes partes de una granja para crear uno");
+                        return 0;
+                    }
+                    if((files.length+1)==opcion&&(charsLang[0].equals("A")&&charsLang[1].equals("B")&&charsLang[2].equals("C")&&charsLang[3].equals("D"))){
+                        if(Simulador.instancia.granjaLang!=null){
+                            Simulador.instancia.granjaLang = new Langostinos();
+                            System.out.println("Has canjeado exitosamente las partes de una granja de langostinos!");
+                            TranscriptWriter.writeInTranscript("Recompensa langostinos usada(ABCD)");
+                            for(File file : files){
+                                if(file.getName()=="langostinos_a.xml"){
+                                    deplete(file);
+                                    
+                                }
+                                if(file.getName()=="langostinos_b.xml"){
+                                    deplete(file);
+                                    
+                                }
+                                if(file.getName()=="langostinos_c.xml"){
+                                    deplete(file);
+                                    
+                                }
+                                if(file.getName()=="langostinos_d.xml"){
+                                    deplete(file);
+                                    
+                                }
+                            }
+                            return 0;
+                        }else{
+                            System.out.println("Ya posees un almacen");
+                            return 0;
+                        }
+                    }else if((files.length+1)==opcion){
+                        System.out.println("No tienes suficientes partes de almacen para crear uno");
+                        return 0;
                     }
                     if((files.length+2)==opcion&&(charsMar[0].equals("A")&&charsMar[1].equals("B"))){
                         ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
@@ -238,17 +343,19 @@ public class GestorXml {
                         }
                         piscis.add(new Piscifactoria("mar", name));
                         for(File file : files){
-                            if(file.getName()=="almacen_a.xml"&&!aChar){
+                            if(file.getName()=="pisci_mar_a.xml"){
                                 deplete(file);
-                                aChar=true;
+                                
                             }
-                            if(file.getName()=="almacen_b.xml"&&!bChar){
+                            if(file.getName()=="pisci_mar_b.xml"){
                                 deplete(file);
-                                bChar=true;
+                                
                             }
                         }
+                        return 0;
                     }else if((files.length+2)==opcion){
                         System.out.println("No tienes suficientes partes de piscifactoria de Mar para crear una");
+                        return 0;
                     }
                     if((files.length+3)==opcion&&(charsRio[0].equals("A")&&charsRio[1].equals("B"))){
                         ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
@@ -260,17 +367,19 @@ public class GestorXml {
                         }
                         piscis.add(new Piscifactoria("rio", name));
                         for(File file : files){
-                            if(file.getName()=="almacen_a.xml"&&!aChar){
+                            if(file.getName()=="pisci_rio_a.xml"){
                                 deplete(file);
-                                aChar=true;
+                                
                             }
-                            if(file.getName()=="almacen_b.xml"&&!bChar){
+                            if(file.getName()=="pisci_rio_b.xml"){
                                 deplete(file);
-                                bChar=true;
+                                
                             }
                         }
+                        return 0;
                     }else if((files.length+2)==opcion){
                         System.out.println("No tienes suficientes partes de piscifactoria de Rio para crear una");
+                        return 0;
                     }
                     Element give = root.element("give");
                     switch (root.element("name").getText().substring(0, 5)) {
@@ -314,11 +423,14 @@ public class GestorXml {
                         System.out.println(root.element("name").getText().substring(0, 5));
                             break;
                     }
+                    return 0;
                 }
             }
         } catch (Exception e) {
             ErrorWriter.writeInErrorLog("Error al canjear una de las recompensas");
+            return 0;
         }
+        return 0;
     }
 
     /**

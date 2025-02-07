@@ -21,8 +21,8 @@ public class TanqueLangostinos {
         if(dead!=0){
             if(descanso!=3){
                 descanso++;
-                dead--;
             }
+            dead--;
         }else if(comida>50){
             if(descanso!=3){
                 descanso++;

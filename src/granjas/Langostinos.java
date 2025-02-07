@@ -46,4 +46,11 @@ public class Langostinos {
             }
         }
     }
+
+    public static void nextDay(){
+       replenish();
+        for (TanqueLangostinos l : langs) {
+            l.nextDay();
+        }
+    }
 }
