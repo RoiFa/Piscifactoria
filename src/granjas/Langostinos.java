@@ -10,7 +10,7 @@ public class Langostinos {
 
     private static int muertos=0;
 
-    private static ArrayList<TanqueLangostinos> langs = new ArrayList<TanqueLangostinos>();
+    private static ArrayList<TanqueLangostinos> tanques = new ArrayList<TanqueLangostinos>();
 
     public static int getMuertos() {
         return muertos;
@@ -25,23 +25,23 @@ public class Langostinos {
     }
 
     public static void comprado(){
-        langs.add(new TanqueLangostinos());
+        tanques.add(new TanqueLangostinos());
     }
 
     public static void replenish(){
         boolean replenished=false;
-        for(int i=0;i<langs.size()&&replenished;i++){
+        for(int i=0;i<tanques.size()&&replenished;i++){
             if(i==0){
                 replenished=false;
             }
-            if (langs.get(i).getComida()!=150) {
+            if (tanques.get(i).getComida()!=150) {
                 if(Simulador.instancia.almacen.getVegetal()>49){
                     Simulador.instancia.almacen.setVegetal(Simulador.instancia.almacen.getVegetal()-50);
-                    langs.get(i).addFood();
+                    tanques.get(i).addFood();
                     replenished = true;
                 }
             }
-            if(replenished&&i==langs.size()){
+            if(replenished&&i==tanques.size()){
                 i=-1;
             }
         }
@@ -49,8 +49,12 @@ public class Langostinos {
 
     public static void nextDay(){
        replenish();
-        for (TanqueLangostinos l : langs) {
+        for (TanqueLangostinos l : tanques) {
             l.nextDay();
         }
+    }
+
+    public static void mejora(){
+        tanques.add(new TanqueLangostinos());
     }
 }

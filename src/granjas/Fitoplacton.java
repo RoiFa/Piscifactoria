@@ -18,7 +18,7 @@ public class Fitoplacton {
         }
     }
 
-    public static void addTanque(){
+    public static void mejora(){
         ciclo = 0;
         tanques++;
     }
@@ -34,7 +34,4 @@ public class Fitoplacton {
     public static boolean isDisponible() {
         return disponible;
     }
-
-
-
 }
