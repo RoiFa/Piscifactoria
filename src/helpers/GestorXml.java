@@ -296,7 +296,7 @@ public class GestorXml {
                             break;
                         case "Tanqu":
                             ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
-                            int pisci = Simulador.selectPisc();
+                            int pisci = Simulador.instancia.selectPisc();
                             if (give.element("building").attribute("code").getText().equals("3")&&piscis.get(pisci).getTipo().equals("rio")){
                                 piscis.get(pisci).addTank();
                                 System.out.println("Se agrego su tanque de Rio correctamente");
