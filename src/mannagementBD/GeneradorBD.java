@@ -1,4 +1,4 @@
-package generador;
+package mannagementBD;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import cliente.ClienteDTO;
 import helpers.ErrorWriter;
 import helpers.RNG;
 import main.Simulador;
