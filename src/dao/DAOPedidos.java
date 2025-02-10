@@ -29,6 +29,8 @@ public class DAOPedidos {
     private static PreparedStatement allFromPedidosFromSpecificCliente;
     /** Sentencia preparada que devuelve toda la información de todos los pedidos donde se pida un pez en específico. */
     private static PreparedStatement allFromPedidosFromSpecificPez;
+    /** Sentencia preparada para entregar peces a un pedido */
+    private static PreparedStatement deliverFish;
 
     /**
      * Prepara todas las sentencias con comodines para facilitar su uso.
@@ -101,6 +103,10 @@ public class DAOPedidos {
                 "ORDER BY ? DESC"
             );
 
+            deliverFish = conn.prepareStatement(
+                "UPDATE pedido SET enviados = enviados + ? WHERE id = ?"
+            );
+
         } catch (SQLException e) {
             ErrorWriter.writeInErrorLog("Error al preparar las sentencias SQL.");
         }
@@ -111,7 +117,7 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los clientes.
      */
-    public static void getAllInfoFromClients() {
+    public static ResultSet getAllInfoFromClients() {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre", "NIF", "Teléfono"});
         if (orderBy != 0) {
@@ -121,8 +127,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -131,7 +137,7 @@ public class DAOPedidos {
      * @param clientID  El ID del cliente.
      * @return  La información del cliente.
      */
-    public static void getAllInfoFromClient(int clientID) {
+    public static ResultSet getAllInfoFromClient(int clientID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre", "NIF", "Teléfono"});
         if (orderBy != 0) {
@@ -142,8 +148,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -151,7 +157,7 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los peces.
      */
-    public static void getAllInfoFromPeces() {
+    public static ResultSet getAllInfoFromPeces() {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre común", "Nombre científico"});
         if (orderBy != 0) {
@@ -161,8 +167,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -171,7 +177,7 @@ public class DAOPedidos {
      * @param pezID El ID del pez.
      * @return  La información del pez.
      */
-    public static void getAllInfoFromPez(int pezID) {
+    public static ResultSet getAllInfoFromPez(int pezID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre común", "Nombre científico"});
         if (orderBy != 0) {
@@ -182,8 +188,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -191,7 +197,7 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los pedidos.
      */
-    public static void getAllInfoFromPedidos() {
+    public static ResultSet getAllInfoFromPedidos() {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {
@@ -201,8 +207,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -211,7 +217,7 @@ public class DAOPedidos {
      * @param pedidoID  El ID del pedido.
      * @return  La información del pedido.
      */
-    public static void getAllInfoFromPedido(int pedidoID) {
+    public static ResultSet getAllInfoFromPedido(int pedidoID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {
@@ -222,8 +228,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -232,7 +238,7 @@ public class DAOPedidos {
      * @param clienteID  El ID del cliente.
      * @return  La información del pedido.
      */
-    public static void getAllInfoFromClientePedidos(int clienteID) {
+    public static ResultSet getAllInfoFromClientePedidos(int clienteID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {
@@ -243,8 +249,8 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
         }
+        return result;
     }
 
     /**
@@ -253,7 +259,7 @@ public class DAOPedidos {
      * @param pezID  El ID del pez.
      * @return  La información del pedido.
      */
-    public static void getAllInfoFromPezPedidos(int pezID) {
+    public static ResultSet getAllInfoFromPezPedidos(int pezID) {
         ResultSet result = null;
         int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
         if (orderBy != 0) {
@@ -264,7 +270,40 @@ public class DAOPedidos {
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
-            showTable(result);
+        }
+        return result;
+    }
+
+    /**
+     * Comprueba la cantidad de peces necesarios para completar un pedido.
+     * 
+     * @param idPedido  El ID del pedido
+     * @return  El número de peces necesarios para completar el pedido
+     */
+    public static int checkCantidad(int idPedido) {
+        ResultSet pedido = getAllInfoFromPedido(idPedido);
+        try {
+            pedido.next();
+            return pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
+        } catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error en la comprobación de cantidad de peces necesarios apra un pedido");
+        }
+        return -1;
+    }
+
+    /**
+     * Añade peces a un pedido.
+     * 
+     * @param idPedido
+     * @param fishCount
+     */
+    public static void deliverFish(int idPedido, int fishCount) {
+        try {
+            deliverFish.setInt(1, fishCount);
+            deliverFish.setInt(2, idPedido);
+            deliverFish.execute();
+        } catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error al entregar peces a un pedido");
         }
     }
 
@@ -273,7 +312,7 @@ public class DAOPedidos {
      * 
      * @param res   El resultado de la sentencia.
      */
-    private static void showTable(ResultSet res) {
+    public static void showTable(ResultSet res) {
         ResultSetMetaData resMD = null;
         String[] colNames = null;
         String[][] resArray = null;

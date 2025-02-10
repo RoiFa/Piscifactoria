@@ -1,9 +1,10 @@
 package tanque.subtanque;
 
+import java.util.ArrayList;
+
 import helpers.ErrorWriter;
-import helpers.LogWriter;
+import helpers.PremadeLogs;
 import helpers.Reader;
-import helpers.TranscriptWriter;
 import main.Simulador;
 import peces.Pez;
 import peces.doble.BagreDeCanal;
@@ -18,6 +19,7 @@ import peces.rio.Koi;
 import peces.rio.Pejerrey;
 import peces.rio.SalmonChinook;
 import peces.rio.TilapiaDelNilo;
+import piscifactoria.Piscifactoria;
 import tanque.Tanque;
 
 public class TanqueCria extends Tanque{
@@ -58,25 +60,24 @@ public class TanqueCria extends Tanque{
 
     @Override
     public void addFish(boolean enReproduccion) {
-        //TODO cambiar para que lleve las crias a otro tanque.
         Pez[] especiesMar = {new Rodaballo(),new Besugo(),new ArenqueDelAtlantico(),new Abadejo(),new Cobia(), new Dorada(),new BagreDeCanal()};
         Pez[] especiesRio = {new Carpa(),new Koi(),new SalmonChinook(),new TilapiaDelNilo(), new Pejerrey(), new Dorada(),new BagreDeCanal()};
         if (enReproduccion) {
             try {
                 if(tipo.equals("mar")){
                     for(int i=0;i<especiesMar.length;i++){
-                        if(especiesMar[i].getNombre().equals(this.tipoPez) && peces.length!=ocupacion()){
+                        if(especiesMar[i].getNombre().equals(this.tipoPez) && peces.size()!=ocupacion()){
                             for(int j=0;j<especiesMar[i].getHuevos()*2;j++){
-                                peces[findSpace()] = creadorEspecies(especiesMar[(i+1)],true);
+                                peces.set(findSpace(), creadorEspecies(especiesMar[(i+1)],true));
                                 Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
                             }
                         }
                     }
                 }else{
                     for(int i=0;i<especiesRio.length;i++){
-                        if(especiesRio[i].getNombre().equals(this.tipoPez) && peces.length != ocupacion()){
+                        if(especiesRio[i].getNombre().equals(this.tipoPez) && peces.size() != ocupacion()){
                             for(int j=0;j<especiesRio[i].getHuevos()*2;j++){
-                                peces[findSpace()] = creadorEspecies(especiesRio[(i+1)],true);
+                                peces.set(findSpace(), creadorEspecies(especiesRio[(i+1)],true));
                                 Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
                             }
                         }
@@ -99,13 +100,27 @@ public class TanqueCria extends Tanque{
     @Override
     public Pez creadorEspecies(Pez pez, boolean enReproduccion) {
         if (enReproduccion) {
-            
+            ArrayList<Piscifactoria> piscis = Simulador.instancia.getPiscis();
+            ArrayList<Tanque> tanques = null;
+            for (Piscifactoria pisci : piscis) {
+                if (pisci.getNombre().equals(this.nomPiscifactoria)) {
+                    tanques = pisci.getTanques();
+                }
+            }
+
+            for (Tanque tanque : tanques) {
+                if (tanque != null && tanque.ocupacion() > 0 && tanque.getTipoPez().equals(pez.getNombre())) {
+                    ArrayList<Pez> newPeces = tanque.getPeces();
+                    newPeces.add(pez);
+                    tanque.setPeces(newPeces);
+                    break;
+                }
+            }
         } else {
             if(Simulador.instancia.monedas.comprar(pez.getCoste()*2)){
-                this.peces[0] = pez.reprod();
-                this.peces[1] = pez.reprod(!predominan());
-                TranscriptWriter.writeInTranscript("Dos " + this.peces[0].getNombre() + " (M y F) comprados por " + this.peces[0].getCoste()*2 + " monedas. Añadido al tanque de cría " + this.numTanque + " de la piscifactoría " + this.nomPiscifactoria);
-                LogWriter.writeInLog(this.peces[0].getNombre()+" (M y F) comprado por " + this.peces[0].getCoste() + " monedas. Añadido al tanque de cría " + this.numTanque + " de la piscifactoría "+this.nomPiscifactoria);
+                this.peces.set(0, pez.reprod());
+                this.peces.set(1, pez.reprod(!predominan()));
+                PremadeLogs.buyTwoFish(pez.getNombre(), pez.getCoste()*2, numTanque, nomPiscifactoria);
             }
         }
         return null;
@@ -140,7 +155,7 @@ public class TanqueCria extends Tanque{
         if (ocupacion() != 0) {
             System.out.println(
                 "Tipo de pez: " + this.tipoPez + "\n" +
-                "Días hasta la siguiente reproducción: " + (peces[0].getEdad()-peces[0].getMadurez()%peces[0].getCiclo())
+                "Días hasta la siguiente reproducción: " + (peces.get(0).getEdad()-peces.get(0).getMadurez()%peces.get(0).getCiclo())
             );
         } else {
             System.out.println("Este tanque de cría está vacío.");
@@ -152,13 +167,13 @@ public class TanqueCria extends Tanque{
         System.out.println("Estás seguro de querer vaciar este tanque de cría? (1.-Si/2.-No)");
         if (Reader.readTheNumber(1, 2) == 1) {
             System.out.println("Vaciando tanque de cría...");
-            for (int i = 0; i < peces.length; i++) {
-                if (peces[i] != null) {
-                    peces[i] = null;
+            for (int i = 0; i < peces.size(); i++) {
+                if (peces.get(i) != null) {
+                    peces.set(i, null);
                 }
             }
             this.tipoPez = null;
-            //TODO log y transcript
+            PremadeLogs.tankCleaning("Vaciado", numTanque, nomPiscifactoria);
             System.out.println("Tanque de cría vaciado.");
         } else {
             System.out.println("Cancelado.");

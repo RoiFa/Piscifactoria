@@ -126,6 +126,14 @@ public class PremadeLogs {
     }
 
     /**
+     * Genera lineas en Log y Transcripciones cuando se compra un pez
+     */
+    public static void buyTwoFish(String fishName,int added,int numTanque,String nomPiscifactoria){
+        TranscriptWriter.writeInTranscript("Dos " +fishName + " (M y F) comprados por " + added + " monedas. Añadido al tanque de cría " + numTanque + " de la piscifactoría " + nomPiscifactoria);
+        LogWriter.writeInLog("Dos " +fishName+" (M y F) comprados por " + added + " monedas. Añadido al tanque de cría " + numTanque + " de la piscifactoría "+nomPiscifactoria);
+    }
+
+    /**
      * Genera lineas en Log y Transcripciones cuando se limpia o vacia un tanque
      */
     public static void tankCleaning(String action,int numTanque,String nomPiscifactoria){
