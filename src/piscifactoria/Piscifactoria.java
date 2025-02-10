@@ -8,6 +8,7 @@ import helpers.ErrorWriter;
 import helpers.PremadeLogs;
 import helpers.Reader;
 import main.Simulador;
+import peces.Pez;
 import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
@@ -278,6 +279,33 @@ public class Piscifactoria {
         PremadeLogs.sellFish(pecesVendidos,this.nombre,dineroVendido);
         System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
         return new int[]{dineroVendido,pecesVendidos};
+    }
+
+    /**
+     * Metodo que retira peces para su venta en un pedido de cliente
+     * @param fishName Nombre del pez a retirar
+     * @param maxAmount Maxima cantidad de peces a retirar
+     * @return Numero de peces retirados
+     */
+    public int sendFish(String fishName,int maxAmount){
+        int counter = 0;
+        if (maxAmount!=-1) {
+            System.out.println("Seleccione un tanque para retirar los peces de este pedido");
+            int option = selectTank();
+            if(tanques.get(option).getTipoPez().equals(fishName)){
+                ArrayList<Pez> tanq = tanques.get(option).getPeces();
+                for (Pez pez : tanq) {
+                    if (pez.isAdulto()&&maxAmount!=counter) {
+                        tanq.remove(pez);
+                        tanques.get(option).setPeces(tanq);
+                        counter++;
+                    }
+                }
+            }else{
+                System.out.println("El tanque seleccionado no posee el tipo de peces requeridos");
+            }
+        }
+        return counter;
     }
 
     /**
