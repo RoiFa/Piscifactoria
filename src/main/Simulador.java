@@ -1,6 +1,7 @@
 package main;
 
 import java.io.File;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import com.google.gson.annotations.JsonAdapter;
@@ -49,7 +50,9 @@ public class Simulador {
         public Almacen almacen;
         /** Las piscifactorías que hay */
         private ArrayList<Piscifactoria> piscis;
-    
+        /** */
+        public static transient Connection conn;
+
         /**
          * Constructor para la carga de datos
          */
