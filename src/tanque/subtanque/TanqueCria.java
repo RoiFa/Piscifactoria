@@ -20,6 +20,7 @@ import peces.rio.SalmonChinook;
 import peces.rio.TilapiaDelNilo;
 import tanque.Tanque;
 
+/** 
 public class TanqueCria extends Tanque{
     
     public TanqueCria(int numTanqueCria, String tipo, String nomPiscifactoria, String tipoPez) {
@@ -43,9 +44,7 @@ public class TanqueCria extends Tanque{
         
     }
 
-    /**
-     * Comprueba si hay un macho fertil y alimentado en el tanque de cria
-     */
+    
     @Override
     public boolean hayMacho() {
         for(Pez pez : this.peces) {
@@ -165,3 +164,4 @@ public class TanqueCria extends Tanque{
         }
     }
 }
+    */
