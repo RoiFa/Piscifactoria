@@ -48,7 +48,7 @@ public class PiscifactoriaAdapter implements JsonSerializer<Piscifactoria>,JsonD
         for(int i = 0;i<p.tanques.size();i++){
             p.tanques.get(i).setNomPiscifactoria(p.getNombre());
             p.tanques.get(i).setNumTanque(i+1);
-            p.tanques.get(i).setMaxSize(p.tanques.get(i).peces.size());
+            p.tanques.get(i).setMaxSize(p.tanques.get(i).getPeces().size());
             p.tanques.get(i).setTipo(p.getTipo());
         }
         return p;

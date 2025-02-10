@@ -264,12 +264,14 @@ public class Piscifactoria {
         int pecesVendidos = 0;
         for (Tanque tank : tanques) {
             try{
-                for(int i=0;i<tank.peces.size();i++){
-                    if (tank.peces.get(i)!=null&&tank.peces.get(i).isAdulto() && tank.peces.get(i).isVivo()) {
-                        dineroVendido += tank.peces.get(i).getMonedas();
+                for(int i=0;i<tank.getPeces().size();i++){
+                    if (tank.getPeces().get(i)!=null&&tank.getPeces().get(i).isAdulto() && tank.getPeces().get(i).isVivo()) {
+                        dineroVendido += tank.getPeces().get(i).getMonedas();
                         pecesVendidos++;
-                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.peces.get(i).getMonedas());
-                        tank.peces.remove(i);
+                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.getPeces().get(i).getMonedas());
+                        ArrayList<Pez> newPeces = tank.getPeces();
+                        newPeces.remove(i);
+                        tank.setPeces(newPeces);
                     }
                 }
             } catch(NullPointerException e) {

@@ -641,6 +641,7 @@ public class Simulador {
         int op = -1;
         while (op != 0) {
             op = Reader.menuGenerator(new String[]{
+                "Datos a mostrar:",
                 "Mostrar todos los clientes",
                 "Mostrar datos de un cliente",
                 "Mostrar todos los peces",
@@ -654,33 +655,33 @@ public class Simulador {
                 case 0:
                     break;
                 case 1:
-                    DAOPedidos.getAllInfoFromClients();
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClients());
                     break;
                 case 2:
                     System.out.println("Introduce el ID del cliente:");
-                    DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000)));
                     break;
                 case 3:
-                    DAOPedidos.getAllInfoFromPeces();
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPeces());
                     break;
                 case 4:
                     System.out.println("Introduce el ID del pez:");
-                    DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000)));
                     break;
                 case 5:
-                    DAOPedidos.getAllInfoFromPedidos();
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedidos());
                     break;
                 case 6:
                     System.out.println("Introduce el ID del pedido:");
-                    DAOPedidos.getAllInfoFromPedido(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedido(Reader.readTheNumber(1, 1000)));
                     break;
                 case 7:
                     System.out.println("Introduce el ID del cliente:");
-                    DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000)));
                     break;
                 case 8:
                     System.out.println("Introduce el ID del pez:");
-                    DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000)));
                     break;
                 default:
                     break;
