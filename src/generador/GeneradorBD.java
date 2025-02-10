@@ -126,7 +126,7 @@ public class GeneradorBD {
     /**
      * Inserta los datos de los peces en la base de datos
      */
-    public static void insertarPeces(String[] nomPeces){
+    public static void insertarPeces(){
 
         PreparedStatement ps = null;
         Statement st = null;
@@ -146,10 +146,17 @@ public class GeneradorBD {
                         comprobar.add(rs.getString("nombre"));
                     }
                 }
+                String[] nomPeces = {AlmacenPropiedades.ABADEJO.getNombre(),AlmacenPropiedades.ARENQUE_ATLANTICO.getNombre(),AlmacenPropiedades.BAGRE_CANAL.getNombre(),
+                                    AlmacenPropiedades.BESUGO.getNombre(),AlmacenPropiedades.CARPA.getNombre(),AlmacenPropiedades.COBIA.getNombre(),
+                                    AlmacenPropiedades.DORADA.getNombre(),AlmacenPropiedades.KOI.getNombre(),AlmacenPropiedades.PEJERREY.getNombre(),
+                                    AlmacenPropiedades.RODABALLO.getNombre(),AlmacenPropiedades.SALMON_CHINOOK.getNombre(),AlmacenPropiedades.TILAPIA_NILO.getNombre()};
+
                 String[] nomCien = {AlmacenPropiedades.ABADEJO.getCientifico(),AlmacenPropiedades.ARENQUE_ATLANTICO.getCientifico(),AlmacenPropiedades.BAGRE_CANAL.getCientifico(),
                                     AlmacenPropiedades.BESUGO.getCientifico(),AlmacenPropiedades.CARPA.getCientifico(),AlmacenPropiedades.COBIA.getCientifico(),
                                     AlmacenPropiedades.DORADA.getCientifico(),AlmacenPropiedades.KOI.getCientifico(),AlmacenPropiedades.PEJERREY.getCientifico(),
                                     AlmacenPropiedades.RODABALLO.getCientifico(),AlmacenPropiedades.SALMON_CHINOOK.getCientifico(),AlmacenPropiedades.TILAPIA_NILO.getCientifico()};
+
+
                 for(int i = 0;i<nomPeces.length;i++){
                     if(comprobar.isEmpty() || !comprobar.contains(nomPeces[i])){
                         ps.setString(1, nomPeces[i]);

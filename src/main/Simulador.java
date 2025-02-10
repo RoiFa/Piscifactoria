@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.google.gson.annotations.JsonAdapter;
 
 import estadisticas.Estadisticas;
+import generador.GeneradorBD;
 import helpers.ErrorWriter;
 import helpers.GestorXml;
 import helpers.Guardado;
@@ -21,6 +22,8 @@ import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
 import adapters.SimuladorAdapter;
+import conexion.Conexion;
+
 import java.sql.Connection;
 import dao.DAOPedidos;
 
@@ -136,6 +139,10 @@ public class Simulador {
             if(!rw.exists()){
                 rw.mkdir();
             }
+            conn = Conexion.getConect();
+            GeneradorBD.generarTablas();
+            GeneradorBD.anadirClientes();
+            GeneradorBD.insertarPeces();
             ErrorWriter.startErrorLog();
             DAOPedidos.prepareStatements(conn);
             int opcion = 0;
@@ -312,6 +319,9 @@ public class Simulador {
             }else{
                 totalRio += p.getTotalAlive();
             }
+        }
+        if(instancia.dia%10==0){
+            GeneradorBD.anadirPedido();
         }
         System.out.println(pecesVendidos+" peces vendidos por un total de "+dineroVendido+" monedas");
         PremadeLogs.nextDay(instancia.dia,totalRio,totalMar,dineroVendido,instancia.monedas.getCantidad());
