@@ -714,7 +714,7 @@ public class Simulador {
     }
 
     /**
-     * 
+     * Entrega peces a un pedido especificado.
      */
     public static void resPedido() {
         int idPedido = selectPedido();
