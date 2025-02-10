@@ -21,6 +21,7 @@ import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
 import adapters.SimuladorAdapter;
+import java.sql.Connection;
 import dao.DAOPedidos;
 
 @JsonAdapter(SimuladorAdapter.class)
@@ -49,6 +50,8 @@ public class Simulador {
         public Almacen almacen;
         /** Las piscifactorías que hay */
         private ArrayList<Piscifactoria> piscis;
+        /**  */
+        public static Connection conn;
     
         /**
          * Constructor para la carga de datos
@@ -134,7 +137,7 @@ public class Simulador {
                 rw.mkdir();
             }
             ErrorWriter.startErrorLog();
-            //TODO DAOPedidos.prepareStatements(conn);
+            DAOPedidos.prepareStatements(conn);
             int opcion = 0;
             String[] saves = Guardado.listarSaves();
             if(saves.length>0){
