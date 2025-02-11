@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import com.google.gson.annotations.JsonAdapter;
 
 import estadisticas.Estadisticas;
-import generador.GeneradorBD;
 import helpers.ErrorWriter;
 import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
+import mannagementBD.Conexion;
+import mannagementBD.GeneradorBD;
 import helpers.PremadeLogs;
 import monedas.Monedas;
 import peces.Pez;
@@ -22,7 +23,6 @@ import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
 import adapters.SimuladorAdapter;
-import conexion.Conexion;
 
 import java.sql.Connection;
 import dao.DAOPedidos;
