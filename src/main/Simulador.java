@@ -193,7 +193,8 @@ public class Simulador {
         "12. Mejorar\n"+
         "13. Pasar varios días\n"+
         "14. Mostrar datos\n"+
-        "15. Reclamar Recompensa");
+        "15. Entregar peces\n"+
+        "16. Reclamar Recompensa");
         
     }
 
@@ -793,6 +794,9 @@ public class Simulador {
                         showData();
                         break;
                     case 15:
+                        resPedido();
+                        break;
+                    case 16:
                         GestorXml.claimReward();
                         break;
                     case 0:
