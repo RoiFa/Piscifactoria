@@ -21,7 +21,7 @@ public class GeneradorBD {
         Statement stm = null;
 
         try{
-            stm = Simulador.instancia.conn.createStatement();
+            stm = Simulador.conn.createStatement();
 
             stm.execute("CREATE TABLE IF NOT EXISTS cliente ( "+
                         "id INTEGER AUTO_INCREMENT PRIMARY KEY,"+

@@ -39,10 +39,10 @@ public class DAOPedidos {
      */
     public static void prepareStatements(Connection conn) {
         try {
-            allFromClientes = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente ORDER BY ? DESC");
-            allFromSpecificCliente = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente WHERE id = ? ORDER BY ? DESC");
-            allFromPeces = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez");
-            allFromSpecificPez = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez WHERE id = ? ORDER BY ? DESC");
+            allFromClientes = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            allFromSpecificCliente = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente WHERE id = ? ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            allFromPeces = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            allFromSpecificPez = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez WHERE id = ? ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             allFromPedidos = conn.prepareStatement(
                 "SELECT " +
                     "pedido.id AS 'ID', " +
@@ -55,7 +55,8 @@ public class DAOPedidos {
                 "FROM pedido " +
                 "JOIN cliente ON pedido.cliente_id = cliente.id " +
                 "JOIN pez ON pedido.pez_id = pez.id " +
-                "ORDER BY ? DESC"
+                "ORDER BY ?",
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE
             );
             allFromSpecificPedido = conn.prepareStatement(
                 "SELECT " +
@@ -70,7 +71,8 @@ public class DAOPedidos {
                 "JOIN cliente ON pedido.cliente_id = cliente.id " +
                 "JOIN pez ON pedido.pez_id = pez.id " +
                 "WHERE pedido.id = ? " +
-                "ORDER BY ? DESC"
+                "ORDER BY ?",
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE
             );
             allFromPedidosFromSpecificCliente = conn.prepareStatement(
                 "SELECT " +
@@ -85,7 +87,8 @@ public class DAOPedidos {
                 "JOIN cliente ON pedido.cliente_id = cliente.id " +
                 "JOIN pez ON pedido.pez_id = pez.id " +
                 "WHERE cliente.id = ? " +
-                "ORDER BY ? DESC"
+                "ORDER BY ?",
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE
             );
             allFromPedidosFromSpecificPez = conn.prepareStatement(
                 "SELECT " +
@@ -100,7 +103,8 @@ public class DAOPedidos {
                 "JOIN cliente ON pedido.cliente_id = cliente.id " +
                 "JOIN pez ON pedido.pez_id = pez.id " +
                 "WHERE pez.id = ? " +
-                "ORDER BY ? DESC"
+                "ORDER BY ?",
+                ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE
             );
 
             deliverFish = conn.prepareStatement(
@@ -321,12 +325,13 @@ public class DAOPedidos {
             if (res.last()) {
                 rows = res.getRow();
             }
+            res.beforeFirst();
             resMD = res.getMetaData();
             colNames = new String[resMD.getColumnCount()];
             for (int i = 0; i < colNames.length; i++) {
                 colNames[i] = resMD.getColumnName(i+1);
             }
-            resArray = new String[rows-1][colNames.length];
+            resArray = new String[rows][colNames.length];
 
             int i = 0;
             while(res.next()) {

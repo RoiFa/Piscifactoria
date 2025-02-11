@@ -736,7 +736,7 @@ public class Simulador {
             
             try {
                 pedido.next();
-                tipoPez = pedido.getString("Tipo de pez");
+                tipoPez = pedido.getString("Tipo de pez").toString();
                 pezCount = pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al intentar recoger datos de un pedido.");
@@ -757,9 +757,9 @@ public class Simulador {
     public static void main(String[] args) {
         init();
         int op = -1;
-        try{
-            showGeneralStatus();
-            while (op!=0) {
+        showGeneralStatus();
+        while (op!=0) {
+            try {
                 menu();
                 op = Reader.readTheNumber(0,100);
 
@@ -833,16 +833,15 @@ public class Simulador {
                     System.out.println("Opción no valida");
                         break;
                 }
+            }catch(Exception e){
+                ErrorWriter.writeInErrorLog("Error general en la simulación.");
+                e.printStackTrace();
             }
-
-        }catch(Exception e){
-            ErrorWriter.writeInErrorLog("Error general en la simulación.");            
-        } finally{
-            Reader.closer();
-            Guardado.close();
-            LogWriter.closeLog();
-            ErrorWriter.closeErrorLog();
         }
+        Reader.closer();
+        Guardado.close();
+        LogWriter.closeLog();
+        ErrorWriter.closeErrorLog();
     }
 
     public static void cheat99(){
