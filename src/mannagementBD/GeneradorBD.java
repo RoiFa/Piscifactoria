@@ -201,7 +201,7 @@ public class GeneradorBD {
 
         try{
             st = Simulador.conn.createStatement();
-            st.execute("INSERT INTO pedido (cliente_id,pez_id,cantidad) VALUES ("+(RNG.RandomInt(10)+1)+","+(RNG.RandomInt(12)+1)+","+(RNG.RandomInt(50)+10)+",0)");
+            st.execute("INSERT INTO pedido (cliente_id,pez_id,cantidad) VALUES ("+(RNG.RandomInt(10)+1)+","+(RNG.RandomInt(12)+1)+","+(RNG.RandomInt(50)+10)+")");
 
         } catch(SQLException e){
             ErrorWriter.writeInErrorLog("Error al insertar un nuevo pedido");
