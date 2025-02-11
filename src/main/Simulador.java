@@ -722,17 +722,21 @@ public class Simulador {
         ResultSet pedido = DAOPedidos.getAllInfoFromPedido(idPedido);
         String tipoPez = "";
         int pezCount = 0;
-        try {
-            pedido.next();
-            tipoPez = pedido.getString("Tipo de pez");
-            pezCount = pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
-        } catch (SQLException e) {
-            ErrorWriter.writeInErrorLog("Error al intentar recoger datos de un pedido.");
-        }
-        int pisci = instancia.selectPisc();
-        int retirados = instancia.getPiscis().get(pisci).sendFish(tipoPez, pezCount);
+        if (idPedido != 0) {
+            try {
+                pedido.next();
+                tipoPez = pedido.getString("Tipo de pez");
+                pezCount = pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
+            } catch (SQLException e) {
+                ErrorWriter.writeInErrorLog("Error al intentar recoger datos de un pedido.");
+            }
+            int pisci = instancia.selectPisc();
+            int retirados = instancia.getPiscis().get(pisci).sendFish(tipoPez, pezCount);
 
-        DAOPedidos.deliverFish(idPedido, retirados);
+            DAOPedidos.deliverFish(idPedido, retirados);
+        } else {
+            System.out.println("Cancelando...");
+        }
     }
 
     /**
