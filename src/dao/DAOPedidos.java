@@ -86,7 +86,7 @@ public class DAOPedidos {
                 "FROM pedido " +
                 "JOIN cliente ON pedido.cliente_id = cliente.id " +
                 "JOIN pez ON pedido.pez_id = pez.id " +
-                "WHERE cliente.id = ? " +
+                "WHERE pedido.cliente_id = ? " +
                 "ORDER BY ?",
                 ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE
             );
@@ -249,7 +249,7 @@ public class DAOPedidos {
             try {
                 allFromPedidosFromSpecificCliente.setInt(1, clienteID);
                 allFromPedidosFromSpecificCliente.setInt(2, orderBy);
-                result = allFromSpecificPedido.executeQuery();
+                result = allFromPedidosFromSpecificCliente.executeQuery();
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }
@@ -270,7 +270,7 @@ public class DAOPedidos {
             try {
                 allFromPedidosFromSpecificPez.setInt(1, pezID);
                 allFromPedidosFromSpecificPez.setInt(2, orderBy);
-                result = allFromSpecificPedido.executeQuery();
+                result = allFromPedidosFromSpecificPez.executeQuery();
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
             }

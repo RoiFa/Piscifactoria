@@ -835,7 +835,6 @@ public class Simulador {
                 }
             }catch(Exception e){
                 ErrorWriter.writeInErrorLog("Error general en la simulación.");
-                e.printStackTrace();
             }
         }
         Reader.closer();
