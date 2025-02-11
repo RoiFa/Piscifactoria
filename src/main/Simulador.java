@@ -719,10 +719,11 @@ public class Simulador {
      */
     public static void resPedido() {
         int idPedido = selectPedido();
-        ResultSet pedido = DAOPedidos.getAllInfoFromPedido(idPedido);
-        String tipoPez = "";
-        int pezCount = 0;
         if (idPedido != 0) {
+            ResultSet pedido = DAOPedidos.getAllInfoFromPedido(idPedido);
+            String tipoPez = "";
+            int pezCount = 0;
+            
             try {
                 pedido.next();
                 tipoPez = pedido.getString("Tipo de pez");
