@@ -284,6 +284,33 @@ public class Piscifactoria {
     }
 
     /**
+     * Metodo que retira peces para su venta en un pedido de cliente
+     * @param fishName Nombre del pez a retirar
+     * @param maxAmount Maxima cantidad de peces a retirar
+     * @return Numero de peces retirados
+     */
+    public int sendFish(String fishName,int maxAmount){
+        int counter = 0;
+        if (maxAmount!=-1) {
+            System.out.println("Seleccione un tanque para retirar los peces de este pedido");
+            int option = selectTank();
+            if(tanques.get(option).getTipoPez().toLowerCase().trim().equals(fishName.toLowerCase().trim())){
+                ArrayList<Pez> tanq = tanques.get(option).getPeces();
+                for (int i = 0; i < tanq.size(); i++) {
+                    if (tanq.get(i).isAdulto()&&maxAmount!=counter) {
+                        tanq.remove(i);
+                        tanques.get(option).setPeces(tanq);
+                        counter++;
+                    }
+                }
+            }else{
+                System.out.println("El tanque seleccionado no posee el tipo de peces requeridos");
+            }
+        }
+        return counter;
+    }
+
+    /**
      * Método que mejora los almacenes de comida.
      * 
      * @return  Si se ha mejorado o no.

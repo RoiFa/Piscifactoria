@@ -2,6 +2,7 @@ package main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gson.annotations.JsonAdapter;
 
@@ -11,6 +12,8 @@ import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
+import mannagementBD.Conexion;
+import mannagementBD.GeneradorBD;
 import helpers.PremadeLogs;
 import monedas.Monedas;
 import peces.Pez;
@@ -21,6 +24,11 @@ import piscifactoria.Piscifactoria;
 import propiedades.AlmacenPropiedades;
 import tanque.Tanque;
 import adapters.SimuladorAdapter;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import dao.DAOPedidos;
 
 @JsonAdapter(SimuladorAdapter.class)
@@ -49,6 +57,8 @@ public class Simulador {
         public Almacen almacen;
         /** Las piscifactorías que hay */
         private ArrayList<Piscifactoria> piscis;
+        /**  */
+        public static Connection conn;
     
         /**
          * Constructor para la carga de datos
@@ -133,8 +143,12 @@ public class Simulador {
             if(!rw.exists()){
                 rw.mkdir();
             }
+            conn = Conexion.getConect();
+            GeneradorBD.generarTablas();
+            GeneradorBD.anadirClientes();
+            GeneradorBD.insertarPeces();
             ErrorWriter.startErrorLog();
-            //TODO DAOPedidos.prepareStatements(conn);
+            DAOPedidos.prepareStatements(conn);
             int opcion = 0;
             String[] saves = Guardado.listarSaves();
             if(saves.length>0){
@@ -186,7 +200,8 @@ public class Simulador {
         "12. Mejorar\n"+
         "13. Pasar varios días\n"+
         "14. Mostrar datos\n"+
-        "15. Reclamar Recompensa");
+        "15. Entregar peces\n"+
+        "16. Reclamar Recompensa");
         
     }
 
@@ -210,7 +225,7 @@ public class Simulador {
      * Permite seleccionar una piscifactoría
      * @return un entero con la opción seleccionada
      */
-    public static int selectPisc(){
+    public int selectPisc(){
         menuPisc();
         int opcion = Reader.readTheNumber(0,instancia.piscis.size());
         if(opcion==0){
@@ -241,7 +256,7 @@ public class Simulador {
      * Permite seleccionar una piscifactoría y mostrar el estado de sus tanques
      */
     private static void showSpecificStatus(){
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             instancia.piscis.get(piscifactoria).showTankStatus();
         }
@@ -251,7 +266,7 @@ public class Simulador {
      * Permite seleccionar un tanque y muestra la información de sus peces
      */
     private static void showTankStatus(){
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             int tank = instancia.piscis.get(piscifactoria).selectTank();
             instancia.piscis.get(piscifactoria).tanques.get(tank).showFishStatus();
@@ -310,6 +325,9 @@ public class Simulador {
                 totalRio += p.getTotalAlive();
             }
         }
+        if(instancia.dia%10==0){
+            GeneradorBD.anadirPedido();
+        }
         System.out.println(pecesVendidos+" peces vendidos por un total de "+dineroVendido+" monedas");
         PremadeLogs.nextDay(instancia.dia,totalRio,totalMar,dineroVendido,instancia.monedas.getCantidad());
     }
@@ -328,7 +346,7 @@ public class Simulador {
         int espacio;
         int add = 0;
         if(!instancia.almacen.getDisponible()){
-            int piscifactoria = selectPisc();
+            int piscifactoria = instancia.selectPisc();
             if(piscifactoria !=-1){
                 if(tipoComida==1){
                     espacio = instancia.piscis.get(piscifactoria).getComidaMax()-instancia.piscis.get(piscifactoria).getComidaAnimal();
@@ -388,7 +406,7 @@ public class Simulador {
 
 
     private static void addFish(){
-        int opcion = selectPisc();
+        int opcion = instancia.selectPisc();
         if(opcion!=-1){
             int tankSelec = instancia.piscis.get(opcion).selectTank();
             instancia.piscis.get(opcion).tanques.get(tankSelec).addFish(false);
@@ -400,7 +418,7 @@ public class Simulador {
      * a la mitad de dinero de lo normal
      */
     private static void sell(){
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             int[] datosVentas=instancia.piscis.get(piscifactoria).sellFish();
             instancia.monedas.anadir(datosVentas[0]);
@@ -415,7 +433,7 @@ public class Simulador {
      * independientemente de su estado
      */
     private static void emptyTank(){
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             int option = instancia.piscis.get(piscifactoria).selectTank();
             instancia.piscis.get(piscifactoria).tanques.get(option).emptyTank();
@@ -429,7 +447,7 @@ public class Simulador {
      * Elimina los peces muertos de una piscifactoría seleccionada
      */
     private static void cleanTank(){
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             instancia.piscis.get(piscifactoria).cleanTank();
         }
@@ -574,8 +592,7 @@ public class Simulador {
      */
 
     private static void upgradePisc() {
-        //TODO opcion para comprar tanque de cria (500 monedas, 3 por piscifactoria)
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if (piscifactoria != -1) {
             int numTanques = instancia.piscis.get(piscifactoria).tanques.size();
             if (numTanques < 10) {
@@ -596,7 +613,7 @@ public class Simulador {
      * @return  Si se ha completado (0) o no (1)
      */
     private static void upgradeAlmacen() {
-        int piscifactoria = selectPisc();
+        int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             int coste = instancia.piscis.get(piscifactoria).getTipo().equals("rio") ? 50 : 200;
             if (instancia.monedas.comprar(coste)) {
@@ -653,21 +670,21 @@ public class Simulador {
                 case 0:
                     break;
                 case 1:
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClients());
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClients(true));
                     break;
                 case 2:
                     System.out.println("Introduce el ID del cliente:");
                     DAOPedidos.showTable(DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000)));
                     break;
                 case 3:
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPeces());
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPeces(true));
                     break;
                 case 4:
                     System.out.println("Introduce el ID del pez:");
                     DAOPedidos.showTable(DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000)));
                     break;
                 case 5:
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedidos());
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedidos(true));
                     break;
                 case 6:
                     System.out.println("Introduce el ID del pedido:");
@@ -675,15 +692,61 @@ public class Simulador {
                     break;
                 case 7:
                     System.out.println("Introduce el ID del cliente:");
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000)));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000), true));
                     break;
                 case 8:
                     System.out.println("Introduce el ID del pez:");
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000)));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000), true));
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    /**
+     * Pide al usuario elegir un pedido.
+     * 
+     * @return  El ID del pedido elegido.
+     */
+    public static int selectPedido() {
+        ResultSet pedidos = DAOPedidos.getAllInfoFromPedidos(false);
+        String[] menuPedido = new String[]{"Selecciona un pedido:"};
+        try {
+            while (pedidos.next()) {
+                String pedido = "[" + pedidos.getInt("ID") + "] " + pedidos.getString("Nombre del cliente") + ": " + pedidos.getString("Tipo de pez") + " " + pedidos.getInt("Cantidad entregada") + "/" + pedidos.getInt("Cantidad pedida") + "(" + ((int)(((double)pedidos.getInt("Cantidad entregada")/(double)pedidos.getInt("Cantidad pedida"))*100) + "%)");
+                menuPedido = Arrays.copyOf(menuPedido, menuPedido.length+1);
+                menuPedido[menuPedido.length-1] = pedido;
+            } 
+        }catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error al elegir un pedido.");
+        }
+        return Reader.menuGenerator(menuPedido);
+    }
+
+    /**
+     * Entrega peces a un pedido especificado.
+     */
+    public static void resPedido() {
+        int idPedido = selectPedido();
+        if (idPedido != 0) {
+            ResultSet pedido = DAOPedidos.getAllInfoFromPedido(idPedido);
+            String tipoPez = "";
+            int pezCount = 0;
+            
+            try {
+                pedido.next();
+                tipoPez = pedido.getString("Tipo de pez").toString();
+                pezCount = pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
+            } catch (SQLException e) {
+                ErrorWriter.writeInErrorLog("Error al intentar recoger datos de un pedido.");
+            }
+            int pisci = instancia.selectPisc();
+            int retirados = instancia.getPiscis().get(pisci).sendFish(tipoPez, pezCount);
+
+            DAOPedidos.deliverFish(idPedido, retirados);
+        } else {
+            System.out.println("Cancelando...");
         }
     }
 
@@ -694,9 +757,9 @@ public class Simulador {
     public static void main(String[] args) {
         init();
         int op = -1;
-        try{
-            showGeneralStatus();
-            while (op!=0) {
+        showGeneralStatus();
+        while (op!=0) {
+            try {
                 menu();
                 op = Reader.readTheNumber(0,100);
 
@@ -746,6 +809,9 @@ public class Simulador {
                         showData();
                         break;
                     case 15:
+                        resPedido();
+                        break;
+                    case 16:
                         GestorXml.claimReward();
                         break;
                     case 0:
@@ -767,16 +833,15 @@ public class Simulador {
                     System.out.println("Opción no valida");
                         break;
                 }
+            }catch(Exception e){
+                ErrorWriter.writeInErrorLog("Error general en la simulación.");
             }
-
-        }catch(Exception e){
-            ErrorWriter.writeInErrorLog("Error general en la simulación.");            
-        } finally{
-            Reader.closer();
-            Guardado.close();
-            LogWriter.closeLog();
-            ErrorWriter.closeErrorLog();
         }
+        Reader.closer();
+        Guardado.close();
+        LogWriter.closeLog();
+        DAOPedidos.close();
+        ErrorWriter.closeErrorLog();
     }
 
     public static void cheat99(){
@@ -785,7 +850,7 @@ public class Simulador {
     }
 
     public static void cheat98(){
-        int opcion = selectPisc();
+        int opcion = instancia.selectPisc();
         instancia.piscis.get(opcion).addTank();
         instancia.piscis.get(opcion).addTank();
         instancia.piscis.get(opcion).addTank();
