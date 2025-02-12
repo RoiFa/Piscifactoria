@@ -56,7 +56,7 @@ public class ErrorWriter {
             bw.append(timeStamp + " " + ErrLine + "\n");
             bw.flush();
         } catch (IOException e) {
-            writeInErrorLog("Fallo al documentar un error.");
+            System.out.println("Fallo al documentar un error.");
         }
     }
 

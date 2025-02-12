@@ -21,7 +21,7 @@ public class GeneradorBD {
         Statement stm = null;
 
         try{
-            stm = Simulador.instancia.conn.createStatement();
+            stm = Simulador.conn.createStatement();
 
             stm.execute("CREATE TABLE IF NOT EXISTS cliente ( "+
                         "id INTEGER AUTO_INCREMENT PRIMARY KEY,"+
@@ -201,7 +201,7 @@ public class GeneradorBD {
 
         try{
             st = Simulador.conn.createStatement();
-            st.execute("INSERT INTO pedido (cliente_id,pez_id,cantidad) VALUES ("+(RNG.RandomInt(10)+1)+","+(RNG.RandomInt(12)+1)+","+(RNG.RandomInt(50)+10)+")");
+            st.execute("INSERT INTO pedido (cliente_id,pez_id,cantidad, enviados) VALUES ("+(RNG.RandomInt(10)+1)+","+(RNG.RandomInt(12)+1)+","+(RNG.RandomInt(50)+10)+",0)");
 
         } catch(SQLException e){
             ErrorWriter.writeInErrorLog("Error al insertar un nuevo pedido");

@@ -294,11 +294,11 @@ public class Piscifactoria {
         if (maxAmount!=-1) {
             System.out.println("Seleccione un tanque para retirar los peces de este pedido");
             int option = selectTank();
-            if(tanques.get(option).getTipoPez().equals(fishName)){
+            if(tanques.get(option).getTipoPez().toLowerCase().trim().equals(fishName.toLowerCase().trim())){
                 ArrayList<Pez> tanq = tanques.get(option).getPeces();
-                for (Pez pez : tanq) {
-                    if (pez.isAdulto()&&maxAmount!=counter) {
-                        tanq.remove(pez);
+                for (int i = 0; i < tanq.size(); i++) {
+                    if (tanq.get(i).isAdulto()&&maxAmount!=counter) {
+                        tanq.remove(i);
                         tanques.get(option).setPeces(tanq);
                         counter++;
                     }

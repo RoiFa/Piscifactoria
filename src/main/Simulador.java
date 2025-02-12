@@ -670,21 +670,21 @@ public class Simulador {
                 case 0:
                     break;
                 case 1:
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClients());
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClients(true));
                     break;
                 case 2:
                     System.out.println("Introduce el ID del cliente:");
                     DAOPedidos.showTable(DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000)));
                     break;
                 case 3:
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPeces());
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPeces(true));
                     break;
                 case 4:
                     System.out.println("Introduce el ID del pez:");
                     DAOPedidos.showTable(DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000)));
                     break;
                 case 5:
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedidos());
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedidos(true));
                     break;
                 case 6:
                     System.out.println("Introduce el ID del pedido:");
@@ -692,11 +692,11 @@ public class Simulador {
                     break;
                 case 7:
                     System.out.println("Introduce el ID del cliente:");
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000)));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000), true));
                     break;
                 case 8:
                     System.out.println("Introduce el ID del pez:");
-                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000)));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000), true));
                     break;
                 default:
                     break;
@@ -710,11 +710,11 @@ public class Simulador {
      * @return  El ID del pedido elegido.
      */
     public static int selectPedido() {
-        ResultSet pedidos = DAOPedidos.getAllInfoFromPedidos();
+        ResultSet pedidos = DAOPedidos.getAllInfoFromPedidos(false);
         String[] menuPedido = new String[]{"Selecciona un pedido:"};
         try {
             while (pedidos.next()) {
-                String pedido = "[" + pedidos.getInt("ID") + "] " + pedidos.getString("Nombre del cliente") + ": " + pedidos.getString("Tipo de pez") + " " + pedidos.getInt("Cantidad entregada") + "/" + pedidos.getInt("Cantidad pedida") + "(" + (pedidos.getInt("Cantidad entregada")/pedidos.getInt("Cantidad pedida") + "%)");
+                String pedido = "[" + pedidos.getInt("ID") + "] " + pedidos.getString("Nombre del cliente") + ": " + pedidos.getString("Tipo de pez") + " " + pedidos.getInt("Cantidad entregada") + "/" + pedidos.getInt("Cantidad pedida") + "(" + ((int)(((double)pedidos.getInt("Cantidad entregada")/(double)pedidos.getInt("Cantidad pedida"))*100) + "%)");
                 menuPedido = Arrays.copyOf(menuPedido, menuPedido.length+1);
                 menuPedido[menuPedido.length-1] = pedido;
             } 
@@ -736,7 +736,7 @@ public class Simulador {
             
             try {
                 pedido.next();
-                tipoPez = pedido.getString("Tipo de pez");
+                tipoPez = pedido.getString("Tipo de pez").toString();
                 pezCount = pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
             } catch (SQLException e) {
                 ErrorWriter.writeInErrorLog("Error al intentar recoger datos de un pedido.");
@@ -757,9 +757,9 @@ public class Simulador {
     public static void main(String[] args) {
         init();
         int op = -1;
-        try{
-            showGeneralStatus();
-            while (op!=0) {
+        showGeneralStatus();
+        while (op!=0) {
+            try {
                 menu();
                 op = Reader.readTheNumber(0,100);
 
@@ -833,16 +833,15 @@ public class Simulador {
                     System.out.println("Opción no valida");
                         break;
                 }
+            }catch(Exception e){
+                ErrorWriter.writeInErrorLog("Error general en la simulación.");
             }
-
-        }catch(Exception e){
-            ErrorWriter.writeInErrorLog("Error general en la simulación.");            
-        } finally{
-            Reader.closer();
-            Guardado.close();
-            LogWriter.closeLog();
-            ErrorWriter.closeErrorLog();
         }
+        Reader.closer();
+        Guardado.close();
+        LogWriter.closeLog();
+        DAOPedidos.close();
+        ErrorWriter.closeErrorLog();
     }
 
     public static void cheat99(){
