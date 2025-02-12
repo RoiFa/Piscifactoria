@@ -40,9 +40,9 @@ public class DAOPedidos {
     public static void prepareStatements(Connection conn) {
         try {
             allFromClientes = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            allFromSpecificCliente = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente WHERE id = ? ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            allFromSpecificCliente = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre', nif AS 'NIF', telefono AS 'Teléfono' FROM cliente WHERE id = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             allFromPeces = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            allFromSpecificPez = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez WHERE id = ? ORDER BY ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            allFromSpecificPez = conn.prepareStatement("SELECT id AS 'ID', nombre AS 'Nombre común', cientifico AS 'Nombre científico' FROM pez WHERE id = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             allFromPedidos = conn.prepareStatement(
                 "SELECT " +
                     "pedido.id AS 'ID', " +
@@ -70,8 +70,7 @@ public class DAOPedidos {
                 "FROM pedido " +
                 "JOIN cliente ON pedido.cliente_id = cliente.id " +
                 "JOIN pez ON pedido.pez_id = pez.id " +
-                "WHERE pedido.id = ? " +
-                "ORDER BY ?",
+                "WHERE pedido.id = ? ",
                 ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE
             );
             allFromPedidosFromSpecificCliente = conn.prepareStatement(
@@ -121,9 +120,12 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los clientes.
      */
-    public static ResultSet getAllInfoFromClients() {
+    public static ResultSet getAllInfoFromClients(boolean order) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre", "NIF", "Teléfono"});
+        int orderBy = 1;
+        if (order) {
+            orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre", "NIF", "Teléfono"});
+        }
         if (orderBy != 0) {
             try {
                 allFromClientes.setInt(1, orderBy);
@@ -143,15 +145,11 @@ public class DAOPedidos {
      */
     public static ResultSet getAllInfoFromClient(int clientID) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre", "NIF", "Teléfono"});
-        if (orderBy != 0) {
-            try {
-                allFromSpecificCliente.setInt(1, clientID);
-                allFromSpecificCliente.setInt(2, orderBy);
-                result = allFromSpecificCliente.executeQuery();
-            } catch (SQLException e) {
-                ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
-            }
+        try {
+            allFromSpecificCliente.setInt(1, clientID);
+            result = allFromSpecificCliente.executeQuery();
+        } catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
         }
         return result;
     }
@@ -161,9 +159,12 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los peces.
      */
-    public static ResultSet getAllInfoFromPeces() {
+    public static ResultSet getAllInfoFromPeces(boolean order) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre común", "Nombre científico"});
+        int orderBy = 1;
+        if (order) {
+            orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre común", "Nombre científico"});
+        }
         if (orderBy != 0) {
             try {
                 allFromPeces.setInt(1, orderBy);
@@ -183,15 +184,11 @@ public class DAOPedidos {
      */
     public static ResultSet getAllInfoFromPez(int pezID) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "Nombre común", "Nombre científico"});
-        if (orderBy != 0) {
-            try {
-                allFromSpecificPez.setInt(1, pezID);
-                allFromSpecificPez.setInt(2, orderBy);
-                result = allFromSpecificPez.executeQuery();
-            } catch (SQLException e) {
-                ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
-            }
+        try {
+            allFromSpecificPez.setInt(1, pezID);
+            result = allFromSpecificPez.executeQuery();
+        } catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
         }
         return result;
     }
@@ -201,10 +198,13 @@ public class DAOPedidos {
      * 
      * @return  La información de todos los pedidos.
      */
-    public static ResultSet getAllInfoFromPedidos() {
+    public static ResultSet getAllInfoFromPedidos(boolean order) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
-        if (orderBy != 0) {
+        int orderBy = 1;
+        if (order) {
+            orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
+        }
+            if (orderBy != 0) {
             try {
                 allFromPedidos.setInt(1, orderBy);
                 result = allFromPedidos.executeQuery();
@@ -223,15 +223,11 @@ public class DAOPedidos {
      */
     public static ResultSet getAllInfoFromPedido(int pedidoID) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
-        if (orderBy != 0) {
-            try {
-                allFromSpecificPedido.setInt(1, pedidoID);
-                allFromSpecificPedido.setInt(2, orderBy);
-                result = allFromSpecificPedido.executeQuery();
-            } catch (SQLException e) {
-                ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
-            }
+        try {
+            allFromSpecificPedido.setInt(1, pedidoID);
+            result = allFromSpecificPedido.executeQuery();
+        } catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error al ejecutar una sentencia SQL");
         }
         return result;
     }
@@ -242,9 +238,12 @@ public class DAOPedidos {
      * @param clienteID  El ID del cliente.
      * @return  La información del pedido.
      */
-    public static ResultSet getAllInfoFromClientePedidos(int clienteID) {
+    public static ResultSet getAllInfoFromClientePedidos(int clienteID, boolean order) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
+        int orderBy = 1;
+        if (order) {
+            orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
+        }
         if (orderBy != 0) {
             try {
                 allFromPedidosFromSpecificCliente.setInt(1, clienteID);
@@ -263,10 +262,13 @@ public class DAOPedidos {
      * @param pezID  El ID del pez.
      * @return  La información del pedido.
      */
-    public static ResultSet getAllInfoFromPezPedidos(int pezID) {
+    public static ResultSet getAllInfoFromPezPedidos(int pezID, boolean order) {
         ResultSet result = null;
-        int orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
-        if (orderBy != 0) {
+        int orderBy = 1;
+        if (order) {
+            orderBy = Reader.menuGenerator(new String[]{"Cómo quieres que se ordenen los datos?", "ID", "ID del cliente", "Nombre del cliente", "ID del pez", "Tipo de pez", "Cantidad pedida", "Cantidad entregada"});
+        }
+            if (orderBy != 0) {
             try {
                 allFromPedidosFromSpecificPez.setInt(1, pezID);
                 allFromPedidosFromSpecificPez.setInt(2, orderBy);

@@ -78,6 +78,7 @@ public class GestorXml {
      */
     public static int listRewards(){
         try {
+            System.out.println("Selecciona una recompensa");
             String ruta = "rewards";
             Path path = Paths.get(ruta);
             String menu="";
