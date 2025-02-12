@@ -10,6 +10,7 @@ import helpers.Reader;
 import main.Simulador;
 import peces.Pez;
 import tanque.Tanque;
+import tanque.subtanque.TanqueCria;
 
 /**Objeto representativo de la piscifactoria */
 @JsonAdapter(PiscifactoriaAdapter.class)
@@ -27,6 +28,8 @@ public class Piscifactoria {
     private int comidaVegetal;
     /** La lista de tanques en la piscifactoría */
     public ArrayList<Tanque> tanques;
+    /** La lista de tanques de cría en la piscifactoría */
+    private ArrayList<TanqueCria> tanquesCria;
 
     /** @return El nombre de la piscifactoría. */
     public String getNombre() {
@@ -113,6 +116,7 @@ public class Piscifactoria {
         this.tipo = tipo;
         this.nombre = nombre;
         this.tanques = new ArrayList<>();
+        this.tanquesCria = new ArrayList<>();
         this.tanques.add(new Tanque(1, tipo,nombre));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
@@ -403,6 +407,14 @@ public class Piscifactoria {
     public void addTank(){
         this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo,nombre));
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
+    }
+
+    /**
+     * Añade un nuevo tanque a la piscifactoría
+     */
+    public void addCriaTank() {
+        this.tanques.add(new TanqueCria(this.tanquesCria.size()+1, this.tipo, nombre));
+        System.out.println("Nuevo tanque de cría añadido a la piscifactoría " + this.nombre);
     }
 
     @Override

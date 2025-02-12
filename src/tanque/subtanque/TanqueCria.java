@@ -24,10 +24,9 @@ import tanque.Tanque;
 
 public class TanqueCria extends Tanque{
     
-    public TanqueCria(int numTanqueCria, String tipo, String nomPiscifactoria, String tipoPez) {
+    public TanqueCria(int numTanqueCria, String tipo, String nomPiscifactoria) {
         super(numTanqueCria, tipo, nomPiscifactoria);
         this.maxSize = 2;
-        this.tipoPez = tipoPez;
         
     }
 
@@ -105,21 +104,23 @@ public class TanqueCria extends Tanque{
             for (Piscifactoria pisci : piscis) {
                 if (pisci.getNombre().equals(this.nomPiscifactoria)) {
                     tanques = pisci.getTanques();
-                }
-            }
-
-            for (Tanque tanque : tanques) {
-                if (tanque != null && tanque.ocupacion() > 0 && tanque.getTipoPez().equals(pez.getNombre())) {
-                    ArrayList<Pez> newPeces = tanque.getPeces();
-                    newPeces.add(pez);
-                    tanque.setPeces(newPeces);
-                    break;
+                    for (Tanque tanque : tanques) {
+                        if (tanque != null && tanque.ocupacion() > 0 && tanque.getTipoPez().equals(pez.getNombre())) {
+                            ArrayList<Pez> newPeces = tanque.getPeces();
+                            newPeces.add(pez);
+                            tanque.setPeces(newPeces);
+                            pisci.setTanques(tanques);
+                            Simulador.instancia.setPiscis(piscis);
+                            return null;
+                        }
+                    }
                 }
             }
         } else {
             if(Simulador.instancia.monedas.comprar(pez.getCoste()*2)){
                 this.peces.set(0, pez.reprod());
                 this.peces.set(1, pez.reprod(!predominan()));
+                this.tipo = pez.getNombre();
                 PremadeLogs.buyTwoFish(pez.getNombre(), pez.getCoste()*2, numTanque, nomPiscifactoria);
             }
         }
