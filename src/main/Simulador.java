@@ -201,7 +201,8 @@ public class Simulador {
         "13. Pasar varios días\n"+
         "14. Mostrar datos\n"+
         "15. Entregar peces\n"+
-        "16. Reclamar Recompensa");
+        "16. Reclamar Recompensa\n"+
+        "17. Gestionar piscifactoría");
         
     }
 
@@ -209,7 +210,6 @@ public class Simulador {
      * Muestra el texto para seleccionar una piscifactoría
      */
     private static void menuPisc(){
-        
         int i = 1;
         System.out.println("Seleccione una piscifactoría:");
         System.out.println("-------------------------- Piscifactorías --------------------------");
@@ -590,7 +590,6 @@ public class Simulador {
      * 
      * @return  Si se ha completado (0) o no (1)
      */
-
     private static void upgradePisc() {
         int piscifactoria = instancia.selectPisc();
         if (piscifactoria != -1) {
@@ -605,6 +604,111 @@ public class Simulador {
                 System.out.println("Ya no se admiten más tanques en la piscifactoría");
             }
         }
+    }
+
+    /**
+     * Muestra el menú para gestionar piscifactorías de manera dinámica.
+     */
+    private static void managePisc() {
+        int pisc = searchPiscWithSpecialTank();
+        String[] menu = new String[]{"Qué quieres gestionar?"};
+        if (pisc != -1) {
+            if (!instancia.piscis.get(pisc).getTanquesCria().isEmpty()){
+                menu = Arrays.copyOf(menu, menu.length+1);
+                menu[menu.length-1] = "Tanques de cría";
+            }
+            if (!instancia.piscis.get(pisc).getTanquesHuevos().isEmpty()){
+                menu = Arrays.copyOf(menu, menu.length+1);
+                menu[menu.length-1] = "Tanques de huevos";
+            }
+            int op = Reader.menuGenerator(menu);
+            switch (op) {
+                case 0:
+                    break;
+                case 1:
+                    if (!instancia.piscis.get(pisc).getTanquesCria().isEmpty()) {
+                        manageCriaTank(pisc);
+                    } else {
+                        manageEggTank(pisc);
+                    }
+                    break;
+                case 2:
+                    if (!instancia.piscis.get(pisc).getTanquesCria().isEmpty()) {
+                        manageEggTank(pisc);
+                    }
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Busca una piscifactoría con tanque de cría.
+     * 
+     * @return  La posición de la piscifactoría en el array.
+     */
+    private static int searchPiscWithSpecialTank() {
+        int piscNum = selectPiscWithSpecialTank();
+        if (piscNum != -1) {
+            for (Piscifactoria p : instancia.piscis) {
+                if (!p.getTanquesCria().isEmpty() || !p.getTanquesHuevos().isEmpty()) {
+                    if (piscNum == 0) {
+                        return instancia.getPiscis().indexOf(p);
+                    }
+                    piscNum--;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Permite seleccionar una piscifactoría con tanque de cría.
+     * 
+     * @return  El número de la piscifactoría. -1 si no hay ningún tanque de cría o si se cancela la operación.
+     */
+    private static int selectPiscWithSpecialTank() {
+        if (menuPiscWithSpecialTank()) {
+
+            int opcion = Reader.readTheNumber(0,instancia.piscis.size());
+            if(opcion==0){
+                System.out.println("Operación cancelada");
+                return -1;
+            }
+            return opcion;
+        }
+        System.out.println("No hay piscifactorías con tanques especiales.");
+        return -1;
+    }
+
+    /**
+     * Muestra el texto para seleccionar una piscifactoría con tanque de cría.
+     * 
+     * @return Si hay alguna piscifactoría con tanque de cría o no.
+     */
+    private static boolean menuPiscWithSpecialTank() {
+        int i = 1;
+        boolean hasSpecialTank = false;
+        System.out.println("Seleccione una piscifactoría:");
+        System.out.println("-------------------------- Piscifactorías --------------------------");
+        System.out.println("[Peces vivos / Peces totales / Espacio total]");
+        for(Piscifactoria p : instancia.piscis){
+            if (!p.getTanquesCria().isEmpty() || !p.getTanquesHuevos().isEmpty()) {
+                hasSpecialTank = true;
+                System.out.println(i+".- "+p.getNombre()+" ["+p.getTotalAlive()+"/"+p.getNum()+"/"+p.getTotal()+"]");
+                i++;
+            }
+        }
+        System.out.println("0. Cancelar");
+        return hasSpecialTank;
+    }
+
+    private static void manageCriaTank(int pisc) {
+        //TODO No se que hacer aqui
+    }
+
+    private static void manageEggTank(int pisc) {
+        //TODO No se que hacer aqui tampoco
     }
 
     /**
@@ -813,6 +917,9 @@ public class Simulador {
                         break;
                     case 16:
                         GestorXml.claimReward();
+                        break;
+                    case 17:
+                        managePisc();
                         break;
                     case 0:
                         System.out.println("Cerrando...");

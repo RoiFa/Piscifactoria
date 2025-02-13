@@ -11,6 +11,7 @@ import main.Simulador;
 import peces.Pez;
 import tanque.Tanque;
 import tanque.subtanque.TanqueCria;
+import tanque.subtanque.TanqueHuevos;
 
 /**Objeto representativo de la piscifactoria */
 @JsonAdapter(PiscifactoriaAdapter.class)
@@ -30,6 +31,8 @@ public class Piscifactoria {
     public ArrayList<Tanque> tanques;
     /** La lista de tanques de cría en la piscifactoría */
     private ArrayList<TanqueCria> tanquesCria;
+    /** La lista de tanques de huevos en la piscifactoría */
+    private ArrayList<TanqueHuevos> tanquesHuevos;
 
     /** @return El nombre de la piscifactoría. */
     public String getNombre() {
@@ -54,6 +57,16 @@ public class Piscifactoria {
     /** @return La lista de tanques en la piscifactoria */
     public ArrayList<Tanque> getTanques() {
         return tanques;
+    }
+
+    /** @return La lista de tanques de cría en la piscifactoría */
+    public ArrayList<TanqueCria> getTanquesCria() {
+        return tanquesCria;
+    }
+
+    /** @return La lista de tanques de huevos en la piscifactoría */
+    public ArrayList<TanqueHuevos> getTanquesHuevos() {
+        return tanquesHuevos;
     }
 
     /** @return La cantidad de comida maxima que puede ser almacenada en cada almacen */
@@ -103,6 +116,16 @@ public class Piscifactoria {
         this.tanques = tanques;
     }
 
+    /** @param tanquesCria El array con los tanques de cría */
+    public void setTanquesCria(ArrayList<TanqueCria> tanquesCria) {
+        this.tanquesCria = tanquesCria;
+    }
+
+    /** @param tanquesHuevos El array con los tanques de huevos. */
+    public void setTanquesHuevos(ArrayList<TanqueHuevos> tanquesHuevos) {
+        this.tanquesHuevos = tanquesHuevos;
+    }
+
     /** Constructor para la carga de datos */
     public Piscifactoria(){}
 
@@ -117,6 +140,7 @@ public class Piscifactoria {
         this.nombre = nombre;
         this.tanques = new ArrayList<>();
         this.tanquesCria = new ArrayList<>();
+        this.tanquesHuevos = new ArrayList<>();
         this.tanques.add(new Tanque(1, tipo,nombre));
         if (tipo.equals("rio")) {
             this.comidaMax = 25;
@@ -410,11 +434,18 @@ public class Piscifactoria {
     }
 
     /**
-     * Añade un nuevo tanque a la piscifactoría
+     * Añade un nuevo tanque de cría a la piscifactoría
      */
     public void addCriaTank() {
-        this.tanques.add(new TanqueCria(this.tanquesCria.size()+1, this.tipo, nombre));
+        this.tanquesCria.add(new TanqueCria(this.tanquesCria.size()+1, this.tipo, nombre));
         System.out.println("Nuevo tanque de cría añadido a la piscifactoría " + this.nombre);
+    }
+
+    /**
+     * Añade un nuevo tanque de huevos a la piscifactoría
+     */
+    public void addEggTank() {
+        this.tanquesHuevos.add(new TanqueHuevos()); //TODO necesita cambiarse al terminar los tanques de huevos.
     }
 
     @Override
