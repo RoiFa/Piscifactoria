@@ -57,7 +57,7 @@ public class Simulador {
         public Almacen almacen;
         /** Las piscifactorías que hay */
         private ArrayList<Piscifactoria> piscis;
-        /**  */
+        /** Conexion con la base de datos */
         public static Connection conn;
     
         /**
