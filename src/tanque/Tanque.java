@@ -238,8 +238,8 @@ public class Tanque {
                 if(tipo.equals("mar")){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre().equals(this.tipoPez)){
-                            if(maxSize!=ocupacion()){
-                                for(int k=0;k<especiesMar[i].getHuevos();k++){
+                            for(int k=0;k<especiesMar[i].getHuevos();k++){
+                                if(maxSize!=ocupacion()){
                                     peces.add(creadorEspecies(especiesMar[(i+1)],true));
                                     Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
                                 }
@@ -249,8 +249,8 @@ public class Tanque {
                 }else{
                     for(int i=0;i<especiesRio.length;i++){
                         if(especiesRio[i].getNombre().equals(this.tipoPez)){
-                            if(maxSize!=ocupacion()){
-                                for(int j=0;j<especiesMar[i].getHuevos();j++){
+                            for(int j=0;j<especiesMar[i].getHuevos();j++){
+                                if(maxSize!=ocupacion()){
                                     peces.add(creadorEspecies(especiesRio[(i+1)],true));
                                     Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
                                 }
