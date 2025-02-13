@@ -339,9 +339,9 @@ public class Simulador {
     private static void addFood(){
         System.out.println();
 
-        int tipoComida = Reader.menuGenerator(new String[]{"Introduzca el tipo de comida:","1.animal","2.vegetal"});
+        int tipoComida = Reader.menuGenerator(new String[]{"Introduzca el tipo de comida:","animal","vegetal"});
 
-        int opcion = Reader.menuGenerator(new String[]{"El coste es 1 moneda por unidad y 5 monedas de descuento cada 25 unidades\nIntroduzca la cantidad a añadir:","1.- 5","2.- 10","3.- 25","4.- llenar"});
+        int opcion = Reader.menuGenerator(new String[]{"El coste es 1 moneda por unidad y 5 monedas de descuento cada 25 unidades\nIntroduzca la cantidad a añadir:","5","10","25","llenar"});
 
         int espacio;
         int add = 0;
