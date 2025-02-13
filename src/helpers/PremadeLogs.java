@@ -147,4 +147,14 @@ public class PremadeLogs {
     public static void nextDay(int dia,int totalRio,int totalMar,int dineroVendido,int monedas){
         TranscriptWriter.writeInTranscript("Fin del día "+(dia-1)+".\nPeces actuales: "+totalRio+" de río, "+totalMar+" de mar.\n"+dineroVendido+" monedas ganadas por un total de "+monedas+".\n------------------------------\n>>>Inicio del día "+dia+".");
     }
+
+    public static void buyFarm(String type){
+        TranscriptWriter.writeInTranscript("Comprada la granja de "+type);
+        LogWriter.writeInLog("Comprada la granja de "+type);
+    }
+
+    public static void upgradeFarm(String type,int total){
+        TranscriptWriter.writeInTranscript("Mejorada la granja de "+type+" añadiendo un tanque por un total de "+total+" tanques");
+        LogWriter.writeInLog("Mejorada la granja de "+type+" añadiendo un tanque por un total de "+total+" tanques");
+    }
 }
