@@ -32,18 +32,18 @@ public class Conexion{
      */
     public static Connection getConect(){
 
-        try{
-            prop = new Properties();
-            prop.put("user", USERNAME);
-            prop.put("password", PASSWORD);
-            prop.put("rewriteBatchedStatements", true);
-
-            conn = DriverManager.getConnection("jdbc:mysql://"+SERVER+":"+PORT_NUMBER+"/"+DATABASE, prop);
-            return conn;
-        } catch(SQLException e){
-            e.printStackTrace();
+        if (conn==null) {
+            try{
+                prop = new Properties();
+                prop.put("user", USERNAME);
+                prop.put("password", PASSWORD);
+                prop.put("rewriteBatchedStatements", true);
+                conn = DriverManager.getConnection("jdbc:mysql://"+SERVER+":"+PORT_NUMBER+"/"+DATABASE, prop);
+            } catch(SQLException e){
+                e.printStackTrace();
+            }
         }
-        return null;
+        return conn;
     }
 
     /**
@@ -53,6 +53,7 @@ public class Conexion{
         if(conn!=null){
             try{
                 conn.close();
+                conn = null;
             } catch(SQLException e){
                 ErrorWriter.writeInErrorLog("Error al cerrar la conexión a la base de datos");
             }
