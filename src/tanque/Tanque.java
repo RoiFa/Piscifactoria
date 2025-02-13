@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.google.gson.annotations.JsonAdapter;
 
 import adapters.TanqueAdapter;
+import granjas.Langostinos;
 import helpers.ErrorWriter;
 import helpers.RNG;
 import helpers.Reader;
@@ -502,12 +503,19 @@ public class Tanque {
      * Elimina los peces muertos del tanque
      */
     public void cleanTank(){
-        for(int i = 0;i<maxSize;i++){
-            if(peces.get(i)!=null && !peces.get(i).isVivo()){
-                peces.remove(i);
+        try {
+            for(int i = 0;i<peces.size();i++){
+                if(peces.get(i)!=null&&!peces.get(i).isVivo()){
+                    peces.remove(i);
+                    if (Langostinos.isDisponible()) {
+                        Langostinos.setMuertos(Langostinos.getMuertos()+1);
+                    }
+                }
             }
+            PremadeLogs.tankCleaning("Limpiado",this.numTanque,this.nomPiscifactoria);
+        } catch (Exception e) {
+            System.out.println("Error al limpiar");
         }
-        PremadeLogs.tankCleaning("Limpiado",this.numTanque,this.nomPiscifactoria);
     }
 
     /**

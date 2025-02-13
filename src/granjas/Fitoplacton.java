@@ -34,4 +34,8 @@ public class Fitoplacton {
     public static boolean isDisponible() {
         return disponible;
     }
+
+    public static void setDisponible(boolean disponible) {
+        Fitoplacton.disponible = disponible;
+    }
 }

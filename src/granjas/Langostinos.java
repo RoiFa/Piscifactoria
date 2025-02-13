@@ -24,10 +24,6 @@ public class Langostinos {
         Langostinos.muertos = muertos;
     }
 
-    public static void comprado(){
-        tanques.add(new TanqueLangostinos());
-    }
-
     public static void replenish(){
         boolean replenished=false;
         for(int i=0;i<tanques.size()&&replenished;i++){
@@ -45,6 +41,10 @@ public class Langostinos {
                 i=-1;
             }
         }
+    }
+
+    public static void setDisponible(boolean disponible) {
+        Langostinos.disponible = disponible;
     }
 
     public static void nextDay(){

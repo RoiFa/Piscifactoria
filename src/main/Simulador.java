@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import com.google.gson.annotations.JsonAdapter;
 
 import estadisticas.Estadisticas;
+import granjas.Fitoplacton;
+import granjas.Langostinos;
 import helpers.ErrorWriter;
 import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
+import mannagementBD.Conexion;
+import mannagementBD.GeneradorBD;
 import helpers.PremadeLogs;
 import monedas.Monedas;
 import peces.Pez;
@@ -136,6 +140,10 @@ public class Simulador {
             if(!rw.exists()){
                 rw.mkdir();
             }
+             conn = Conexion.getConect();
+            GeneradorBD.generarTablas();
+            GeneradorBD.anadirClientes();
+            GeneradorBD.insertarPeces();
             ErrorWriter.startErrorLog();
             DAOPedidos.prepareStatements(conn);
             int opcion = 0;
@@ -313,6 +321,12 @@ public class Simulador {
                 totalRio += p.getTotalAlive();
             }
         }
+        if (Fitoplacton.isDisponible()) {
+            Fitoplacton.nextDay();
+        }
+        if (Langostinos.isDisponible()) {
+            Langostinos.nextDay();
+        }
         System.out.println(pecesVendidos+" peces vendidos por un total de "+dineroVendido+" monedas");
         PremadeLogs.nextDay(instancia.dia,totalRio,totalMar,dineroVendido,instancia.monedas.getCantidad());
     }
@@ -474,11 +488,11 @@ public class Simulador {
 
     private static void comprar(){
 
-        int opcion = 0;
+        int opcion = -1;
 
-        while (opcion<1 || opcion>3) {
+        while (opcion!=0) {
 
-            opcion = Reader.menuGenerator(new String[]{"Menu de compra: ","Piscifactoría","Almacén central: 2000 monedas. Disponible: "+instancia.monedas.getCantidad()+" monedas"});
+            opcion = Reader.menuGenerator(new String[]{"Menu de compra: ","Piscifactoría","Almacén central: 2000 monedas ","Granja de Langostinos: 3000 monedas","Granja de Fitoplacton: 5000 monedas"});
 
             switch (opcion) {
                 case 1:
@@ -487,7 +501,6 @@ public class Simulador {
                 case 2:
                     if(!instancia.almacen.getDisponible()){
                         if(instancia.monedas.comprar(2000)){
-                            instancia.monedas.gastar(2000);
                             instancia.almacen.setDisponible(true);
                             System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
                             PremadeLogs.pantryBuy();
@@ -497,8 +510,45 @@ public class Simulador {
                     }
                     break;
 
+                case 3:
+                    if(instancia.almacen.getDisponible()){
+                        if (!Langostinos.isDisponible()) {
+                            if(instancia.monedas.comprar(3000)){
+                                Langostinos.setDisponible(true);
+                                Langostinos.mejora();
+                                System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
+                                System.out.println("Has comprado exitosamente la granja de langostinos");
+                            }
+                        }else{
+                            System.out.println("Ya posees este edificio");
+                        }
+                    } else{
+                        System.out.println("Solo puedes comprar esta mejora si tienes un almacen");
+                    }
+                    break;
+
+                case 4:
+                    if(instancia.almacen.getDisponible()){
+                        if (!Fitoplacton.isDisponible()) {
+                            if(instancia.monedas.comprar(5000)){
+                                Fitoplacton.setDisponible(true);
+                                System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
+                                System.out.println("Has comprado exitosamente la granja de fitoplacton");
+                            }
+                        }else{
+                            System.out.println("Ya posees este edificio");
+                        }
+                    } else{
+                        System.out.println("Solo puedes comprar esta mejora si tienes un almacen");
+                    }
+                    break;
+
                 case 0:
                     System.out.println("Cancelando...");
+
+                default:
+                    System.out.println("Opcion no valida");
+                    break;
             }
         }
     }
@@ -535,11 +585,11 @@ public class Simulador {
      */
     private static void mejorar(){
 
-        int opcion = 0;
+        int opcion = -1;
 
-        while (opcion<1 || opcion>3) {
+        while (opcion!=0) {
 
-            opcion = Reader.menuGenerator(new String[]{"Escoja que mejorar: ","Piscifactoria","Almacén central"});
+            opcion = Reader.menuGenerator(new String[]{"Escoja que mejorar: ","Piscifactoria","Almacén central","Granja de Langostinos","Granja de Fitoplacton"});
 
             switch (opcion) {
                 case 1:
@@ -565,6 +615,36 @@ public class Simulador {
                     break;
 
                 case 3:
+
+                    if (Langostinos.isDisponible()) {
+                        if (instancia.monedas.comprar(1500)) {
+                            Langostinos.mejora();
+                            System.out.println("Se ha mejorado la granja de langostinos");
+                        }else{
+                            System.out.println("Operacion cancelada");
+                        }
+                    }else{
+                        System.out.println("No posees este edificio");
+                    }
+
+                    break;
+
+                case 4:
+
+                    if (Fitoplacton.isDisponible()) {
+                        if (instancia.monedas.comprar(2500)) {
+                            Fitoplacton.mejora();
+                            System.out.println("Se ha mejorado la granja de fitoplacton");
+                        }else{
+                            System.out.println("Operacion cancelada");
+                        }
+                    }else{
+                        System.out.println("No posees este edificio");
+                    }
+
+                    break;
+
+                case 0:
                 System.out.println("Volviendo...");
             }
         }
