@@ -502,7 +502,6 @@ public class Simulador {
                 case 2:
                     if(!instancia.almacen.getDisponible()){
                         if(instancia.monedas.comprar(2000)){
-                            instancia.monedas.gastar(2000);
                             instancia.almacen.setDisponible(true);
                             System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
                             PremadeLogs.pantryBuy();

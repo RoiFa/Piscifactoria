@@ -502,7 +502,7 @@ public class Tanque {
      * Elimina los peces muertos del tanque
      */
     public void cleanTank(){
-        for(int i = 0;i<maxSize;i++){
+        for(int i = 0;i<peces.size();i++){
             if(peces.get(i)!=null && !peces.get(i).isVivo()){
                 peces.remove(i);
             }
