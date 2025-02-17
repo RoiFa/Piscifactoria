@@ -839,6 +839,9 @@ public class Simulador {
                         Guardado.save();
                         System.out.println("Salida con éxito");
                         break;
+                    case 96:
+                        GestorXml.randomFarm();
+                        break;
                     case 97:
                         GestorXml.randomReward();
                         System.out.println("Se agrego una recompensa aleatoria");
