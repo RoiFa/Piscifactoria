@@ -527,7 +527,7 @@ public class Simulador {
 
         int buyPisc = Reader.menuGenerator(new String[]{"Elige el tipo de piscifactoría a comprar:","Río","Mar"});
 
-        if (buyPisc != 3) {
+        if (buyPisc != 0) {
             int numPisc = 0;
             for (Piscifactoria p : instancia.piscis) {
                 if (p.getTipo().equals(buyPisc == 1 ? "rio" : "mar")) {
@@ -586,23 +586,72 @@ public class Simulador {
     }
 
     /**
-     * Métdo encargado de la lógica de mejorar una piscifactoría.
-     * 
-     * @return  Si se ha completado (0) o no (1)
+     * Método encargado de la lógica de mejorar una piscifactoría.
      */
     private static void upgradePisc() {
         int piscifactoria = instancia.selectPisc();
         if (piscifactoria != -1) {
-            int numTanques = instancia.piscis.get(piscifactoria).tanques.size();
-            if (numTanques < 10) {
-                int costeTanque = instancia.piscis.get(piscifactoria).getTipo().equals("rio") ? 150 + 150 * numTanques : 600 + 600 * numTanques;
-                if(instancia.monedas.comprar(costeTanque)){
-                        instancia.piscis.get(piscifactoria).addTank();
-                        PremadeLogs.tankBuy(instancia.piscis.get(piscifactoria).getTanques().getLast().getNumTanque(),instancia.piscis.get(piscifactoria).getNombre());
-                }
-            } else {
-                System.out.println("Ya no se admiten más tanques en la piscifactoría");
+            int op = Reader.menuGenerator(new String[]{"Escoge una de las siguientes mejoras:", "Comprar tanque de peces.", "Comprar tanque de cría.", "Comprar tanque de huevos."});
+            switch (op) {
+                case 0:
+                    System.out.println("Cancelado.");
+                    break;
+                case 1:
+                    buyTank(piscifactoria);
+                    break;
+                case 2:
+                    buyCriaTank(piscifactoria);
+                    break;
+                case 3:
+                    buyEggTank(piscifactoria);
+                    break;
             }
+        }
+    }
+
+    /**
+     * Método que se encarga de comprar un tanque para una piscifactoría seleccionada.
+     * 
+     * @param pisci El número de la piscifactoría seleccionada.
+     */
+    private static void buyTank(int pisci) {
+        int numTanques = instancia.piscis.get(pisci).tanques.size();
+        if (numTanques < 10) {
+            int costeTanque = instancia.piscis.get(pisci).getTipo().equals("rio") ? 150 + 150 * numTanques : 600 + 600 * numTanques;
+            if(instancia.monedas.comprar(costeTanque)){
+                instancia.piscis.get(pisci).addTank();
+                PremadeLogs.tankBuy(instancia.piscis.get(pisci).getTanques().getLast().getNumTanque(),instancia.piscis.get(pisci).getNombre());
+            }
+        } else {
+            System.out.println("Ya no se admiten más tanques en la piscifactoría");
+        }
+    }
+
+    /**
+     * Método que se encarga de comprar un tanque de cría para una piscifactoría seleccionada
+     * 
+     * @param pisci El número de la piscifactoría seleccionada.
+     */
+    private static void buyCriaTank(int pisci) {
+        if (instancia.piscis.get(pisci).getTanquesCria().size() < 3) {
+            if (instancia.monedas.comprar(500)) {
+                instancia.piscis.get(pisci).addCriaTank();
+                PremadeLogs.criaTankBuy(instancia.piscis.get(pisci).getTanques().getLast().getNumTanque(), instancia.piscis.get(pisci).getNombre());
+            }
+        } else {
+            System.out.println("Ya no se admiten más tanques de cría en la piscifactoría");
+        }
+    }
+
+    /**
+     * Método que se encarga de comprar un tanque de huevos para una piscifactoría seleccionada
+     * 
+     * @param pisci El número de la piscifactoría seleccionada
+     */
+    private static void buyEggTank(int pisci) {
+        if (instancia.monedas.comprar(1500)) {
+            instancia.piscis.get(pisci).addEggTank();
+            PremadeLogs.eggTankBuy(instancia.piscis.get(pisci).getTanques().getLast().getNumTanque(), instancia.piscis.get(pisci).getNombre());
         }
     }
 
@@ -704,17 +753,15 @@ public class Simulador {
     }
 
     private static void manageCriaTank(int pisc) {
-        //TODO No se que hacer aqui
+        //TODO Hacer menú para mostrar estado, comprar peces o vaciar.
     }
 
     private static void manageEggTank(int pisc) {
-        //TODO No se que hacer aqui tampoco
+        //TODO Hacer menú para listar o vaciar
     }
 
     /**
      * Métdo encargado de la lógica de mejorar un almacén de una piscifactoría. 
-     * 
-     * @return  Si se ha completado (0) o no (1)
      */
     private static void upgradeAlmacen() {
         int piscifactoria = instancia.selectPisc();
@@ -870,6 +917,7 @@ public class Simulador {
                 switch (op) {
                     case 1:
                         showGeneralStatus();
+                        GestorXml.randomSpecialTank();
                         break;
                     case 2:
                         showSpecificStatus();

@@ -319,6 +319,17 @@ public class Tanque {
         }
     }
 
+    /**
+     * Añade un pez al tanque.
+     * 
+     * @param fish  El pez a añadir
+     */
+    public void addFish(Pez fish) {
+        if (fish != null && fish.getNombre().equals(this.tipoPez)) {
+            this.peces.add(fish);
+        }
+    }
+
     public String buscaNombre(){
         for(int i=0;i<peces.size();i++){
             if(peces.get(i)!=null){

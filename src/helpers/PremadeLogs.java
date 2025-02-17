@@ -70,6 +70,28 @@ public class PremadeLogs {
     }
 
     /**
+     * Genera lineas en Log y Transcripciones cuando se compra un tanque de cría
+     * 
+     * @param numTanque El número de tanque
+     * @param pisciName El nombre de la piscifactoría donde se añade.
+     */
+    public static void criaTankBuy(int numTanque, String pisciName) {
+        TranscriptWriter.writeInTranscript("Comprado un tanque de cría número " + numTanque + " de la piscifactoría " + pisciName);
+        LogWriter.writeInLog("Comprado un tanque de cría número " + numTanque + " de la piscifactoría " + pisciName);
+    }
+
+    /**
+     * Genera lineas en Log y Transcripciones cuando se compra un tanque de huevos
+     * 
+     * @param numTanque El número de tanque
+     * @param pisciName El nombre de la piscifactoría donde se añade.
+     */
+    public static void eggTankBuy(int numTanque, String pisciName) {
+        TranscriptWriter.writeInTranscript("Comprado un tanque de huevos número " + numTanque + " de la piscifactoría " + pisciName);
+        LogWriter.writeInLog("Comprado un tanque de huevos número " + numTanque + " de la piscifactoría " + pisciName);
+    }
+
+    /**
      * Genera lineas en Log y Transcripciones cuando se mejora una piscifactoria
      */
     public static void pisciUpdate(String pisciName,int maxfood,int coste){

@@ -1,5 +1,9 @@
 package piscifactoria;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.Map.entry;
 
 import com.google.gson.annotations.JsonAdapter;
 
@@ -437,7 +441,7 @@ public class Piscifactoria {
      * Añade un nuevo tanque de cría a la piscifactoría
      */
     public void addCriaTank() {
-        this.tanquesCria.add(new TanqueCria(this.tanquesCria.size()+1, this.tipo, nombre));
+        this.tanquesCria.add(new TanqueCria(this.tanquesCria.size()+1, this.tipo, this.nombre));
         System.out.println("Nuevo tanque de cría añadido a la piscifactoría " + this.nombre);
     }
 
@@ -445,7 +449,47 @@ public class Piscifactoria {
      * Añade un nuevo tanque de huevos a la piscifactoría
      */
     public void addEggTank() {
-        this.tanquesHuevos.add(new TanqueHuevos()); //TODO necesita cambiarse al terminar los tanques de huevos.
+        this.tanquesHuevos.add(new TanqueHuevos(this.tanquesHuevos.size()+1, this.tipo, this.nombre));
+        System.out.println("Nuevo tanque de huevos añadido a la piscifactoría " + this.nombre);
+    }
+
+    /**
+     * Muestra el número de peces de cada tipo de pez en los tanques de huevos.
+     */
+    public void listFishInEggTanks() { //TODO añadir al menu principal y comprobar
+        Map<String, Integer> data;
+        if (this.tipo.equals("rio")) {
+            data = Map.ofEntries(
+                entry("Carpa", 0),
+                entry("Koi", 0),
+                entry("Pejerrey", 0),
+                entry("Salmon Chinook", 0),
+                entry("Tilapia del Nilo", 0),
+                entry("Bagre de Canal", 0),
+                entry("Dorada", 0)
+            );
+        } else {
+            data = Map.ofEntries(
+                entry("Abadejo", 0),
+                entry("Arenque del Atlantico", 0),
+                entry("Besugo", 0),
+                entry("Cobia", 0),
+                entry("Rodaballo", 0),
+                entry("Bagre de Canal", 0),
+                entry("Dorada", 0)
+            );
+        }
+
+        for (TanqueHuevos eggTank : tanquesHuevos) {
+            data = eggTank.listFish(data);
+        }
+
+        Set<String> keys = data.keySet();
+        for (String string : keys) {
+            if (data.get(string) != 0) {
+                System.out.println("Nº de " + string + ": " + data.get(string));
+            }
+        }
     }
 
     @Override
