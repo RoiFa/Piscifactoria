@@ -139,7 +139,8 @@ public class Tanque {
                 System.out.println("Peces vivos: "+vivos()+"/"+ocupacion()+"("+((int)(((double)vivos())/ocupacion())*100)+"%)"+
                 "\n"+"Peces alimentados: "+ocupacion()+"/"+ocupacion()+"("+((int)(((double)alimentados())/ocupacion())*100)+"%)"+
                 "\n"+"Peces adultos: "+adultos()+"/"+ocupacion()+"("+((int)(((double)adultos())/ocupacion())*100)+"%)"+
-                "\n"+"Hembras / machos: "+machos()+"/"+hembras());
+                "\n"+"Hembras / machos: "+machos()+"/"+hembras()+
+                "\n"+"Peces enfermos: "+enfermos()+"/"+ocupacion());
             }
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al mostrar el estado actual del tanque.\n");
@@ -182,6 +183,8 @@ public class Tanque {
         int pecesVendidos=0;
         int dineroVendido=0;
         int[] cants;
+        int enfermo = enfermos();
+        int muerto = ocupacion() - vivos();
         for(int i=0;i<peces.size();i++){
             if(peces.get(i)!=null&&peces.get(i).isVivo()){
                 if(!peces.get(i).isFertil()&&(peces.get(i).getEdad()-peces.get(i).getMadurez())%peces.get(i).getCiclo()==0&&peces.get(i).isAdulto()){
@@ -203,6 +206,19 @@ public class Tanque {
                         Simulador.instancia.orca.registrarVenta(peces.get(i).getNombre(), peces.get(i).getMonedas());
                         peces.remove(i);
                     }
+                }
+                if(!peces.get(i).isEnfermo()){
+                    if(enfermo>0){
+                        if(RNG.RandomInt(10)==1){
+                            peces.get(i).setEnfermo(true);
+                        }
+                    } else if(muerto>0){
+                        if(RNG.RandomInt(20)==1){
+                            peces.get(i).setEnfermo(true);
+                        }
+                    }
+                } else{
+                    
                 }
             }
             if (Simulador.instancia.almacen.getDisponible()&&(carne <= 0 || vegetal <= 0)) {
@@ -585,7 +601,31 @@ public class Tanque {
         }      
     }
 
-    
+    /**
+     * Devuelve la cantidad de peces enfermos
+     * @return Número de peces enfermos
+     */
+    public int enfermos(){
+        int enfermos = 0;
+        for(Pez p : peces){
+            if(p.isVivo() && p.isEnfermo()){
+                enfermos++;
+            }
+        }
+        return enfermos;
+    }
+
+    /**
+     * Cura a los peces enfermos (y vivos) del tanque
+     */
+    public void curar(){
+        for(int i = 0;i<peces.size();i++){
+            if(peces.get(i).isVivo()&&peces.get(i).isEnfermo()){
+                peces.get(i).setEnfermo(false);
+            }
+        }
+    }
+
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-package dto;
+package managementBD;
 
 public class ClienteDTO {
 

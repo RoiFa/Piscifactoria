@@ -1,7 +1,11 @@
 package main;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gson.annotations.JsonAdapter;
 
@@ -11,6 +15,8 @@ import helpers.GestorXml;
 import helpers.Guardado;
 import helpers.LogWriter;
 import helpers.Reader;
+import managementBD.Conexion;
+import managementBD.GeneradorBD;
 import helpers.PremadeLogs;
 import monedas.Monedas;
 import peces.Pez;
@@ -49,6 +55,9 @@ public class Simulador {
         public Almacen almacen;
         /** Las piscifactorías que hay */
         private ArrayList<Piscifactoria> piscis;
+
+        /** Conexión con la base de datos */
+        public static transient Connection conn;
     
         /**
          * Constructor para la carga de datos
@@ -134,7 +143,12 @@ public class Simulador {
                 rw.mkdir();
             }
             ErrorWriter.startErrorLog();
-            //TODO DAOPedidos.prepareStatements(conn);
+            Simulador.conn = Conexion.getConect();
+            GeneradorBD.generarTablas();
+            GeneradorBD.anadirClientes();
+            GeneradorBD.insertarPeces();
+            ErrorWriter.startErrorLog();
+            DAOPedidos.prepareStatements(Simulador.conn);
             int opcion = 0;
             String[] saves = Guardado.listarSaves();
             if(saves.length>0){
@@ -186,7 +200,9 @@ public class Simulador {
         "12. Mejorar\n"+
         "13. Pasar varios días\n"+
         "14. Mostrar datos\n"+
-        "15. Reclamar Recompensa");
+        "15. Entregar peces\n"+
+        "16. Reclamar Recompensa\n"+
+        "0. Salir");
         
     }
 
@@ -309,6 +325,9 @@ public class Simulador {
             }else{
                 totalRio += p.getTotalAlive();
             }
+        }
+        if(instancia.dia%10==0){
+            GeneradorBD.anadirPedido();
         }
         System.out.println(pecesVendidos+" peces vendidos por un total de "+dineroVendido+" monedas");
         PremadeLogs.nextDay(instancia.dia,totalRio,totalMar,dineroVendido,instancia.monedas.getCantidad());
@@ -639,6 +658,7 @@ public class Simulador {
         int op = -1;
         while (op != 0) {
             op = Reader.menuGenerator(new String[]{
+                "Datos a mostrar:",
                 "Mostrar todos los clientes",
                 "Mostrar datos de un cliente",
                 "Mostrar todos los peces",
@@ -652,37 +672,83 @@ public class Simulador {
                 case 0:
                     break;
                 case 1:
-                    DAOPedidos.getAllInfoFromClients();
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClients(true));
                     break;
                 case 2:
                     System.out.println("Introduce el ID del cliente:");
-                    DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClient(Reader.readTheNumber(1, 1000)));
                     break;
                 case 3:
-                    DAOPedidos.getAllInfoFromPeces();
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPeces(true));
                     break;
                 case 4:
                     System.out.println("Introduce el ID del pez:");
-                    DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPez(Reader.readTheNumber(1, 1000)));
                     break;
                 case 5:
-                    DAOPedidos.getAllInfoFromPedidos();
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedidos(true));
                     break;
                 case 6:
                     System.out.println("Introduce el ID del pedido:");
-                    DAOPedidos.getAllInfoFromPedido(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPedido(Reader.readTheNumber(1, 1000)));
                     break;
                 case 7:
                     System.out.println("Introduce el ID del cliente:");
-                    DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromClientePedidos(Reader.readTheNumber(1, 1000), true));
                     break;
                 case 8:
                     System.out.println("Introduce el ID del pez:");
-                    DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000));
+                    DAOPedidos.showTable(DAOPedidos.getAllInfoFromPezPedidos(Reader.readTheNumber(1, 1000), true));
                     break;
                 default:
                     break;
             }
+        }
+    }
+
+    /**
+     * Pide al usuario elegir un pedido.
+     * 
+     * @return  El ID del pedido elegido.
+     */
+    public static int selectPedido() {
+        ResultSet pedidos = DAOPedidos.getAllInfoFromPedidos(false);
+        String[] menuPedido = new String[]{"Selecciona un pedido:"};
+        try {
+            while (pedidos.next()) {
+                String pedido = "[" + pedidos.getInt("ID") + "] " + pedidos.getString("Nombre del cliente") + ": " + pedidos.getString("Tipo de pez") + " " + pedidos.getInt("Cantidad entregada") + "/" + pedidos.getInt("Cantidad pedida") + "(" + ((int)(((double)pedidos.getInt("Cantidad entregada")/(double)pedidos.getInt("Cantidad pedida"))*100) + "%)");
+                menuPedido = Arrays.copyOf(menuPedido, menuPedido.length+1);
+                menuPedido[menuPedido.length-1] = pedido;
+            } 
+        }catch (SQLException e) {
+            ErrorWriter.writeInErrorLog("Error al elegir un pedido.");
+        }
+        return Reader.menuGenerator(menuPedido);
+    }
+
+    /**
+     * Entrega peces a un pedido especificado.
+     */
+    public static void resPedido() {
+        int idPedido = selectPedido();
+        if (idPedido != 0) {
+            ResultSet pedido = DAOPedidos.getAllInfoFromPedido(idPedido);
+            String tipoPez = "";
+            int pezCount = 0;
+            
+            try {
+                pedido.next();
+                tipoPez = pedido.getString("Tipo de pez").toString();
+                pezCount = pedido.getInt("Cantidad pedida") - pedido.getInt("Cantidad entregada");
+            } catch (SQLException e) {
+                ErrorWriter.writeInErrorLog("Error al intentar recoger datos de un pedido.");
+            }
+            int pisci = instancia.selectPisc();
+            int retirados = instancia.getPiscis().get(pisci).sendFish(tipoPez, pezCount);
+
+            DAOPedidos.deliverFish(idPedido, retirados);
+        } else {
+            System.out.println("Cancelando...");
         }
     }
 
@@ -745,6 +811,9 @@ public class Simulador {
                         showData();
                         break;
                     case 15:
+                        resPedido();
+                        break;
+                    case 16:
                         GestorXml.claimReward();
                         break;
                     case 0:
@@ -763,7 +832,7 @@ public class Simulador {
                         cheat99();
                         break;
                     default:
-                    System.out.println("Opción no valida");
+                        System.out.println("Opción no valida");
                         break;
                 }
             }
@@ -775,6 +844,7 @@ public class Simulador {
             Guardado.close();
             LogWriter.closeLog();
             ErrorWriter.closeErrorLog();
+            Conexion.closeCon();
         }
     }
 

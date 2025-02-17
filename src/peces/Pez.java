@@ -44,6 +44,9 @@ public abstract class Pez {
     /** El tipo de pez (Base, Normal, Inversion o Riesgo) */
     private PecesTipo tipo;
 
+    /** Si el pez está enfermo */
+    private boolean enfermo;
+
     
     /**
      * El constructor básico de un pez genérico.
@@ -149,6 +152,11 @@ public abstract class Pez {
         return tipo;
     }
 
+    /** @return Si el pez está enfermo. */
+    public boolean isEnfermo(){
+        return enfermo;
+    }
+
     /** @param edad La edad a cambiar. */
     public void setEdad(int edad) {
         this.edad = edad;
@@ -184,6 +192,11 @@ public abstract class Pez {
         return (this.edad >= this.madurez);
     }
 
+    /** @param enfermo Si el pez está enfermo o no. */
+    public void setEnfermo(boolean enfermo){
+        this.enfermo = enfermo;
+    }
+
     /**
      * Método que muestra el estado actual del pez mostrando información como nombre, edad, sexo, etc.
      */
@@ -195,7 +208,8 @@ public abstract class Pez {
             "Vivo: " + (this.vivo ? "Si" : "No") + "\n" +
             "Alimentado: " + (this.alimentado ? "si" : "No") + "\n" +
             "Adulto: " + (this.isAdulto() ? "Si" : "No") + "\n" + 
-            "Fértil: " + (this.fertil ? "Si" : "No")
+            "Fértil: " + (this.fertil ? "Si" : "No") + "\n" +
+            "Enfermo: " + (this.enfermo ? "Si" : "No")
         );
     }
 
@@ -221,8 +235,11 @@ public abstract class Pez {
                 if (this.edad == this.madurez) {
                     this.fertil = true;
                 }
-                if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5)) {
-                    setVivo(false);
+                if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5) || (this.enfermo && this.edad < this.madurez && RNG.RandomInt(4) == 1) || (this.enfermo && isAdulto() && RNG.RandomInt(10) == 1)) {
+                    this.vivo = false;
+                }
+                if(this.alimentado && RNG.RandomInt(10) == 1){
+                    this.enfermo = false;
                 }
                 return comido;
             }

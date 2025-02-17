@@ -8,6 +8,7 @@ import helpers.ErrorWriter;
 import helpers.PremadeLogs;
 import helpers.Reader;
 import main.Simulador;
+import peces.Pez;
 import tanque.Tanque;
 
 /**Objeto representativo de la piscifactoria */
@@ -162,6 +163,7 @@ public class Piscifactoria {
         int machosTotal=0;
         int hembrasTotal=0;
         int fertilesTotal=0;
+        int enfermosTotal=0;
         for(int i=0;i<tanques.size();i++){
             maxTotal += tanques.get(i).getMaxSize();
             ocupTotal += tanques.get(i).ocupacion();
@@ -171,6 +173,7 @@ public class Piscifactoria {
             machosTotal += tanques.get(i).machos();
             hembrasTotal += tanques.get(i).hembras();
             fertilesTotal += tanques.get(i).fertiles();
+            enfermosTotal += tanques.get(i).enfermos();
         }
         try {
             System.out.println(
@@ -190,6 +193,9 @@ public class Piscifactoria {
                 if(fertilesTotal!=0&&vivosTotal!=0){
                     System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"("+(int)(((double)fertilesTotal)/vivosTotal*100)+"%)");
                 }else{System.out.println("Fértiles: "+ fertilesTotal +"/"+ vivosTotal +"(0%)");}
+                if(enfermosTotal!=0&&vivosTotal!=0){
+                    System.out.println("Enfermos: "+ enfermosTotal +"/"+ vivosTotal +"("+(int)(((double)enfermosTotal)/vivosTotal*100)+"%)");
+                }else{System.out.println("Enfermos: "+ enfermosTotal +"/"+ vivosTotal +"(0%)");}
         } catch (ArithmeticException e) {
             ErrorWriter.writeInErrorLog("Error al intentar mostrar información de la piscifactoría " + this.nombre);
         }
@@ -278,6 +284,33 @@ public class Piscifactoria {
         PremadeLogs.sellFish(pecesVendidos,this.nombre,dineroVendido);
         System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
         return new int[]{dineroVendido,pecesVendidos};
+    }
+
+    /**
+     * Metodo que retira peces para su venta en un pedido de cliente
+     * @param fishName Nombre del pez a retirar
+     * @param maxAmount Maxima cantidad de peces a retirar
+     * @return Numero de peces retirados
+     */
+    public int sendFish(String fishName,int maxAmount){
+        int counter = 0;
+        if (maxAmount!=-1) {
+            System.out.println("Seleccione un tanque para retirar los peces de este pedido");
+            int option = selectTank();
+            if(tanques.get(option).getTipoPez().toLowerCase().trim().equals(fishName.toLowerCase().trim())){
+                ArrayList<Pez> tanq = tanques.get(option).getPeces();
+                for (int i = 0; i < tanq.size(); i++) {
+                    if (tanq.get(i).isAdulto()&&maxAmount!=counter) {
+                        tanq.remove(i);
+                        tanques.get(option).setPeces(tanq);
+                        counter++;
+                    }
+                }
+            }else{
+                System.out.println("El tanque seleccionado no posee el tipo de peces requeridos");
+            }
+        }
+        return counter;
     }
 
     /**
@@ -373,6 +406,27 @@ public class Piscifactoria {
     public void addTank(){
         this.tanques.add(new Tanque(this.tanques.size()+1, this.tipo,nombre));
         System.out.println("Nuevo tanque añadido a la piscifactoría "+this.nombre);
+    }
+
+    /**
+     * Menú para mostrar cuantos peces enfermos hay en la piscifactoría por tanques
+     * @return
+     */
+    public String menuEnfermos(){
+        String enf = "Piscifactoría "+this.nombre+" [";
+        for(Tanque tanque :tanques){
+            enf += String.valueOf(tanque.enfermos())+"|";
+        }
+        return enf.substring(0,enf.lastIndexOf("|"));
+    }
+
+    /**
+     * Cura a los peces enfermos de todos los tanques de la piscifactoría
+     */
+    public void curar(){
+        for(Tanque tanque : tanques){
+            tanque.curar();
+        }
     }
 
     @Override
