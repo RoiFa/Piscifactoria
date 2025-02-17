@@ -242,10 +242,10 @@ public class Simulador {
         }
         System.out.println("Día actual: "+instancia.dia);
         System.out.println("Monedas disponibles: "+instancia.monedas.getCantidad());
-        System.out.println();
         if(instancia.almacen.getDisponible()){
-            instancia.almacen.toString();
+            System.out.println(instancia.almacen.toString());
         }
+        System.out.println();
     }
 
     /**
@@ -518,6 +518,7 @@ public class Simulador {
                                 Langostinos.mejora();
                                 System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
                                 System.out.println("Has comprado exitosamente la granja de langostinos");
+                                PremadeLogs.buyFarm("Langostinos");
                             }
                         }else{
                             System.out.println("Ya posees este edificio");
@@ -534,6 +535,7 @@ public class Simulador {
                                 Fitoplacton.setDisponible(true);
                                 System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
                                 System.out.println("Has comprado exitosamente la granja de fitoplacton");
+                                PremadeLogs.buyFarm("Fitoplacton");
                             }
                         }else{
                             System.out.println("Ya posees este edificio");
@@ -620,6 +622,7 @@ public class Simulador {
                         if (instancia.monedas.comprar(1500)) {
                             Langostinos.mejora();
                             System.out.println("Se ha mejorado la granja de langostinos");
+                            PremadeLogs.upgradeFarm("Langostinos", Langostinos.getTanques().size());
                         }else{
                             System.out.println("Operacion cancelada");
                         }
@@ -635,6 +638,7 @@ public class Simulador {
                         if (instancia.monedas.comprar(2500)) {
                             Fitoplacton.mejora();
                             System.out.println("Se ha mejorado la granja de fitoplacton");
+                            PremadeLogs.upgradeFarm("Fitoplacton", Fitoplacton.getTanques());
                         }else{
                             System.out.println("Operacion cancelada");
                         }

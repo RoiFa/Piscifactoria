@@ -24,13 +24,17 @@ public class Langostinos {
         Langostinos.muertos = muertos;
     }
 
+    public static ArrayList<TanqueLangostinos> getTanques() {
+        return tanques;
+    }
+
     public static void replenish(){
         boolean replenished=false;
-        for(int i=0;i<tanques.size()&&replenished;i++){
+        for(int i=0;i<tanques.size();i++){
             if(i==0){
                 replenished=false;
             }
-            if (tanques.get(i).getComida()!=150) {
+            if (tanques.get(i).getComida()!=3) {
                 if(Simulador.instancia.almacen.getVegetal()>49){
                     Simulador.instancia.almacen.setVegetal(Simulador.instancia.almacen.getVegetal()-50);
                     tanques.get(i).addFood();

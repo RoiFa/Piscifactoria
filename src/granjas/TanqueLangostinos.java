@@ -22,10 +22,11 @@ public class TanqueLangostinos {
                 descanso++;
             }
             dead--;
-        }else if(comida>50){
+        }else if(comida>=1){
             if(descanso!=3){
                 descanso++;
             }
+            comida--;
         }else{
             if (descanso!=0) {
                 descanso--;
@@ -39,6 +40,6 @@ public class TanqueLangostinos {
     }
 
     public void addFood(){
-        comida += 50;
+        comida += 1;
     }
 }
