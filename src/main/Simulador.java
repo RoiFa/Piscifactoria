@@ -56,6 +56,10 @@ public class Simulador {
         private ArrayList<Piscifactoria> piscis;
         /**  */
         public static Connection conn;
+
+        public Langostinos lang;
+
+        public Fitoplacton fito;
     
         /**
          * Constructor para la carga de datos
@@ -121,6 +125,14 @@ public class Simulador {
          */
         public String getNombre(){
             return nombre;
+        }
+
+        public Langostinos getLang() {
+            return lang;
+        }
+
+        public Fitoplacton getFito() {
+            return fito;
         }
     
     
@@ -197,7 +209,8 @@ public class Simulador {
         "12. Mejorar\n"+
         "13. Pasar varios días\n"+
         "14. Mostrar datos\n"+
-        "15. Reclamar Recompensa");
+        "15. Reclamar Recompensa\n"+
+        "16. Mostrar estado granjas");
         
     }
 
@@ -514,6 +527,7 @@ public class Simulador {
                     if(instancia.almacen.getDisponible()){
                         if (!Langostinos.isDisponible()) {
                             if(instancia.monedas.comprar(3000)){
+                                instancia.lang = new Langostinos();
                                 Langostinos.setDisponible(true);
                                 Langostinos.mejora();
                                 System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
@@ -532,6 +546,7 @@ public class Simulador {
                     if(instancia.almacen.getDisponible()){
                         if (!Fitoplacton.isDisponible()) {
                             if(instancia.monedas.comprar(5000)){
+                                instancia.fito = new Fitoplacton();
                                 Fitoplacton.setDisponible(true);
                                 System.out.println("Monedas restantes: "+instancia.monedas.getCantidad());
                                 System.out.println("Has comprado exitosamente la granja de fitoplacton");
@@ -834,10 +849,17 @@ public class Simulador {
                     case 15:
                         GestorXml.claimReward();
                         break;
+                    case 16:
+                        System.out.println(instancia.lang);
+                        System.out.println(instancia.fito);
+                        break;
                     case 0:
                         System.out.println("Cerrando...");
                         Guardado.save();
                         System.out.println("Salida con éxito");
+                        break;
+                    case 95:
+                        cheat95();
                         break;
                     case 96:
                         GestorXml.randomFarm();
@@ -870,6 +892,11 @@ public class Simulador {
 
     public static void cheat99(){
         instancia.monedas.anadir(1000);
+        PremadeLogs.secretMoney(Simulador.instancia.monedas.getCantidad());
+    }
+
+    public static void cheat95(){
+        instancia.monedas.anadir(100000);
         PremadeLogs.secretMoney(Simulador.instancia.monedas.getCantidad());
     }
 

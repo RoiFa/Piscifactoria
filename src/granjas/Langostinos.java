@@ -2,8 +2,12 @@ package granjas;
 
 import java.util.ArrayList;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.LangostinosAdapter;
 import main.Simulador;
 
+@JsonAdapter(LangostinosAdapter.class)
 public class Langostinos {
 
     private static boolean disponible=false;
@@ -22,6 +26,10 @@ public class Langostinos {
 
     public static void setMuertos(int muertos) {
         Langostinos.muertos = muertos;
+    }
+
+    public static void setTanques(ArrayList<TanqueLangostinos> tanques) {
+        Langostinos.tanques = tanques;
     }
 
     public static ArrayList<TanqueLangostinos> getTanques() {
@@ -60,5 +68,10 @@ public class Langostinos {
 
     public static void mejora(){
         tanques.add(new TanqueLangostinos());
+    }
+
+    @Override
+    public String toString() {
+        return "Langostinos\nNº de Tanques:"+getTanques().size()+"\nPeces muertos:"+getMuertos();
     }
 }

@@ -1,7 +1,11 @@
 package granjas;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.FitoplactonAdapter;
 import main.Simulador;
 
+@JsonAdapter(FitoplactonAdapter.class)
 public class Fitoplacton {
 
     private static boolean disponible=false;
@@ -37,5 +41,16 @@ public class Fitoplacton {
 
     public static void setDisponible(boolean disponible) {
         Fitoplacton.disponible = disponible;
+    }
+    public static void setCiclo(int ciclo) {
+        Fitoplacton.ciclo = ciclo;
+    }
+    public static void setTanques(int tanques) {
+        Fitoplacton.tanques = tanques;
+    }
+
+    @Override
+    public String toString() {
+        return "Fitoplacton\nNº de tanques:"+getTanques()+"\nCiclo:"+getCiclo();
     }
 }

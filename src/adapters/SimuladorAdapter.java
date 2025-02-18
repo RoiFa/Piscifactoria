@@ -15,6 +15,8 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import estadisticas.Estadisticas;
+import granjas.Fitoplacton;
+import granjas.Langostinos;
 import main.Almacen;
 import main.Simulador;
 import monedas.Monedas;
@@ -35,6 +37,8 @@ public class SimuladorAdapter implements JsonSerializer<Simulador>,JsonDeseriali
         jsonObject.add("orca", new JsonPrimitive(src.orca.exportarDatos(src.getImplementados())));
         JsonObject edificios = new JsonObject();
         edificios.add("almacen", context.serialize(src.almacen));
+        edificios.add("fitoplacton", context.serialize(src.getFito()));
+        edificios.add("langostinos", context.serialize(src.getLang()));
         jsonObject.add("edificios", context.serialize(edificios));
         jsonObject.add("piscifactorias", context.serialize(src.getPiscis()));
         return jsonObject;
@@ -51,6 +55,8 @@ public class SimuladorAdapter implements JsonSerializer<Simulador>,JsonDeseriali
         sim.orca = new Estadisticas(sim.getImplementados(), jsonObject.get("orca").getAsString());
         JsonObject edificios = jsonObject.getAsJsonObject("edificios");
         sim.almacen = context.deserialize(edificios.get("almacen"), Almacen.class);
+        sim.lang = context.deserialize(edificios.get("langostinos"), Langostinos.class);
+        sim.fito = context.deserialize(edificios.get("fitoplacton"), Fitoplacton.class);
         Type tipo = new TypeToken<ArrayList<Piscifactoria>>(){}.getType();
         sim.setPiscis(context.deserialize(jsonObject.get("piscifactorias"), tipo));
         return sim;

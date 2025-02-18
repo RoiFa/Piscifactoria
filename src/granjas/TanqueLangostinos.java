@@ -1,7 +1,11 @@
 package granjas;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.TanqueLangostinosAdapter;
 import main.Simulador;
 
+@JsonAdapter(TanqueLangostinosAdapter.class)
 public class TanqueLangostinos {
 
     private int comida=0;
@@ -42,4 +46,13 @@ public class TanqueLangostinos {
     public void addFood(){
         comida += 1;
     }
+
+    public void setComida(int comida) {
+        this.comida = comida;
+    }
+
+    public void setDescanso(int descanso) {
+        this.descanso = descanso;
+    }
+    
 }
