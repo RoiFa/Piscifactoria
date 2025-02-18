@@ -87,11 +87,17 @@ public class TanqueCria extends Tanque{
             }
         } else {
             if (this.tipo.equals("mar")) {
-                menuEspeciesMar();
-                creadorEspecies(especiesMar[(Reader.readTheNumber(1, 7)-1)], false);
+                int opt = Reader.menuGenerator(new String[]{"Seleccione una de estas especies a añadir:","Rodaballo","Besugo","Arenque del Atlántico","Abadejo","Cobia","Dorada","Bagre de canal"});
+                if (opt != 0) {
+                    this.tipoPez = especiesMar[opt-1].getNombre();
+                    creadorEspecies(especiesMar[opt-1], false);
+                }
             } else {
-                menuEspeciesRio();
-                creadorEspecies(especiesRio[(Reader.readTheNumber(1, 7)-1)], false);
+                int opt = Reader.menuGenerator(new String[]{"Seleccione una de estas especies a añadir:","Carpa","Koi","Salmón chinook","Tilapia del Nilo","Pejerrey","Dorada","Bagre de canal"});
+                if (opt != 0) {
+                    this.tipoPez = especiesRio[opt-1].getNombre();
+                    creadorEspecies(especiesRio[opt-1], false);
+                }
             }
         }
     }
@@ -118,8 +124,8 @@ public class TanqueCria extends Tanque{
             }
         } else {
             if(Simulador.instancia.monedas.comprar(pez.getCoste()*2)){
-                this.peces.set(0, pez.reprod());
-                this.peces.set(1, pez.reprod(!predominan()));
+                this.peces.add(pez.reprod());
+                this.peces.add(pez.reprod(!predominan()));
                 this.tipo = pez.getNombre();
                 PremadeLogs.buyTwoFish(pez.getNombre(), pez.getCoste()*2, numTanque, nomPiscifactoria);
             }

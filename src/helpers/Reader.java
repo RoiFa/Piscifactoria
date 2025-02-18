@@ -95,11 +95,11 @@ static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     public static int menuGenerator(String[] options){
         try {
             System.out.println(options[0]);
-        for (int i = 1; i<options.length; i++){
-            System.out.println(i+".-"+options[i]);
-        }
-        System.out.println("0.-Cancelar\n-----------------------");
-        return readTheNumber(0, options.length);
+            for (int i = 1; i<options.length; i++){
+                System.out.println(i+".-"+options[i]);
+            }
+            System.out.println("0.-Cancelar\n-----------------------");
+            return readTheNumber(0, options.length-1);
         } catch (Exception e) {
             ErrorWriter.writeInErrorLog("Error al generar un menu");
             return 0;

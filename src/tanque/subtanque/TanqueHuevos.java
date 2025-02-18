@@ -56,6 +56,11 @@ public class TanqueHuevos extends Tanque{
         return false;
     }
 
+    @Override
+    public void addFish(Pez fish) {
+        this.peces.add(fish);
+    }
+
     /**
      * Añade a una lista el número de cada tipo de pez.
      * 
@@ -64,8 +69,12 @@ public class TanqueHuevos extends Tanque{
      */
     public Map<String, Integer> listFish(Map<String, Integer> map) {
         for (Pez pez : peces) {
-            int newInt = map.get(pez.getNombre())+1;
-            map.put(pez.getNombre(), newInt);
+            if (map.get(pez.getNombre()) == null) {
+                map.putIfAbsent(pez.getNombre(), 1);
+            } else {
+                int newInt = map.get(pez.getNombre())+1;
+                map.put(pez.getNombre(), newInt);
+            }
         }
         return map;
     }

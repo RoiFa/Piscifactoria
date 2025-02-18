@@ -216,16 +216,16 @@ public abstract class Pez {
                         this.fertil = true;
                     }
                 }
-            } else {
-                setEdad(edad+1);
-                if (this.edad == this.madurez) {
-                    this.fertil = true;
-                }
-                if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5)) {
-                    setVivo(false);
-                }
                 return comido;
             }
+            setEdad(edad+1);
+            if (this.edad == this.madurez) {
+                this.fertil = true;
+            }
+            if ((!this.alimentado && RNG.RandomBoolean()) || (this.edad < this.madurez && this.edad % 2 == 0 && RNG.RandomInt(100) <= 5)) {
+                setVivo(false);
+            }
+            return comido;
         }
         return new int[] {0, 0};
     }

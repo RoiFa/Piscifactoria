@@ -1,9 +1,8 @@
 package piscifactoria;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static java.util.Map.entry;
 
 import com.google.gson.annotations.JsonAdapter;
 
@@ -282,6 +281,12 @@ public class Piscifactoria {
             dineroVendido += datos[1];
 
         }
+
+        for (TanqueCria tankCria : tanquesCria) {
+            datos = tankCria.nextDay(comidaAnimal, comidaVegetal);
+            comidaAnimal = datos[2];
+            comidaVegetal = datos[3];
+        }
         System.out.println("Piscifactoría "+nombre+": "+pecesVendidos+" peces vendidos por "+dineroVendido+" monedas");
         return new int[]{pecesVendidos,dineroVendido};
     }
@@ -421,11 +426,53 @@ public class Piscifactoria {
     }
 
     /**
+     * Muestra el texto del menú con los posibles tanques de cría a seleccionar
+     */
+    private void menuCriaTank(){
+        int i = 1;
+        System.out.println("Seleccione un tanque de cría:");
+        for(Tanque tanqueCria : tanquesCria){
+            System.out.print(i+". Tanque de cría "+tanqueCria.getNumTanque());
+            if(tanqueCria.ocupacion()==0){
+                System.out.println();
+            }else{
+                System.out.println(": "+tanqueCria.getTipoPez());
+            }
+            i++;
+        }
+    }
+
+    /**
+     * Permite seleccionar un tanque de cría y lo devuelve
+     * @return el tanque de cría seleccionado
+     */
+    public int selectCriaTank(){
+        menuCriaTank();
+        int opcion = Reader.readTheNumber(1,tanques.size());
+        return opcion-1;
+    }
+
+    /**
      * Elimina los peces muertos de los tanques de la piscifactoría
      */
     public void cleanTank(){
         for(Tanque tanque : tanques){
             tanque.cleanTank();
+        }
+    }
+
+    /**
+     * Elimina todos los peces de todos los tanques de huevos, pidiendo confirmación.
+     */
+    public void emptyEggTanks() {
+        System.out.println("Estás seguro de esto? (0: volver; 1: continuar)");
+        int confirm = Reader.readTheNumber(0, 1);
+        if (confirm == 1) {
+            for (TanqueHuevos th : tanquesHuevos) {
+                th.emptyTank();
+            }
+        } else {
+            System.out.println("Cancelando...");
         }
     }
 
@@ -456,29 +503,9 @@ public class Piscifactoria {
     /**
      * Muestra el número de peces de cada tipo de pez en los tanques de huevos.
      */
-    public void listFishInEggTanks() { //TODO añadir al menu principal y comprobar
-        Map<String, Integer> data;
-        if (this.tipo.equals("rio")) {
-            data = Map.ofEntries(
-                entry("Carpa", 0),
-                entry("Koi", 0),
-                entry("Pejerrey", 0),
-                entry("Salmon Chinook", 0),
-                entry("Tilapia del Nilo", 0),
-                entry("Bagre de Canal", 0),
-                entry("Dorada", 0)
-            );
-        } else {
-            data = Map.ofEntries(
-                entry("Abadejo", 0),
-                entry("Arenque del Atlantico", 0),
-                entry("Besugo", 0),
-                entry("Cobia", 0),
-                entry("Rodaballo", 0),
-                entry("Bagre de Canal", 0),
-                entry("Dorada", 0)
-            );
-        }
+    public void listFishInEggTanks() {
+        System.out.println("Número de cada tipo de pez en tanques de huevos:");
+        Map<String, Integer> data = new HashMap<>();
 
         for (TanqueHuevos eggTank : tanquesHuevos) {
             data = eggTank.listFish(data);

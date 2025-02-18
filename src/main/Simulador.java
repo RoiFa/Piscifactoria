@@ -701,10 +701,10 @@ public class Simulador {
         if (piscNum != -1) {
             for (Piscifactoria p : instancia.piscis) {
                 if (!p.getTanquesCria().isEmpty() || !p.getTanquesHuevos().isEmpty()) {
+                    piscNum--;
                     if (piscNum == 0) {
                         return instancia.getPiscis().indexOf(p);
                     }
-                    piscNum--;
                 }
             }
         }
@@ -752,12 +752,57 @@ public class Simulador {
         return hasSpecialTank;
     }
 
+    /**
+     * Muestra el menú para la gestión de los tanques de crías de una piscifactoría
+     * 
+     * @param pisc  El número de la piscifactoría en la lista.
+     */
     private static void manageCriaTank(int pisc) {
-        //TODO Hacer menú para mostrar estado, comprar peces o vaciar.
+        int cria = instancia.getPiscis().get(pisc).selectCriaTank();
+        String[] menu = new String[]{"Escoge qué quieres gestionar:", "Estado del tanque", ""};
+        if (instancia.getPiscis().get(pisc).getTanquesCria().get(cria).getPeces().isEmpty()) {
+            menu[menu.length-1] = "Comprar peces";
+        } else {
+            menu[menu.length-1] = "Vaciar tanque";
+        }
+
+        int op = Reader.menuGenerator(menu);
+        switch (op) {
+            case 0:
+                System.out.println("Cancelando...");
+                break;
+            case 1:
+                instancia.getPiscis().get(pisc).getTanquesCria().get(cria).showStatus();
+                break;
+            case 2:
+                if (instancia.getPiscis().get(pisc).getTanquesCria().get(cria).getPeces().isEmpty()) {
+                    instancia.getPiscis().get(pisc).getTanquesCria().get(cria).addFish(false);
+                } else {
+                    instancia.getPiscis().get(pisc).getTanquesCria().get(cria).emptyTank();
+                }
+                break;
+        }
+
     }
 
+    /**
+     * Muestra el menú para la gestión de los tanques de huevos de una piscifactoría
+     * 
+     * @param pisc  El número de la piscifactoría en la lista.
+     */
     private static void manageEggTank(int pisc) {
-        //TODO Hacer menú para listar o vaciar
+        int op = Reader.menuGenerator(new String[]{"Escoge qué quieres gestionar:", "Listar peces", "Vaciar tanque de huevos"});
+        switch (op) {
+            case 0:
+                System.out.println("Cancelando...");
+                break;
+            case 1:
+                instancia.getPiscis().get(pisc).listFishInEggTanks();
+                break;
+            case 2:
+                instancia.getPiscis().get(pisc).emptyEggTanks();
+                break;
+        }
     }
 
     /**
@@ -917,7 +962,6 @@ public class Simulador {
                 switch (op) {
                     case 1:
                         showGeneralStatus();
-                        GestorXml.randomSpecialTank();
                         break;
                     case 2:
                         showSpecificStatus();
@@ -989,6 +1033,7 @@ public class Simulador {
                         break;
                 }
             }catch(Exception e){
+                e.printStackTrace();
                 ErrorWriter.writeInErrorLog("Error general en la simulación.");
             }
         }

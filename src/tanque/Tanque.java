@@ -238,10 +238,12 @@ public class Tanque {
                 if(tipo.equals("mar")){
                     for(int i=0;i<especiesMar.length;i++){
                         if(especiesMar[i].getNombre().equals(this.tipoPez)){
-                            if(maxSize!=ocupacion()){
-                                for(int k=0;k<especiesMar[i].getHuevos();k++){
-                                    peces.add(creadorEspecies(especiesMar[(i+1)],true));
+                            for(int k=0;k<especiesMar[i].getHuevos();k++){
+                                if(maxSize!=ocupacion()){
+                                    peces.add(creadorEspecies(especiesMar[i],true));
                                     Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
+                                } else {
+                                    sendCria(creadorEspecies(especiesMar[i], true));   
                                 }
                             }
                         }
@@ -249,10 +251,12 @@ public class Tanque {
                 }else{
                     for(int i=0;i<especiesRio.length;i++){
                         if(especiesRio[i].getNombre().equals(this.tipoPez)){
-                            if(maxSize!=ocupacion()){
-                                for(int j=0;j<especiesMar[i].getHuevos();j++){
-                                    peces.add(creadorEspecies(especiesRio[(i+1)],true));
+                            for(int j=0;j<especiesRio[i].getHuevos();j++){
+                                if(maxSize!=ocupacion()){
+                                    peces.add(creadorEspecies(especiesRio[(i)],true));
                                     Simulador.instancia.orca.registrarNacimiento(this.tipoPez);
+                                } else {
+                                    sendCria(creadorEspecies(especiesRio[i], true));   
                                 }
                             }
                         }
@@ -320,6 +324,27 @@ public class Tanque {
     }
 
     /**
+     * Manda una cría a un tanque de huevos si la piscifactoría tiene uno.
+     * 
+     * @param pez   El pez a añadir
+     * @return Si el pez ha sido añadido con éxito.
+     */
+    private boolean sendCria(Pez pez) {
+        int length = Simulador.instancia.getPiscis().size();
+        for (int i = 0; i < length; i++) {
+            if (Simulador.instancia.getPiscis().get(i).getNombre().equals(this.nomPiscifactoria)) {
+                for (int j = 0; j < Simulador.instancia.getPiscis().get(i).getTanquesHuevos().size(); j++) {
+                    if (Simulador.instancia.getPiscis().get(i).getTanquesHuevos().get(j).ocupacion() < Simulador.instancia.getPiscis().get(i).getTanquesHuevos().get(j).getMaxSize()) {
+                        Simulador.instancia.getPiscis().get(i).getTanquesHuevos().get(j).addFish(pez);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Añade un pez al tanque.
      * 
      * @param fish  El pez a añadir
@@ -337,15 +362,6 @@ public class Tanque {
             }
         }
         return "";
-    }
-
-    /**Menu de texto para peces de Rio */
-    public void menuEspeciesRio(){
-        
-    }
-    
-    /**Menu de texto para peces de Mar */
-    public void menuEspeciesMar(){
     }
 
     /**
