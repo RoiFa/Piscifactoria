@@ -2,6 +2,9 @@ package tanque.subtanque;
 
 import java.util.ArrayList;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.TanqueCriaAdapter;
 import helpers.ErrorWriter;
 import helpers.PremadeLogs;
 import helpers.Reader;
@@ -22,7 +25,21 @@ import peces.rio.TilapiaDelNilo;
 import piscifactoria.Piscifactoria;
 import tanque.Tanque;
 
+@JsonAdapter(TanqueCriaAdapter.class)
 public class TanqueCria extends Tanque{
+
+    /** El día actual dentro del ciclo de reproducción */
+    private int ciclo;
+
+    /** @return El día dentro del ciclo de reproducción */
+    public int getCiclo() {
+        return ciclo;
+    }
+
+    /** @param ciclo El nuevo ciclo */
+    public void setCiclo(int ciclo) {
+        this.ciclo = ciclo;
+    }
     
     public TanqueCria(int numTanqueCria, String tipo, String nomPiscifactoria) {
         super(numTanqueCria, tipo, nomPiscifactoria);
@@ -30,6 +47,14 @@ public class TanqueCria extends Tanque{
         
     }
 
+    /** Constructor para la carga de datos. */
+    public TanqueCria(){
+        this.maxSize = 2;
+    }
+
+    /**
+     * Crea de forma dinámica el menú de gestión de un tanque de cría
+     */
     public void tankCriaMenu() {
 
         System.out.println(
