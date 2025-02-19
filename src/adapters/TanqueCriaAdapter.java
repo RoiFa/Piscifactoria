@@ -84,6 +84,7 @@ public class TanqueCriaAdapter implements JsonSerializer<TanqueCria>,JsonDeseria
             default:
                 break;
         }
+        t.setTipoPez(p.getNombre());
         t.addFish(p.reprod(true));
         t.addFish(p.reprod(false));
         t.getPeces().get(0).setEdad(jsonObject.get("madurez").getAsInt());

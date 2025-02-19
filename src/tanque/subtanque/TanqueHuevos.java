@@ -3,10 +3,14 @@ package tanque.subtanque;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.TanqueHuevosAdapter;
 import main.Simulador;
 import peces.Pez;
 import tanque.Tanque;
 
+@JsonAdapter(TanqueHuevosAdapter.class)
 public class TanqueHuevos extends Tanque{
     
     /**

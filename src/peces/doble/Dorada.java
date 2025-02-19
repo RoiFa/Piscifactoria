@@ -1,5 +1,8 @@
 package peces.doble;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.PezAdapter;
 import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
@@ -7,6 +10,7 @@ import propiedades.AlmacenPropiedades;
 /**
  * Clase que representa una dorada
  */
+@JsonAdapter(PezAdapter.class)
 public class Dorada extends Pez{
 
     /**

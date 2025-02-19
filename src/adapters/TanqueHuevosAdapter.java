@@ -31,7 +31,7 @@ import tanque.subtanque.TanqueHuevos;
 public class TanqueHuevosAdapter implements JsonSerializer<TanqueHuevos>,JsonDeserializer<TanqueHuevos>{
     
     @Override
-    public JsonElement serialize(TanqueHuevos src, Type typeOfSrc, JsonSerializationContext context) { //TODO Se está guardando toda la info de los peces en vez de sólo los nombres
+    public JsonElement serialize(TanqueHuevos src, Type typeOfSrc, JsonSerializationContext context) { 
         JsonObject jsonObject = new JsonObject();
         ArrayList<Pez> peces = src.getPeces();
         String[] arrayPeces = new String[0];

@@ -1,5 +1,8 @@
 package peces.mar;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.PezAdapter;
 import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
@@ -7,6 +10,7 @@ import propiedades.AlmacenPropiedades;
 /**
  * Clase que representa un arenque del atlántico
  */
+@JsonAdapter(PezAdapter.class)
 public class ArenqueDelAtlantico extends Pez{
 
     /**

@@ -1,5 +1,8 @@
 package peces.rio;
 
+import com.google.gson.annotations.JsonAdapter;
+
+import adapters.PezAdapter;
 import helpers.RNG;
 import peces.Pez;
 import propiedades.AlmacenPropiedades;
@@ -7,6 +10,7 @@ import propiedades.AlmacenPropiedades;
 /**
  * Clase que representa un pejerrey
  */
+@JsonAdapter(PezAdapter.class)
 public class Pejerrey extends Pez{
 
     /**
