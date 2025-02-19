@@ -41,6 +41,13 @@ public class TanqueCria extends Tanque{
         this.ciclo = ciclo;
     }
     
+    /**
+     * Constructor principal de un tanque de cría.
+     * 
+     * @param numTanqueCria El número de tanque de cría
+     * @param tipo  El tipo de piscifactoría en la que está (mar o río)
+     * @param nomPiscifactoria  El nombre de la piscifactoría donde se sitúa.
+     */
     public TanqueCria(int numTanqueCria, String tipo, String nomPiscifactoria) {
         super(numTanqueCria, tipo, nomPiscifactoria);
         this.maxSize = 2;

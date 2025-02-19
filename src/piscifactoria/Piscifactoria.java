@@ -305,7 +305,7 @@ public class Piscifactoria {
                     if (tank.getPeces().get(i)!=null&&tank.getPeces().get(i).isAdulto() && tank.getPeces().get(i).isVivo()) {
                         dineroVendido += tank.getPeces().get(i).getMonedas();
                         pecesVendidos++;
-                        Simulador.instancia.orca.registrarVenta(tank.buscaNombre(), tank.getPeces().get(i).getMonedas());
+                        Simulador.instancia.orca.registrarVenta(tank.getTipoPez(), tank.getPeces().get(i).getMonedas());
                         ArrayList<Pez> newPeces = tank.getPeces();
                         newPeces.remove(i);
                         tank.setPeces(newPeces);

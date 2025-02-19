@@ -355,15 +355,6 @@ public class Tanque {
         }
     }
 
-    public String buscaNombre(){
-        for(int i=0;i<peces.size();i++){
-            if(peces.get(i)!=null){
-                return peces.get(i).getNombre();
-            }
-        }
-        return "";
-    }
-
     /**
      * Encuentra un hueco dentro del array del Tanque
      * @return Devuelve la posicion del hueco
