@@ -204,6 +204,7 @@ public abstract class Pez {
      * 
      * @param comidaAnimal  La comida animal que hay en el almacén
      * @param comidaVegetal La comida vegetal que hay en el almacén
+     * @param enCria    Si el pez esta en un tanque de cria.
      * @return La cantidad de comida que come de cada tipo
      */
     public int[] grow(int comidaAnimal, int comidaVegetal, boolean enCria) { 

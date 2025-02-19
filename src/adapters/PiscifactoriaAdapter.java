@@ -28,7 +28,11 @@ public class PiscifactoriaAdapter implements JsonSerializer<Piscifactoria>,JsonD
         comida.add("vegetal", new JsonPrimitive(src.getComidaVegetal()));
         comida.add("animal", new JsonPrimitive(src.getComidaVegetal()));
         jsonObject.add("comida", comida);
-        jsonObject.add("tanques", context.serialize(src.tanques));
+        jsonObject.add("tanques", context.serialize(src.getTanques()));
+        JsonObject mejoras = new JsonObject();
+        mejoras.add("cria", context.serialize(src.getTanquesCria()));
+        mejoras.add("huevos", context.serialize(src.getTanquesHuevos()));
+        jsonObject.add("mejoras", mejoras);
         return jsonObject;
     }
 
@@ -44,13 +48,14 @@ public class PiscifactoriaAdapter implements JsonSerializer<Piscifactoria>,JsonD
         p.setComidaVegetal(comida.get("vegetal").getAsInt());
         p.setComidaAnimal(comida.get("animal").getAsInt());
         Type tipo = new TypeToken<ArrayList<Tanque>>(){}.getType();
-        p.tanques = context.deserialize(jsonObject.get("tanques"), tipo);
-        for(int i = 0;i<p.tanques.size();i++){
-            p.tanques.get(i).setNomPiscifactoria(p.getNombre());
-            p.tanques.get(i).setNumTanque(i+1);
-            p.tanques.get(i).setMaxSize(p.tanques.get(i).getPeces().size());
-            p.tanques.get(i).setTipo(p.getTipo());
+        p.setTanques(context.deserialize(jsonObject.get("tanques"), tipo));
+        for(int i = 0;i<p.getTanques().size();i++){
+            p.getTanques().get(i).setNomPiscifactoria(p.getNombre());
+            p.getTanques().get(i).setNumTanque(i+1);
+            p.getTanques().get(i).setMaxSize(p.getTanques().get(i).getPeces().size());
+            p.getTanques().get(i).setTipo(p.getTipo());
         }
+        p.setTanquesCria(context.deserialize(jsonObject.get("cria"), typeOfT));
         return p;
     }
 }

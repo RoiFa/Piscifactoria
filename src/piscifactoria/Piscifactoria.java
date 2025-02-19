@@ -31,7 +31,7 @@ public class Piscifactoria {
     /** El almacén de comida vegetal */
     private int comidaVegetal;
     /** La lista de tanques en la piscifactoría */
-    public ArrayList<Tanque> tanques;
+    private ArrayList<Tanque> tanques;
     /** La lista de tanques de cría en la piscifactoría */
     private ArrayList<TanqueCria> tanquesCria;
     /** La lista de tanques de huevos en la piscifactoría */

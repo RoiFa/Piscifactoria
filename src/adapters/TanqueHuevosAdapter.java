@@ -2,34 +2,44 @@ package adapters;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import peces.Pez;
+import peces.doble.BagreDeCanal;
+import peces.doble.Dorada;
+import peces.mar.Abadejo;
+import peces.mar.ArenqueDelAtlantico;
+import peces.mar.Besugo;
+import peces.mar.Cobia;
+import peces.mar.Rodaballo;
+import peces.rio.Carpa;
+import peces.rio.Koi;
+import peces.rio.Pejerrey;
+import peces.rio.SalmonChinook;
+import peces.rio.TilapiaDelNilo;
 import tanque.subtanque.TanqueHuevos;
 
 public class TanqueHuevosAdapter implements JsonSerializer<TanqueHuevos>,JsonDeserializer<TanqueHuevos>{
     
     @Override
-    public JsonElement serialize(TanqueHuevos src, Type typeOfSrc, JsonSerializationContext context) { //TODO todo aqui
+    public JsonElement serialize(TanqueHuevos src, Type typeOfSrc, JsonSerializationContext context) { //TODO Se está guardando toda la info de los peces en vez de sólo los nombres
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("pez", new JsonPrimitive(src.getTipoPez()));
-        jsonObject.add("madurez", new JsonPrimitive(src.ocupacion()));
-        JsonObject datos = new JsonObject();
-        datos.add("vivos", new JsonPrimitive(src.vivos()));
-        datos.add("maduros", new JsonPrimitive(src.adultos()));
-        datos.add("fertiles", new JsonPrimitive(src.fertiles()));
-        jsonObject.add("datos", datos);
-        jsonObject.add("peces", context.serialize(src.getPeces()));
+        ArrayList<Pez> peces = src.getPeces();
+        String[] arrayPeces = new String[0];
+        for (Pez pez : peces) {
+            arrayPeces = Arrays.copyOf(arrayPeces, arrayPeces.length+1);
+            arrayPeces[arrayPeces.length-1] = pez.getNombre();
+        }
+        jsonObject.add("peces", context.serialize(arrayPeces));
         return jsonObject;
     }
 
@@ -37,12 +47,54 @@ public class TanqueHuevosAdapter implements JsonSerializer<TanqueHuevos>,JsonDes
     public TanqueHuevos deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
-        JsonArray jsonArray = jsonObject.getAsJsonArray("peces");
-        TanqueHuevos t = new TanqueHuevos();
-        Type tipo = new TypeToken<ArrayList<Pez>>(){}.getType();
-        t.setPeces(context.deserialize(jsonArray, tipo));
-        t.setMaxSize(t.getPeces().size());
-        t.setTipoPez(jsonObject.get("pez").getAsString());
-        return t;
+        TanqueHuevos th = new TanqueHuevos();
+        Type tipo = new TypeToken<String[]>(){}.getType();
+        String[] pecesName = context.deserialize(jsonObject.get("peces"), tipo);
+        for (String pezName : pecesName) {
+            Pez p = null;
+            switch (pezName) {
+                case "Carpa":
+                    p = new Carpa();
+                    break;
+                case "Koi":
+                    p = new Koi();
+                    break;
+                case "Pejerrey ":
+                    p = new Pejerrey();
+                    break;
+                case "Salmón chinook":
+                    p = new SalmonChinook();
+                    break;
+                case "Tilapia del Nilo":
+                    p = new TilapiaDelNilo();
+                    break;
+                case "Abadejo":
+                    p = new Abadejo();
+                    break;
+                case "Arenque del Atlántico":
+                    p = new ArenqueDelAtlantico();
+                    break;
+                case "Besugo":
+                    p = new Besugo();
+                    break;
+                case "Cobia":
+                    p = new Cobia();
+                    break;
+                case "Rodaballo":
+                    p = new Rodaballo();
+                    break;
+                case "Bagre de canal":
+                    p = new BagreDeCanal();
+                    break;
+                case "Dorada":
+                    p = new Dorada();
+                    break;
+                default:
+                    break;
+            }
+            th.addFish(p);
+        }
+        
+        return th;
     }
 }

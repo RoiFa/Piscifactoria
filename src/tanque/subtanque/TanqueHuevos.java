@@ -22,7 +22,9 @@ public class TanqueHuevos extends Tanque{
     }
 
     /** Constructor para la carga de datos */
-    public TanqueHuevos(){}
+    public TanqueHuevos(){
+        this.maxSize = 25;
+    }
 
     /**
      * Busca si hay espacios en algún tanque de la piscifactoría y añade los peces que puedan ser añadidos.

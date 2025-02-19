@@ -41,54 +41,55 @@ public class TanqueCriaAdapter implements JsonSerializer<TanqueCria>,JsonDeseria
     public TanqueCria deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
-        String pezName = jsonObject.get("pez").getAsString();
         TanqueCria t = new TanqueCria();
+        String pezName = jsonObject.get("pez").getAsString();
         Pez p = null;
         switch (pezName) {
-                case "Carpa":
-                    p = new Carpa();
-                    break;
-                case "Koi":
-                    p = new Koi();
-                    break;
-                case "Pejerrey ":
-                    p = new Pejerrey();
-                    break;
-                case "Salmón chinook":
-                    p = new SalmonChinook();
-                    break;
-                case "Tilapia del Nilo":
-                    p = new TilapiaDelNilo();
-                    break;
-                case "Abadejo":
-                    p = new Abadejo();
-                    break;
-                case "Arenque del Atlántico":
-                    p = new ArenqueDelAtlantico();
-                    break;
-                case "Besugo":
-                    p = new Besugo();
-                    break;
-                case "Cobia":
-                    p = new Cobia();
-                    break;
-                case "Rodaballo":
-                    p = new Rodaballo();
-                    break;
-                case "Bagre de canal":
-                    p = new BagreDeCanal();
-                    break;
-                case "Dorada":
-                    p = new Dorada();
-                    break;
-                default:
-                    break;
-            }
-        t.addFish(p.reprod(true)); //TODO setear ciclo
+            case "Carpa":
+                p = new Carpa();
+                break;
+            case "Koi":
+                p = new Koi();
+                break;
+            case "Pejerrey ":
+                p = new Pejerrey();
+                break;
+            case "Salmón chinook":
+                p = new SalmonChinook();
+                break;
+            case "Tilapia del Nilo":
+                p = new TilapiaDelNilo();
+                break;
+            case "Abadejo":
+                p = new Abadejo();
+                break;
+            case "Arenque del Atlántico":
+                p = new ArenqueDelAtlantico();
+                break;
+            case "Besugo":
+                p = new Besugo();
+                break;
+            case "Cobia":
+                p = new Cobia();
+                break;
+            case "Rodaballo":
+                p = new Rodaballo();
+                break;
+            case "Bagre de canal":
+                p = new BagreDeCanal();
+                break;
+            case "Dorada":
+                p = new Dorada();
+                break;
+            default:
+                break;
+        }
+        t.addFish(p.reprod(true));
         t.addFish(p.reprod(false));
         t.getPeces().get(0).setEdad(jsonObject.get("madurez").getAsInt());
         t.getPeces().get(1).setEdad(jsonObject.get("madurez").getAsInt());
         t.setTipoPez(jsonObject.get("pez").getAsString());
+        t.setCiclo(jsonObject.get("ciclo").getAsInt());
         return t;
     }
 }

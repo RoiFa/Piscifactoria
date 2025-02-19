@@ -269,7 +269,7 @@ public class Simulador {
         int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             int tank = instancia.piscis.get(piscifactoria).selectTank();
-            instancia.piscis.get(piscifactoria).tanques.get(tank).showFishStatus();
+            instancia.piscis.get(piscifactoria).getTanques().get(tank).showFishStatus();
         }
     }
 
@@ -409,7 +409,7 @@ public class Simulador {
         int opcion = instancia.selectPisc();
         if(opcion!=-1){
             int tankSelec = instancia.piscis.get(opcion).selectTank();
-            instancia.piscis.get(opcion).tanques.get(tankSelec).addFish(false);
+            instancia.piscis.get(opcion).getTanques().get(tankSelec).addFish(false);
         }
     }
 
@@ -436,8 +436,8 @@ public class Simulador {
         int piscifactoria = instancia.selectPisc();
         if(piscifactoria!=-1){
             int option = instancia.piscis.get(piscifactoria).selectTank();
-            instancia.piscis.get(piscifactoria).tanques.get(option).emptyTank();
-            Tanque tanque = instancia.piscis.get(piscifactoria).tanques.get(option);
+            instancia.piscis.get(piscifactoria).getTanques().get(option).emptyTank();
+            Tanque tanque = instancia.piscis.get(piscifactoria).getTanques().get(option);
             PremadeLogs.tankCleaning("Vaciando", tanque.getNumTanque(), tanque.getNomPiscifactoria());
         }
     }
@@ -615,7 +615,7 @@ public class Simulador {
      * @param pisci El número de la piscifactoría seleccionada.
      */
     private static void buyTank(int pisci) {
-        int numTanques = instancia.piscis.get(pisci).tanques.size();
+        int numTanques = instancia.piscis.get(pisci).getTanques().size();
         if (numTanques < 10) {
             int costeTanque = instancia.piscis.get(pisci).getTipo().equals("rio") ? 150 + 150 * numTanques : 600 + 600 * numTanques;
             if(instancia.monedas.comprar(costeTanque)){
@@ -1055,8 +1055,8 @@ public class Simulador {
         instancia.piscis.get(opcion).addTank();
         instancia.piscis.get(opcion).addTank();
         instancia.piscis.get(opcion).addTank();
-        for(int i=instancia.piscis.get(opcion).tanques.size(),j=0;j<4;i--){
-            instancia.piscis.get(opcion).tanques.get(i-1).randomFish();
+        for(int i=instancia.piscis.get(opcion).getTanques().size(),j=0;j<4;i--){
+            instancia.piscis.get(opcion).getTanques().get(i-1).randomFish();
             j++;
         }
         PremadeLogs.secretFish(instancia.piscis.get(opcion).getNombre());

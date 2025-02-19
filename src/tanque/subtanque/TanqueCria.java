@@ -44,6 +44,7 @@ public class TanqueCria extends Tanque{
     public TanqueCria(int numTanqueCria, String tipo, String nomPiscifactoria) {
         super(numTanqueCria, tipo, nomPiscifactoria);
         this.maxSize = 2;
+        this.ciclo = 0;
         
     }
 
@@ -149,6 +150,7 @@ public class TanqueCria extends Tanque{
             }
         } else {
             if(Simulador.instancia.monedas.comprar(pez.getCoste()*2)){
+                this.ciclo = pez.getCiclo() + pez.getMadurez();
                 this.peces.add(pez.reprod());
                 this.peces.add(pez.reprod(!predominan()));
                 this.tipo = pez.getNombre();
@@ -162,6 +164,7 @@ public class TanqueCria extends Tanque{
     public int[] nextDay(int carne, int vegetal) {
         int[] cants;
 
+        
         for (Pez pez : this.peces) {
             if(!pez.isFertil()&&(pez.getEdad()-pez.getMadurez())%pez.getCiclo()==0&&pez.isAdulto()){
                 pez.setFertil(true);
@@ -177,7 +180,15 @@ public class TanqueCria extends Tanque{
                 Simulador.instancia.almacen.repartirComida();
             }
         }
+
+        if (this.peces.get(1) != null && this.peces.get(1).isAlimentado()) {
+            this.ciclo--;
+            if (this.ciclo == 0) {
+                this.ciclo = this.peces.get(1).getCiclo();
+            }
+        }
         
+        System.out.println(this.ciclo);
         return new int[]{0,0,carne,vegetal};
     }
 
@@ -187,7 +198,7 @@ public class TanqueCria extends Tanque{
         if (ocupacion() != 0) {
             System.out.println(
                 "Tipo de pez: " + this.tipoPez + "\n" +
-                "Días hasta la siguiente reproducción: " + (peces.get(0).getEdad()-peces.get(0).getMadurez()%peces.get(0).getCiclo())
+                "Días hasta la siguiente reproducción: " + this.ciclo
             );
         } else {
             System.out.println("Este tanque de cría está vacío.");
