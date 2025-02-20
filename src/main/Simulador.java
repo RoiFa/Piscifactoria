@@ -795,9 +795,10 @@ public class Simulador {
     public static void main(String[] args) {
         init();
         int op = -1;
-        try{
             showGeneralStatus();
-            while (op!=0) {
+        while (op!=0) {
+                
+            try{
                 menu();
                 op = Reader.readTheNumber(0,100);
 
@@ -850,8 +851,12 @@ public class Simulador {
                         GestorXml.claimReward();
                         break;
                     case 16:
-                        System.out.println(instancia.lang);
-                        System.out.println(instancia.fito);
+                        if (instancia.lang!=null) {
+                            System.out.println(instancia.lang);
+                        }
+                        if (instancia.fito!=null) {
+                            System.out.println(instancia.fito);
+                        }
                         break;
                     case 0:
                         System.out.println("Cerrando...");
@@ -878,16 +883,14 @@ public class Simulador {
                     System.out.println("Opción no valida");
                         break;
                 }
+            }catch(Exception e){
+                ErrorWriter.writeInErrorLog("Error general en la simulación.");            
             }
-
-        }catch(Exception e){
-            ErrorWriter.writeInErrorLog("Error general en la simulación.");            
-        } finally{
-            Reader.closer();
-            Guardado.close();
-            LogWriter.closeLog();
-            ErrorWriter.closeErrorLog();
         }
+        Reader.closer();
+        Guardado.close();
+        LogWriter.closeLog();
+        ErrorWriter.closeErrorLog();
     }
 
     public static void cheat99(){
