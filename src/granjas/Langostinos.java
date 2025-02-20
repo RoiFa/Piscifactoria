@@ -20,12 +20,18 @@ public class Langostinos {
     /** Lista donde estan almacenados los tanques de langostinos */
     private static ArrayList<TanqueLangostinos> tanques = new ArrayList<TanqueLangostinos>();
 
-    /** Devuelve el numero de peces muertos */
+    /** 
+     * Devuelve el numero de peces muertos
+     * @return Nº de peces muertos
+     */
     public static int getMuertos() {
         return muertos;
     }
 
-    /** Devuelve el estado de compra de esta granja */
+    /**
+     * Devuelve el estado de compra de esta granja
+     * @return Estado actual de la granja
+    */
     public static boolean isDisponible() {
         return disponible;
     }
@@ -46,6 +52,7 @@ public class Langostinos {
 
     /**
      * Devuelve la lista de tanques de langostinos
+     * @return Lista de tanques de langostinos
      */
     public static ArrayList<TanqueLangostinos> getTanques() {
         return tanques;
