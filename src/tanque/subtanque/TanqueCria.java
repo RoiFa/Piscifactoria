@@ -25,6 +25,9 @@ import peces.rio.TilapiaDelNilo;
 import piscifactoria.Piscifactoria;
 import tanque.Tanque;
 
+/**
+ * Clase que representa un tanque de cría
+ */
 @JsonAdapter(TanqueCriaAdapter.class)
 public class TanqueCria extends Tanque{
 

@@ -10,6 +10,9 @@ import main.Simulador;
 import peces.Pez;
 import tanque.Tanque;
 
+/**
+ * Clase que representa un tanque de huevos.
+ */
 @JsonAdapter(TanqueHuevosAdapter.class)
 public class TanqueHuevos extends Tanque{
     
