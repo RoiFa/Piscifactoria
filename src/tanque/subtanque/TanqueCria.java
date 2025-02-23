@@ -188,7 +188,7 @@ public class TanqueCria extends Tanque{
             }
         }
 
-        if (this.peces.get(1) != null && this.peces.get(1).isAlimentado()) {
+        if (!this.peces.isEmpty() && this.peces.get(1).isAlimentado()) {
             this.ciclo--;
             if (this.ciclo == 0) {
                 this.ciclo = this.peces.get(1).getCiclo();
@@ -217,10 +217,8 @@ public class TanqueCria extends Tanque{
         System.out.println("Estás seguro de querer vaciar este tanque de cría? (1.-Si/2.-No)");
         if (Reader.readTheNumber(1, 2) == 1) {
             System.out.println("Vaciando tanque de cría...");
-            for (int i = 0; i < peces.size(); i++) {
-                if (peces.get(i) != null) {
-                    peces.set(i, null);
-                }
+            for (int i = 0; i < peces.size();) {
+                peces.remove(i);
             }
             this.tipoPez = null;
             PremadeLogs.tankCleaning("Vaciado", numTanque, nomPiscifactoria);

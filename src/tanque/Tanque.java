@@ -532,10 +532,8 @@ public class Tanque {
      * Elimina todos los peces del tanque independientemente de su estado
      */
     public void emptyTank(){
-        for(int i = 0;i<maxSize;i++){
-            if(peces.get(i)!=null){
-                peces.remove(i);
-            }
+        for(int i = 0;i<peces.size();){
+            peces.remove(i);
         }
         PremadeLogs.tankCleaning("Vaciado",this.numTanque,this.nomPiscifactoria);
         System.out.println("El tanque se ha vaciado por completo");

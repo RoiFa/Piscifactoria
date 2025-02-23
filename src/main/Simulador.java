@@ -1033,7 +1033,6 @@ public class Simulador {
                         break;
                 }
             }catch(Exception e){
-                e.printStackTrace();
                 ErrorWriter.writeInErrorLog("Error general en la simulación.");
             }
         }
