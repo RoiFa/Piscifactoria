@@ -70,6 +70,7 @@ public abstract class Pez {
         this.optimo = fish.getOptimo();
         this.piscifactoria = fish.getPiscifactoria();
         this.tipo = fish.getTipo();
+        this.enfermo = false;
     }
 
     /** @return El nombre común del pez. */
@@ -280,6 +281,7 @@ public abstract class Pez {
         this.fertil = false;
         this.vivo = true;
         this.alimentado = false;
+        this.enfermo = false;
     }
 
     

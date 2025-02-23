@@ -217,8 +217,6 @@ public class Tanque {
                             peces.get(i).setEnfermo(true);
                         }
                     }
-                } else{
-                    
                 }
             }
             if (Simulador.instancia.almacen.getDisponible()&&(carne <= 0 || vegetal <= 0)) {

@@ -202,6 +202,7 @@ public class Simulador {
         "14. Mostrar datos\n"+
         "15. Entregar peces\n"+
         "16. Reclamar Recompensa\n"+
+        "17. Gestionar enfermedades\n"+
         "0. Salir");
         
     }
@@ -753,6 +754,32 @@ public class Simulador {
     }
 
     /**
+     * Muestra el texto del menú para gestionar enfermedades
+     */
+    public static void menuEnfermos(){
+        int i = 1;
+        System.out.println("=============== Enfermos ===============");
+        for(Piscifactoria pis : instancia.piscis){
+            System.out.println(i+".- "+pis.menuEnfermos()+"]");
+        }
+        System.out.println();
+    }
+
+    /**
+     * Cura a todos los peces enfermos de una piscifactoría si hay monedas
+     */
+    public static void curar(){
+        menuEnfermos();
+        System.out.println("0.- Cancelar");
+        int opcion = Reader.readTheNumber(0, instancia.piscis.size());
+        if(opcion==0){
+            System.out.println("Operación cancelada");
+        } else{
+            instancia.piscis.get(opcion-1).curar();
+        }
+    }
+
+    /**
      * Realiza toda la lógica
      * @param args
      */
@@ -815,6 +842,9 @@ public class Simulador {
                         break;
                     case 16:
                         GestorXml.claimReward();
+                        break;
+                    case 17:
+                        curar();
                         break;
                     case 0:
                         System.out.println("Cerrando...");

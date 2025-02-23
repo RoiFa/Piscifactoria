@@ -7,6 +7,7 @@ import adapters.PiscifactoriaAdapter;
 import helpers.ErrorWriter;
 import helpers.PremadeLogs;
 import helpers.Reader;
+import helpers.TranscriptWriter;
 import main.Simulador;
 import peces.Pez;
 import tanque.Tanque;
@@ -421,12 +422,25 @@ public class Piscifactoria {
     }
 
     /**
-     * Cura a los peces enfermos de todos los tanques de la piscifactoría
+     * Cura a los peces enfermos de todos los tanques de la piscifactoría si hay monedas o se confirma
      */
     public void curar(){
-        for(Tanque tanque : tanques){
-            tanque.curar();
+        int enfermos = 0;
+        for(Tanque t : tanques){
+            enfermos += t.enfermos();
         }
+        if(enfermos>0){
+            int coste = enfermos*10;
+            if(Simulador.instancia.monedas.comprar(coste)){
+                for(Tanque tanque : tanques){
+                    tanque.curar();
+                }
+                TranscriptWriter.writeInTranscript("Curados "+enfermos+" peces de la piscifactoría "+nombre+" por "+coste+" monedas");
+            }
+        } else{
+            System.out.println("No hay peces a los que curar en esta piscifactoría");
+        }
+        
     }
 
     @Override
